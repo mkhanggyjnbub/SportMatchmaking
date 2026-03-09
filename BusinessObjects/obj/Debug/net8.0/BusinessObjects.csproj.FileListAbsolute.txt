@@ -12,3 +12,18 @@ D:\Project Prn\BusinessObjects\obj\Debug\net8.0\refint\BusinessObjects.dll
 D:\Project Prn\BusinessObjects\obj\Debug\net8.0\BusinessObjects.pdb
 D:\Project Prn\BusinessObjects\obj\Debug\net8.0\BusinessObjects.genruntimeconfig.cache
 D:\Project Prn\BusinessObjects\obj\Debug\net8.0\ref\BusinessObjects.dll
+C:\Users\LENOVO\Documents\GitHub\SportMatchmaking\BusinessObjects\bin\Debug\net8.0\BusinessObjects.deps.json
+C:\Users\LENOVO\Documents\GitHub\SportMatchmaking\BusinessObjects\bin\Debug\net8.0\BusinessObjects.runtimeconfig.json
+C:\Users\LENOVO\Documents\GitHub\SportMatchmaking\BusinessObjects\bin\Debug\net8.0\BusinessObjects.dll
+C:\Users\LENOVO\Documents\GitHub\SportMatchmaking\BusinessObjects\bin\Debug\net8.0\BusinessObjects.pdb
+C:\Users\LENOVO\Documents\GitHub\SportMatchmaking\BusinessObjects\obj\Debug\net8.0\BusinessObjects.csproj.AssemblyReference.cache
+C:\Users\LENOVO\Documents\GitHub\SportMatchmaking\BusinessObjects\obj\Debug\net8.0\BusinessObjects.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\LENOVO\Documents\GitHub\SportMatchmaking\BusinessObjects\obj\Debug\net8.0\BusinessObjects.AssemblyInfoInputs.cache
+C:\Users\LENOVO\Documents\GitHub\SportMatchmaking\BusinessObjects\obj\Debug\net8.0\BusinessObjects.AssemblyInfo.cs
+C:\Users\LENOVO\Documents\GitHub\SportMatchmaking\BusinessObjects\obj\Debug\net8.0\BusinessObjects.csproj.CoreCompileInputs.cache
+C:\Users\LENOVO\Documents\GitHub\SportMatchmaking\BusinessObjects\obj\Debug\net8.0\BusinessObjects.sourcelink.json
+C:\Users\LENOVO\Documents\GitHub\SportMatchmaking\BusinessObjects\obj\Debug\net8.0\BusinessObjects.dll
+C:\Users\LENOVO\Documents\GitHub\SportMatchmaking\BusinessObjects\obj\Debug\net8.0\refint\BusinessObjects.dll
+C:\Users\LENOVO\Documents\GitHub\SportMatchmaking\BusinessObjects\obj\Debug\net8.0\BusinessObjects.pdb
+C:\Users\LENOVO\Documents\GitHub\SportMatchmaking\BusinessObjects\obj\Debug\net8.0\BusinessObjects.genruntimeconfig.cache
+C:\Users\LENOVO\Documents\GitHub\SportMatchmaking\BusinessObjects\obj\Debug\net8.0\ref\BusinessObjects.dll

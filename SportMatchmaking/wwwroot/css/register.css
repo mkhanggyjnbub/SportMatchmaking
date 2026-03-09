@@ -1,0 +1,103 @@
+﻿.register-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #eef2ff, #f8fafc);
+    padding: 40px 15px;
+}
+
+.register-card {
+    width: 100%;
+    max-width: 720px;
+    border: none;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+    background: #fff;
+}
+
+.register-header {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: white;
+    padding: 28px 32px;
+    text-align: center;
+}
+
+    .register-header h2 {
+        margin: 0;
+        font-weight: 700;
+    }
+
+    .register-header p {
+        margin: 8px 0 0;
+        opacity: 0.9;
+    }
+
+.register-body {
+    padding: 32px;
+}
+
+.form-label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #1f2937;
+}
+
+.required-label::after {
+    content: " *";
+    color: #dc3545;
+    font-weight: 700;
+}
+
+.form-control {
+    border-radius: 12px;
+    padding: 12px 14px;
+    border: 1px solid #d1d5db;
+}
+
+    .form-control:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 0.15rem rgba(37, 99, 235, 0.15);
+    }
+
+.form-text-muted {
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.btn-register {
+    border-radius: 12px;
+    padding: 12px;
+    font-weight: 600;
+    font-size: 16px;
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    border: none;
+}
+
+    .btn-register:hover {
+        background: linear-gradient(135deg, #1d4ed8, #1e40af);
+    }
+
+.register-footer {
+    text-align: center;
+    margin-top: 20px;
+    color: #6b7280;
+}
+
+    .register-footer a {
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+.section-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 18px;
+    color: #1f2937;
+}
+
+.divider {
+    border-top: 1px solid #e5e7eb;
+    margin: 28px 0 20px;
+}

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace SportMatchmaking.Models;
+namespace BusinessObjects;
 
 public partial class SportMatchmakingContext : DbContext
 {
@@ -38,6 +38,7 @@ public partial class SportMatchmakingContext : DbContext
     public virtual DbSet<Sport> Sports { get; set; }
 
     public virtual DbSet<SportImage> SportImages { get; set; }
+    public virtual DbSet<EmailVerification> EmailVerifications { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer("Name=ConnectionStrings:mvc_b1Context");
@@ -294,8 +295,32 @@ public partial class SportMatchmakingContext : DbContext
             entity.Property(e => e.ImageUrl).HasMaxLength(500);
         });
 
+        modelBuilder.Entity<EmailVerification>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+
+            entity.ToTable("EmailVerification");
+
+            entity.Property(e => e.Email)
+                .HasMaxLength(255);
+
+            entity.Property(e => e.OTP)
+                .HasMaxLength(6);
+
+            entity.Property(e => e.IsUsed)
+                .HasDefaultValue(false);
+
+            entity.Property(e => e.CreatedAt)
+                .HasColumnType("datetime");
+
+            entity.Property(e => e.ExpireTime)
+                .HasColumnType("datetime");
+        });
+
         OnModelCreatingPartial(modelBuilder);
     }
+
+
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }
