@@ -1,0 +1,63 @@
+﻿@model SportMatchmaking.Models.VerifyOtpVM
+
+@{
+    ViewData["Title"] = "Verify OTP";
+}
+
+<div class="register-page">
+    <div class="register-card">
+        <div class="register-header">
+            <h2>Verify Your Email</h2>
+            <p>Enter the 6-digit OTP sent to your email</p>
+        </div>
+
+        <div class="register-body">
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success">@TempData["Success"]</div>
+            }
+
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger">@TempData["Error"]</div>
+            }
+
+            <form asp-action="VerifyOtp" method="post">
+                <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label"></label>
+                    <input asp-for="Email" class="form-control" readonly />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="OTP" class="form-label"></label>
+                    <input asp-for="OTP" class="form-control" placeholder="Enter 6-digit OTP" maxlength="6" />
+                    <span asp-validation-for="OTP" class="text-danger"></span>
+                </div>
+
+                <div class="d-grid mt-4">
+                    <button type="submit" class="btn btn-primary btn-register">Verify OTP</button>
+                </div>
+            </form>
+
+            <form asp-action="ResendOtp" method="post" class="mt-3">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="email" value="@Model.Email" />
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-outline-secondary">Resend OTP</button>
+                </div>
+            </form>
+
+            <div class="register-footer">
+                Back to
+                <a asp-action="Login" asp-controller="Auth">Login</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

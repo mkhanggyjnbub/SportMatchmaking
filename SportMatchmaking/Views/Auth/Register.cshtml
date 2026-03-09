@@ -1,0 +1,100 @@
+﻿@model SportMatchmaking.Models.RegisterVM
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="register-page">
+    <div class="register-card">
+        <div class="register-header">
+            <h2>Create Account</h2>
+        </div>
+
+        <div class="register-body">
+            <form asp-action="Register" method="post">
+                <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+                <div class="section-title">Account Information</div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Email" class="form-label required-label"></label>
+                        <input asp-for="Email" class="form-control" placeholder="Enter your email" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="UserName" class="form-label required-label"></label>
+                        <input asp-for="UserName" class="form-control" placeholder="Enter your username" />
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Password" class="form-label required-label"></label>
+                        <input asp-for="Password" type="password" class="form-control" placeholder="Enter password" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                        <div class="form-text-muted mt-1">Password must be at least 6 characters.</div>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="ConfirmPassword" class="form-label required-label"></label>
+                        <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirm password" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+                <div class="section-title">Profile Information</div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="DisplayName" class="form-label required-label"></label>
+                        <input asp-for="DisplayName" class="form-control" placeholder="Enter display name" />
+                        <span asp-validation-for="DisplayName" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="PhoneNumber" class="form-label required-label"></label>
+                        <input asp-for="PhoneNumber" class="form-control" placeholder="Enter phone number" />
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Bio" class="form-label"></label>
+                    <textarea asp-for="Bio" class="form-control" rows="3" placeholder="Tell us something about yourself"></textarea>
+                    <span asp-validation-for="Bio" class="text-danger"></span>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="City" class="form-label required-label"></label>
+                        <input asp-for="City" class="form-control" placeholder="Enter city" />
+                        <span asp-validation-for="City" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="District" class="form-label required-label"></label>
+                        <input asp-for="District" class="form-control" placeholder="Enter district" />
+                        <span asp-validation-for="District" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="d-grid mt-4">
+                    <button type="submit" class="btn btn-primary btn-register">Register</button>
+                </div>
+
+                <div class="register-footer">
+                    Already have an account?
+                    <a asp-action="Login" asp-controller="Auth">Login</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
