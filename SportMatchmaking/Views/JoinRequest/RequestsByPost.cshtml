@@ -1,0 +1,63 @@
+﻿@model List<Services.Models.JoinRequest.JoinRequestListItemModel>
+
+@{
+    ViewData["Title"] = "Danh sách request của bài";
+}
+
+<h2>Danh sách request của bài #@ViewBag.PostId</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Người gửi</th>
+            <th>PartySize</th>
+            <th>Lời nhắn</th>
+            <th>GuestNames</th>
+            <th>Gửi lúc</th>
+            <th>Trạng thái</th>
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.RequesterName</td>
+                <td>@item.PartySize</td>
+                <td>@item.Message</td>
+                <td>@item.GuestNames</td>
+                <td>@item.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>@item.StatusText</td>
+                <td>
+                    @if (item.Status == 1)
+                    {
+                        <div class="d-flex gap-2">
+                            <form asp-action="Review" method="post">
+                                <input type="hidden" name="RequestId" value="@item.RequestId" />
+                                <input type="hidden" name="PostId" value="@item.PostId" />
+                                <input type="hidden" name="IsAccept" value="true" />
+                                <button type="submit" class="btn btn-success btn-sm">Accept</button>
+                            </form>
+
+                            <form asp-action="Review" method="post">
+                                <input type="hidden" name="RequestId" value="@item.RequestId" />
+                                <input type="hidden" name="PostId" value="@item.PostId" />
+                                <input type="hidden" name="IsAccept" value="false" />
+                                <button type="submit" class="btn btn-warning btn-sm">Reject</button>
+                            </form>
+                        </div>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

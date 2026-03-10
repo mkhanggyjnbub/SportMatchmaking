@@ -1,0 +1,52 @@
+﻿@model List<Services.Models.JoinRequest.JoinRequestListItemModel>
+
+@{
+    ViewData["Title"] = "Request của tôi";
+}
+
+<h2>Request của tôi</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>RequestId</th>
+            <th>PostId</th>
+            <th>PartySize</th>
+            <th>Lời nhắn</th>
+            <th>Trạng thái</th>
+            <th>Gửi lúc</th>
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.RequestId</td>
+                <td>@item.PostId</td>
+                <td>@item.PartySize</td>
+                <td>@item.Message</td>
+                <td>@item.StatusText</td>
+                <td>@item.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>
+                    @if (item.Status == 1)
+                    {
+                        <form asp-action="Cancel" method="post">
+                            <input type="hidden" name="requestId" value="@item.RequestId" />
+                            <button type="submit" class="btn btn-danger btn-sm">Hủy</button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

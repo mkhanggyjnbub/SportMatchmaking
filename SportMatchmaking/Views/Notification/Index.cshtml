@@ -1,0 +1,39 @@
+﻿@model List<Services.Models.Notification.NotificationListItemModel>
+
+@{
+    ViewData["Title"] = "Thông báo";
+}
+
+<h2>Thông báo của tôi</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Tiêu đề</th>
+            <th>Nội dung</th>
+            <th>Thời gian</th>
+            <th>Đã đọc</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Title</td>
+                <td>@item.Body</td>
+                <td>@item.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>@(item.IsRead ? "Yes" : "No")</td>
+                <td>
+                    @if (!item.IsRead)
+                    {
+                        <form asp-action="MarkAsRead" method="post">
+                            <input type="hidden" name="notificationId" value="@item.NotificationId" />
+                            <button type="submit" class="btn btn-primary btn-sm">Đánh dấu đã đọc</button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

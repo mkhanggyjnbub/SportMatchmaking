@@ -1,0 +1,35 @@
+﻿@model Services.Models.JoinRequest.CreateJoinRequestModel
+
+@{
+    ViewData["Title"] = "Gửi yêu cầu tham gia";
+}
+
+<h2>Gửi yêu cầu tham gia</h2>
+
+<form asp-action="Create" method="post">
+    <input asp-for="PostId" type="hidden" />
+
+    <div class="mb-3">
+        <label asp-for="PartySize" class="form-label"></label>
+        <input asp-for="PartySize" class="form-control" />
+        <span asp-validation-for="PartySize" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Message" class="form-label">Lời nhắn</label>
+        <textarea asp-for="Message" class="form-control"></textarea>
+        <span asp-validation-for="Message" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="GuestNames" class="form-label">Tên người đi cùng</label>
+        <textarea asp-for="GuestNames" class="form-control"></textarea>
+        <span asp-validation-for="GuestNames" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Gửi request</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

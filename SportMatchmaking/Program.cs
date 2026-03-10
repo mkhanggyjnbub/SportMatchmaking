@@ -4,12 +4,22 @@ using Microsoft.EntityFrameworkCore;
 using Repositories.AppUser;
 using Services.AppUser;
 using Services.Auth;
+using Repositories;
+using Repositories.Interfaces;
+using Services;
+using Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<IJoinRequestRepository, JoinRequestRepository>();
+builder.Services.AddScoped<IMatchPostRepository, MatchPostRepository>();
+builder.Services.AddScoped<IPostParticipantRepository, PostParticipantRepository>();
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 
+builder.Services.AddScoped<IJoinRequestService, JoinRequestService>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddDbContext<SportMatchmakingContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("mvc_b1Context")));
 
