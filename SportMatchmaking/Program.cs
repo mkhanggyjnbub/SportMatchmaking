@@ -5,6 +5,10 @@ using Repositories.AppUser;
 using Services.AppUser;
 using Services.Auth;
 
+//vinh
+using Repositories;
+using Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -18,6 +22,11 @@ builder.Services.AddScoped<EmailVerificationDAO>();
 
 builder.Services.AddScoped<IAppUserRepository, AppUserRepository>();
 builder.Services.AddScoped<IEmailVerificationRepository, EmailVerificationRepository>();
+
+//vinh
+builder.Services.AddScoped<IChatThreadRepository, ChatThreadRepository>();
+builder.Services.AddScoped<IChatThreadService, ChatThreadService>();
+
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 
@@ -50,5 +59,6 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Auth}/{action=Login}/{id?}");
+
 
 app.Run();
