@@ -71,5 +71,30 @@ namespace SportMatchmaking.Controllers
                 });
             }
         }
+
+        [HttpPost]
+        public async Task<IActionResult> SendMessageFromUi(long threadId, int currentUserId, string messageText)
+        {
+            try
+            {
+                await _chatThreadService.SendMessageAsync(threadId, currentUserId, messageText);
+
+                return RedirectToAction("Index", new
+                {
+                    currentUserId = currentUserId,
+                    threadId = threadId
+                });
+            }
+            catch (Exception ex)
+            {
+                TempData["ChatError"] = ex.Message;
+
+                return RedirectToAction("Index", new
+                {
+                    currentUserId = currentUserId,
+                    threadId = threadId
+                });
+            }
+        }
     }
 }

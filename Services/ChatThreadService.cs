@@ -15,6 +15,23 @@ namespace Services
             _chatThreadRepository = chatThreadRepository;
         }
 
+        private static string FormatRoomTime(DateTime sentAtLocal)
+        {
+            var now = DateTime.Now;
+
+            if (sentAtLocal.Date == now.Date)
+            {
+                return sentAtLocal.ToString("HH:mm");
+            }
+
+            return sentAtLocal.ToString("dd/MM");
+        }
+
+        private static string FormatMessageSender(int senderUserId)
+        {
+            return $"User {senderUserId}";
+        }
+
         public async Task<ChatIndexViewModel> GetChatIndexDataAsync(int currentUserId, long? threadId)
         {
             var threads = await _chatThreadRepository.GetThreadsByUserIdAsync(currentUserId);
@@ -26,6 +43,9 @@ namespace Services
                 var threadMessages = await _chatThreadRepository.GetMessagesByThreadIdAsync(thread.ThreadId);
                 var lastMessage = threadMessages.LastOrDefault();
 
+                var members = await _chatThreadRepository.GetThreadMembersByThreadIdAsync(thread.ThreadId);
+                var memberCount = members.Count;
+
                 roomItems.Add(new ChatRoomItemViewModel
                 {
                     ThreadId = thread.ThreadId,
@@ -35,10 +55,34 @@ namespace Services
                         : $"Phòng #{thread.ThreadId}",
                     LastMessage = lastMessage?.MessageText ?? "Chưa có tin nhắn",
                     LastMessageTimeText = lastMessage != null
-                        ? lastMessage.SentAt.ToLocalTime().ToString("HH:mm")
-                        : ""
+                        ? FormatRoomTime(lastMessage.SentAt.ToLocalTime())
+                        : "",
+                    MemberCount = memberCount
                 });
             }
+
+            roomItems = roomItems
+                .OrderByDescending(r =>
+                {
+                    var room = threads.First(t => t.ThreadId == r.ThreadId);
+                    return room.CreatedAt;
+                })
+                .ToList();
+
+            var roomLastMessageMap = new Dictionary<long, DateTime>();
+
+            foreach (var room in roomItems)
+            {
+                var threadMessages = await _chatThreadRepository.GetMessagesByThreadIdAsync(room.ThreadId);
+                var lastMessage = threadMessages.LastOrDefault();
+
+                roomLastMessageMap[room.ThreadId] = lastMessage?.SentAt ?? DateTime.MinValue;
+            }
+
+            roomItems = roomItems
+                .OrderByDescending(r => roomLastMessageMap[r.ThreadId])
+                .ThenByDescending(r => threads.First(t => t.ThreadId == r.ThreadId).CreatedAt)
+                .ToList();
 
             long? selectedThreadId = threadId;
 
@@ -47,7 +91,17 @@ namespace Services
                 selectedThreadId = roomItems.First().ThreadId;
             }
 
+            foreach (var room in roomItems)
+            {
+                room.IsSelected = selectedThreadId.HasValue && room.ThreadId == selectedThreadId.Value;
+            }
+
             var selectedRoomTitle = "Chưa chọn phòng";
+            var selectedRoomSubtitle = roomItems.Any()
+                ? "Hãy chọn một phòng để xem nội dung chat"
+                : "Bạn chưa tham gia phòng chat nào";
+            var selectedRoomMemberCount = 0;
+
             var messageItems = new List<ChatMessageItemViewModel>();
 
             if (selectedThreadId.HasValue)
@@ -59,6 +113,13 @@ namespace Services
                     selectedRoomTitle = selectedThread.PostId.HasValue
                         ? $"Bài đăng #{selectedThread.PostId}"
                         : $"Phòng #{selectedThread.ThreadId}";
+
+                    var selectedMembers = await _chatThreadRepository.GetThreadMembersByThreadIdAsync(selectedThreadId.Value);
+                    selectedRoomMemberCount = selectedMembers.Count;
+
+                    selectedRoomSubtitle = selectedThread.PostId.HasValue
+                        ? $"Phòng chat theo bài đăng • {selectedRoomMemberCount} thành viên"
+                        : $"Phòng chat trực tiếp • {selectedRoomMemberCount} thành viên";
                 }
 
                 var messages = await _chatThreadRepository.GetMessagesByThreadIdAsync(selectedThreadId.Value);
@@ -68,7 +129,7 @@ namespace Services
                     MessageId = m.MessageId,
                     ThreadId = m.ThreadId,
                     SenderUserId = m.SenderUserId,
-                    SenderName = $"User {m.SenderUserId}",
+                    SenderName = FormatMessageSender(m.SenderUserId),
                     MessageText = m.MessageText ?? "",
                     SentAt = m.SentAt,
                     IsMine = m.SenderUserId == currentUserId
@@ -80,6 +141,8 @@ namespace Services
                 CurrentUserId = currentUserId,
                 SelectedThreadId = selectedThreadId,
                 SelectedRoomTitle = selectedRoomTitle,
+                SelectedRoomSubtitle = selectedRoomSubtitle,
+                SelectedRoomMemberCount = selectedRoomMemberCount,
                 Rooms = roomItems,
                 Messages = messageItems
             };
@@ -113,25 +176,42 @@ namespace Services
                 throw new Exception("Post does not exist.");
             }
 
-            var thread = await EnsurePostGroupThreadCreatedAsync(postId);
-
-            var confirmedParticipants = await _chatThreadRepository.GetConfirmedParticipantsByPostIdAsync(postId);
-            if (confirmedParticipants == null || !confirmedParticipants.Any())
+            var acceptedParticipants = await _chatThreadRepository.GetConfirmedParticipantsByPostIdAsync(postId);
+            if (acceptedParticipants == null || !acceptedParticipants.Any())
             {
                 return 0;
             }
+
+            var creatorParticipant = await _chatThreadRepository.GetCreatorParticipantByPostIdAsync(postId);
+            if (creatorParticipant == null)
+            {
+                throw new Exception("Creator participant does not exist.");
+            }
+
+            var thread = await EnsurePostGroupThreadCreatedAsync(postId);
 
             var existingMembers = await _chatThreadRepository.GetThreadMembersByThreadIdAsync(thread.ThreadId);
             var existingUserIds = existingMembers
                 .Select(m => m.UserId)
                 .ToHashSet();
 
-            var newMembers = confirmedParticipants
-                .Where(pp => !existingUserIds.Contains(pp.UserId))
-                .Select(pp => new ChatThreadMember
+            var usersToAdd = new List<int>();
+
+            // luôn đảm bảo creator có trong phòng
+            usersToAdd.Add(creatorParticipant.UserId);
+
+            // thêm các participant đã accepted
+            usersToAdd.AddRange(
+                acceptedParticipants.Select(pp => pp.UserId)
+            );
+
+            var newMembers = usersToAdd
+                .Distinct()
+                .Where(userId => !existingUserIds.Contains(userId))
+                .Select(userId => new ChatThreadMember
                 {
                     ThreadId = thread.ThreadId,
-                    UserId = pp.UserId,
+                    UserId = userId,
                     JoinedAt = DateTime.UtcNow,
                     IsMuted = false
                 })
@@ -146,6 +226,43 @@ namespace Services
             await _chatThreadRepository.SaveChangesAsync();
 
             return newMembers.Count;
+        }
+
+        public async Task<ChatMessage> SendMessageAsync(long threadId, int senderUserId, string messageText)
+        {
+            var thread = await _chatThreadRepository.GetThreadByIdAsync(threadId);
+            if (thread == null)
+            {
+                throw new Exception("Thread does not exist.");
+            }
+
+            if (string.IsNullOrWhiteSpace(messageText))
+            {
+                throw new Exception("Message text cannot be empty.");
+            }
+
+            var members = await _chatThreadRepository.GetThreadMembersByThreadIdAsync(threadId);
+            var isMember = members.Any(m => m.UserId == senderUserId);
+
+            if (!isMember)
+            {
+                throw new Exception("Sender is not a member of this thread.");
+            }
+
+            var newMessage = new ChatMessage
+            {
+                ThreadId = threadId,
+                SenderUserId = senderUserId,
+                MessageText = messageText.Trim(),
+                SentAt = DateTime.UtcNow,
+                EditedAt = null,
+                IsDeleted = false
+            };
+
+            await _chatThreadRepository.AddMessageAsync(newMessage);
+            await _chatThreadRepository.SaveChangesAsync();
+
+            return newMessage;
         }
     }
 }

@@ -9,5 +9,7 @@ namespace Services.Models.Chat
         public string RoomName { get; set; } = "";
         public string LastMessage { get; set; } = "";
         public string LastMessageTimeText { get; set; } = "";
+        public int MemberCount { get; set; }
+        public bool IsSelected { get; set; }
     }
 }

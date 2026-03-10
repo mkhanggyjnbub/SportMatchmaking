@@ -72,8 +72,14 @@ namespace Repositories
         public async Task<List<PostParticipant>> GetConfirmedParticipantsByPostIdAsync(long postId)
         {
             return await _context.PostParticipants
-                .Where(pp => pp.PostId == postId && pp.Status == 1) // 1 = Confirmed
+                .Where(pp => pp.PostId == postId && pp.Status == 2) // 2 = Accepted
                 .ToListAsync();
+        }
+
+        public async Task<PostParticipant?> GetCreatorParticipantByPostIdAsync(long postId)
+        {
+            return await _context.PostParticipants
+                .FirstOrDefaultAsync(pp => pp.PostId == postId && pp.Role == 1);
         }
 
         public async Task<List<ChatThreadMember>> GetThreadMembersByThreadIdAsync(long threadId)
@@ -88,6 +94,10 @@ namespace Repositories
             await _context.ChatThreadMembers.AddRangeAsync(members);
         }
 
+        public async Task AddMessageAsync(ChatMessage message)
+        {
+            await _context.ChatMessages.AddAsync(message);
+        }
         public async Task SaveChangesAsync()
         {
             await _context.SaveChangesAsync();

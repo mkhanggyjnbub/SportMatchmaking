@@ -1,6 +1,4 @@
-﻿//vinh
-
-using BusinessObjects;
+﻿using BusinessObjects;
 
 namespace Repositories
 {
@@ -14,8 +12,11 @@ namespace Repositories
         Task<ChatThread?> GetThreadByIdAsync(long threadId);
         Task<List<ChatMessage>> GetMessagesByThreadIdAsync(long threadId);
         Task<List<PostParticipant>> GetConfirmedParticipantsByPostIdAsync(long postId);
+        Task<PostParticipant?> GetCreatorParticipantByPostIdAsync(long postId);
         Task<List<ChatThreadMember>> GetThreadMembersByThreadIdAsync(long threadId);
         Task AddThreadMembersAsync(List<ChatThreadMember> members);
+
+        Task AddMessageAsync(ChatMessage message);
         Task SaveChangesAsync();
     }
 }
