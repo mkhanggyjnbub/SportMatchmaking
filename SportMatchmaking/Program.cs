@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Repositories.AppUser;
 using Services.AppUser;
 using Services.Auth;
+using Services.Admin;
+using Repositories.Admin;   
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +24,24 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 
 builder.Services.AddDistributedMemoryCache();
+
+builder.Services.AddScoped<AdminUserDAO>();
+builder.Services.AddScoped<AdminPostDAO>();
+builder.Services.AddScoped<AdminSportDAO>();
+builder.Services.AddScoped<AdminReportDAO>();
+builder.Services.AddScoped<AdminDashboardDAO>();
+
+builder.Services.AddScoped<IAdminUserRepository, AdminUserRepository>();
+builder.Services.AddScoped<IAdminPostRepository, AdminPostRepository>();
+builder.Services.AddScoped<IAdminSportRepository, AdminSportRepository>();
+builder.Services.AddScoped<IAdminReportRepository, AdminReportRepository>();
+builder.Services.AddScoped<IAdminDashboardRepository, AdminDashboardRepository>();
+
+builder.Services.AddScoped<IAdminUserService, AdminUserService>();
+builder.Services.AddScoped<IAdminPostService, AdminPostService>();
+builder.Services.AddScoped<IAdminSportService, AdminSportService>();
+builder.Services.AddScoped<IAdminReportService, AdminReportService>();
+builder.Services.AddScoped<IAdminDashboardService, AdminDashboardService>();
 
 builder.Services.AddSession(options =>
 {

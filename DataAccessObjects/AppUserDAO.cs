@@ -31,6 +31,7 @@ namespace DataAccessObjects
         public AppUser? GetByEmail(string email)
         {
             return _context.AppUsers
+                .Include(x => x.Role)   
                 .FirstOrDefault(x => x.Email.ToLower() == email.Trim().ToLower());
         }
 

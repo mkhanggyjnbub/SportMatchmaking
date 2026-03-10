@@ -1,0 +1,23 @@
+﻿using BusinessObjects;
+
+namespace Repositories.Admin
+{
+    public interface IAdminPostRepository
+    {
+        Task<List<MatchPost>> GetPostsAsync(
+            string? keyword = null,
+            int? sportId = null,
+            byte? status = null,
+            string? city = null,
+            string? district = null,
+            int? creatorUserId = null);
+
+        Task<MatchPost?> GetPostByIdAsync(long postId);
+        Task<bool> CancelPostAsync(long postId);
+        Task<bool> UpdatePostStatusAsync(long postId, byte status);
+        Task<int> GetReportCountByPostIdAsync(long postId);
+        Task<List<MatchPost>> GetHighlyReportedPostsAsync(int minReportCount = 1);
+        Task<int> CountPostsAsync();
+        Task<int> CountCompletedPostsAsync();
+    }
+}

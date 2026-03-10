@@ -1,0 +1,65 @@
+﻿@model List<BusinessObjects.SportImage>
+
+@{
+    ViewData["Title"] = "Quản lý ảnh môn thể thao";
+}
+
+<h2 class="admin-page-title mb-1">Quản lý ảnh môn thể thao</h2>
+<p class="admin-page-subtitle mb-4">Danh sách ảnh dùng cho các môn thể thao.</p>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<div class="admin-filter d-flex gap-2 flex-wrap mb-4">
+    <a asp-action="CreateImage" class="btn btn-success">Thêm ảnh</a>
+    <a asp-action="Index" class="btn btn-secondary">Quay lại danh sách môn thể thao</a>
+</div>
+
+<div class="admin-table-wrap">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0 admin-table">
+            <thead>
+                <tr>
+                    <th>ImageId</th>
+                    <th>ImageUrl</th>
+                    <th style="width:180px;">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var img in Model)
+                    {
+                        <tr>
+                            <td>@img.ImageId</td>
+                            <td class="text-break">@img.ImageUrl</td>
+                            <td class="admin-actions">
+                                <a asp-action="EditImage" asp-route-id="@img.ImageId" class="btn btn-sm btn-warning">Sửa</a>
+
+                                <form asp-action="DeleteImage" asp-route-id="@img.ImageId" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-sm btn-danger"
+                                            onclick="return confirm('Bạn có chắc muốn xóa ảnh này?')">
+                                        Xóa
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="3" class="text-center py-4">Không có dữ liệu.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
