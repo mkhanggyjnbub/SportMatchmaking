@@ -8,6 +8,8 @@ using Services.Auth;
 //vinh
 using Repositories;
 using Services;
+using Microsoft.AspNetCore.SignalR;
+using SportMatchmaking.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +28,7 @@ builder.Services.AddScoped<IEmailVerificationRepository, EmailVerificationReposi
 //vinh
 builder.Services.AddScoped<IChatThreadRepository, ChatThreadRepository>();
 builder.Services.AddScoped<IChatThreadService, ChatThreadService>();
+builder.Services.AddSignalR();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
@@ -60,5 +63,7 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Auth}/{action=Login}/{id?}");
 
+//vinh
+app.MapHub<ChatHub>("/chathub");
 
 app.Run();

@@ -1,4 +1,6 @@
-﻿@model Services.Models.Chat.ChatIndexViewModel
+﻿@* vinh *@
+
+@model Services.Models.Chat.ChatIndexViewModel
 
 @{
     ViewData["Title"] = "Chat";
@@ -546,14 +548,14 @@
 
                     @foreach (var msg in Model.Messages)
                     {
-                        <div class="message-row @(msg.IsMine ? "right" : "left")">
+                        <div class="message-row @(msg.IsMine ? "right" : "left")" data-message-id="@msg.MessageId">
                             <div class="message-bubble">
                                 @if (!msg.IsMine)
                                 {
                                     <div class="sender-name">@msg.SenderName</div>
                                 }
 
-                                <div class="@(msg.IsDeleted ? "deleted-message" : "")">
+                                <div class="message-text @(msg.IsDeleted ? "deleted-message" : "")">
                                     @msg.MessageText
                                 </div>
 
@@ -674,6 +676,41 @@
             if (event.target === modal) {
                 closeEditModal();
             }
+        });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+    <script>
+        const threadId = "@(Model.SelectedThreadId?.ToString() ?? "")";
+        const currentUserId = "@Model.CurrentUserId";
+
+        function reloadCurrentChatThread() {
+            if (!threadId) return;
+            window.location.href = `/Chat/Index?currentUserId=${currentUserId}&threadId=${threadId}`;
+        }
+
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/chathub")
+            .build();
+
+        connection.start().then(function () {
+            if (threadId) {
+                connection.invoke("JoinThread", threadId.toString());
+            }
+        }).catch(function (err) {
+            console.error(err.toString());
+        });
+
+        connection.on("ReceiveMessage", function (data) {
+            if (String(data.threadId) !== String(threadId)) return;
+            reloadCurrentChatThread();
+        });
+
+        connection.on("MessageEdited", function (data) {
+            reloadCurrentChatThread();
+        });
+
+        connection.on("MessageDeleted", function (data) {
+            reloadCurrentChatThread();
         });
     </script>
 </body>

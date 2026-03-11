@@ -1,16 +1,24 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿//vinh
+
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Services;
 using Services.Models.Chat;
+using SportMatchmaking.Hubs;
 
 namespace SportMatchmaking.Controllers
 {
     public class ChatController : Controller
     {
         private readonly IChatThreadService _chatThreadService;
+        private readonly IHubContext<ChatHub> _hubContext;
 
-        public ChatController(IChatThreadService chatThreadService)
+        public ChatController(
+            IChatThreadService chatThreadService,
+            IHubContext<ChatHub> hubContext)
         {
             _chatThreadService = chatThreadService;
+            _hubContext = hubContext;
         }
 
         [HttpGet]
@@ -79,6 +87,12 @@ namespace SportMatchmaking.Controllers
             {
                 await _chatThreadService.SendMessageAsync(threadId, currentUserId, messageText);
 
+                await _hubContext.Clients.Group(threadId.ToString())
+                    .SendAsync("ReceiveMessage", new
+                    {
+                        threadId = threadId
+                    });
+
                 return RedirectToAction("Index", new
                 {
                     currentUserId = currentUserId,
@@ -102,10 +116,24 @@ namespace SportMatchmaking.Controllers
         {
             var result = await _chatThreadService.EditMessageAsync(messageId, currentUserId, newText);
 
+            if (result.success)
+            {
+                await _hubContext.Clients.Group(threadId.ToString())
+                    .SendAsync("MessageEdited", new
+                    {
+                        messageId = messageId,
+                        threadId = threadId
+                    });
+            }
+
             TempData["ChatMessage"] = result.message;
             TempData["ChatMessageType"] = result.success ? "success" : "error";
 
-            return RedirectToAction("Index", new { currentUserId = currentUserId, threadId = threadId });
+            return RedirectToAction("Index", new
+            {
+                currentUserId = currentUserId,
+                threadId = threadId
+            });
         }
 
         [HttpPost]
@@ -113,10 +141,24 @@ namespace SportMatchmaking.Controllers
         {
             var result = await _chatThreadService.DeleteMessageAsync(messageId, currentUserId);
 
+            if (result.success)
+            {
+                await _hubContext.Clients.Group(threadId.ToString())
+                    .SendAsync("MessageDeleted", new
+                    {
+                        messageId = messageId,
+                        threadId = threadId
+                    });
+            }
+
             TempData["ChatMessage"] = result.message;
             TempData["ChatMessageType"] = result.success ? "success" : "error";
 
-            return RedirectToAction("Index", new { currentUserId = currentUserId, threadId = threadId });
+            return RedirectToAction("Index", new
+            {
+                currentUserId = currentUserId,
+                threadId = threadId
+            });
         }
     }
 }
