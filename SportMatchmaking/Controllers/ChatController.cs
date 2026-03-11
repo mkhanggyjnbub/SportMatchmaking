@@ -96,5 +96,27 @@ namespace SportMatchmaking.Controllers
                 });
             }
         }
+
+        [HttpPost]
+        public async Task<IActionResult> EditMessageFromUi(long messageId, long currentUserId, long threadId, string newText)
+        {
+            var result = await _chatThreadService.EditMessageAsync(messageId, currentUserId, newText);
+
+            TempData["ChatMessage"] = result.message;
+            TempData["ChatMessageType"] = result.success ? "success" : "error";
+
+            return RedirectToAction("Index", new { currentUserId = currentUserId, threadId = threadId });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteMessageFromUi(long messageId, long currentUserId, long threadId)
+        {
+            var result = await _chatThreadService.DeleteMessageAsync(messageId, currentUserId);
+
+            TempData["ChatMessage"] = result.message;
+            TempData["ChatMessageType"] = result.success ? "success" : "error";
+
+            return RedirectToAction("Index", new { currentUserId = currentUserId, threadId = threadId });
+        }
     }
 }

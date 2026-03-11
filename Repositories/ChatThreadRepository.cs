@@ -98,6 +98,17 @@ namespace Repositories
         {
             await _context.ChatMessages.AddAsync(message);
         }
+
+        public async Task<ChatMessage?> GetMessageByIdAsync(long messageId)
+        {
+            return await _context.ChatMessages
+                .FirstOrDefaultAsync(m => m.MessageId == messageId);
+        }
+
+        public void UpdateMessage(ChatMessage message)
+        {
+            _context.ChatMessages.Update(message);
+        }
         public async Task SaveChangesAsync()
         {
             await _context.SaveChangesAsync();

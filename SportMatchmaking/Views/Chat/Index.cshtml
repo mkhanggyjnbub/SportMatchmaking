@@ -274,6 +274,116 @@
             text-align: right;
         }
 
+        .message-actions {
+            margin-top: 8px;
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+
+        .message-action-btn {
+            border: none;
+            background: transparent;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .edit-btn {
+            color: #f59e0b;
+        }
+
+        .delete-btn {
+            color: #ef4444;
+        }
+
+        .edited-text {
+            margin-top: 6px;
+            font-size: 11px;
+            opacity: 0.8;
+            text-align: right;
+            font-style: italic;
+        }
+
+        .deleted-message {
+            font-style: italic;
+            opacity: 0.85;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.45);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            padding: 20px;
+        }
+
+            .modal-overlay.show {
+                display: flex;
+            }
+
+        .edit-modal {
+            width: 100%;
+            max-width: 520px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
+            overflow: hidden;
+        }
+
+        .edit-modal-header {
+            padding: 16px 18px;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 18px;
+            font-weight: 700;
+            color: #1d4ed8;
+        }
+
+        .edit-modal-body {
+            padding: 18px;
+        }
+
+            .edit-modal-body textarea {
+                width: 100%;
+                min-height: 120px;
+                resize: vertical;
+                border: 1px solid #cbd5e1;
+                border-radius: 12px;
+                padding: 12px 14px;
+                outline: none;
+                font-size: 14px;
+                background: #f8fafc;
+            }
+
+        .edit-modal-footer {
+            padding: 14px 18px 18px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .modal-btn {
+            height: 42px;
+            padding: 0 18px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .modal-btn-cancel {
+            background: #e5e7eb;
+            color: #1f2937;
+        }
+
+        .modal-btn-save {
+            background: #1d4ed8;
+            color: white;
+        }
+
         .empty-messages {
             margin: auto 0;
             text-align: center;
@@ -396,13 +506,28 @@
                                         : "Chưa chọn phòng")
                 </div>
             </div>
-            @if (TempData["ChatError"] != null)
-            {
-                <div style="margin: 10px 20px 0; padding: 10px 14px; border-radius: 10px; background: #fee2e2; color: #b91c1c; font-size: 14px; border: 1px solid #fecaca;">
-                    @TempData["ChatError"]
-                </div>
-            }
+
+
+
             <div class="messages" id="messageContainer">
+
+                            @if (TempData["ChatMessage"] != null)
+            {
+                var isSuccess = (TempData["ChatMessageType"]?.ToString() == "success");
+                var bgColor = isSuccess ? "#dcfce7" : "#fee2e2";
+                var textColor = isSuccess ? "#166534" : "#b91c1c";
+                var borderColor = isSuccess ? "#bbf7d0" : "#fecaca";
+
+                    <div style="padding: 10px 14px; border-radius: 10px; background: @bgColor; color: @textColor; font-size: 14px; border: 1px solid @borderColor;">
+                        @TempData["ChatMessage"]
+                    </div>
+            }
+            else if (TempData["ChatError"] != null)
+            {
+                    <div style="padding: 10px 14px; border-radius: 10px; background: #fee2e2; color: #b91c1c; font-size: 14px; border: 1px solid #fecaca;">
+                        @TempData["ChatError"]
+                    </div>
+            }
                 @if (Model.SelectedThreadId == null)
                 {
                     <div class="empty-messages">
@@ -428,13 +553,47 @@
                                     <div class="sender-name">@msg.SenderName</div>
                                 }
 
-                                <div>@msg.MessageText</div>
+                                <div class="@(msg.IsDeleted ? "deleted-message" : "")">
+                                    @msg.MessageText
+                                </div>
+
+                                @if (msg.EditedAt.HasValue && !msg.IsDeleted)
+                                {
+                                    <div class="edited-text">(đã chỉnh sửa)</div>
+                                }
+
                                 <div class="message-time">@msg.SentAt.ToLocalTime().ToString("dd/MM HH:mm")</div>
+
+                                @if (msg.CanEditOrDelete)
+                                {
+                                    <div class="message-actions">
+                                        <button type="button"
+                                                class="message-action-btn edit-btn"
+                                                data-message-id="@msg.MessageId"
+                                                data-message-text="@Html.Raw(System.Text.Encodings.Web.HtmlEncoder.Default.Encode(msg.MessageText ?? ""))"
+                                                onclick="openEditModal(this)">
+                                            Sửa
+                                        </button>
+
+                                        <form method="post"
+                                              asp-action="DeleteMessageFromUi"
+                                              asp-controller="Chat"
+                                              style="display:inline;"
+                                              onsubmit="return confirm('Bạn có chắc muốn xóa tin nhắn này không?');">
+                                            <input type="hidden" name="messageId" value="@msg.MessageId" />
+                                            <input type="hidden" name="currentUserId" value="@Model.CurrentUserId" />
+                                            <input type="hidden" name="threadId" value="@Model.SelectedThreadId" />
+                                            <button type="submit" class="message-action-btn delete-btn">Xóa</button>
+                                        </form>
+                                    </div>
+                                }
                             </div>
                         </div>
                     }
                 }
             </div>
+
+
 
             @if (Model.SelectedThreadId.HasValue)
             {
@@ -460,7 +619,35 @@
             }
         </section>
     </div>
+    <div class="modal-overlay" id="editMessageModal">
+        <div class="edit-modal">
+            <div class="edit-modal-header">
+                Sửa tin nhắn
+            </div>
 
+            <form method="post" asp-action="EditMessageFromUi" asp-controller="Chat">
+                <div class="edit-modal-body">
+                    <input type="hidden" id="editMessageId" name="messageId" />
+                    <input type="hidden" name="currentUserId" value="@Model.CurrentUserId" />
+                    <input type="hidden" name="threadId" value="@Model.SelectedThreadId" />
+
+                    <textarea id="editMessageText"
+                              name="newText"
+                              placeholder="Nhập nội dung mới..."
+                              required></textarea>
+                </div>
+
+                <div class="edit-modal-footer">
+                    <button type="button" class="modal-btn modal-btn-cancel" onclick="closeEditModal()">
+                        Hủy
+                    </button>
+                    <button type="submit" class="modal-btn modal-btn-save">
+                        Lưu thay đổi
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
     <script>
         (function () {
             var messageContainer = document.getElementById("messageContainer");
@@ -468,6 +655,26 @@
                 messageContainer.scrollTop = messageContainer.scrollHeight;
             }
         })();
+
+        function openEditModal(button) {
+            var messageId = button.getAttribute("data-message-id");
+            var messageText = button.getAttribute("data-message-text");
+
+            document.getElementById("editMessageId").value = messageId;
+            document.getElementById("editMessageText").value = messageText;
+            document.getElementById("editMessageModal").classList.add("show");
+        }
+
+        function closeEditModal() {
+            document.getElementById("editMessageModal").classList.remove("show");
+        }
+
+        window.addEventListener("click", function (event) {
+            var modal = document.getElementById("editMessageModal");
+            if (event.target === modal) {
+                closeEditModal();
+            }
+        });
     </script>
 </body>
 </html>

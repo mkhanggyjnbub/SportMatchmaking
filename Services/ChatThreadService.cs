@@ -130,9 +130,12 @@ namespace Services
                     ThreadId = m.ThreadId,
                     SenderUserId = m.SenderUserId,
                     SenderName = FormatMessageSender(m.SenderUserId),
-                    MessageText = m.MessageText ?? "",
+                    MessageText = m.IsDeleted == true ? "Tin nhắn đã bị xóa" : (m.MessageText ?? ""),
                     SentAt = m.SentAt,
-                    IsMine = m.SenderUserId == currentUserId
+                    EditedAt = m.EditedAt,
+                    IsDeleted = m.IsDeleted,
+                    IsMine = m.SenderUserId == currentUserId,
+                    CanEditOrDelete = m.SenderUserId == currentUserId && m.IsDeleted != true
                 }).ToList();
             }
 
@@ -263,6 +266,65 @@ namespace Services
             await _chatThreadRepository.SaveChangesAsync();
 
             return newMessage;
+        }
+
+        public async Task<(bool success, string message)> EditMessageAsync(long messageId, long currentUserId, string newText)
+        {
+            if (string.IsNullOrWhiteSpace(newText))
+            {
+                return (false, "Nội dung tin nhắn không được để trống.");
+            }
+
+            var message = await _chatThreadRepository.GetMessageByIdAsync(messageId);
+            if (message == null)
+            {
+                return (false, "Không tìm thấy tin nhắn.");
+            }
+
+            if (message.IsDeleted == true)
+            {
+                return (false, "Tin nhắn đã bị xóa, không thể chỉnh sửa.");
+            }
+
+            if (message.SenderUserId != currentUserId)
+            {
+                return (false, "Bạn không có quyền sửa tin nhắn này.");
+            }
+
+            message.MessageText = newText.Trim();
+            message.EditedAt = DateTime.Now;
+
+            _chatThreadRepository.UpdateMessage(message);
+            await _chatThreadRepository.SaveChangesAsync();
+
+            return (true, "Sửa tin nhắn thành công.");
+        }
+
+        public async Task<(bool success, string message)> DeleteMessageAsync(long messageId, long currentUserId)
+        {
+            var message = await _chatThreadRepository.GetMessageByIdAsync(messageId);
+            if (message == null)
+            {
+                return (false, "Không tìm thấy tin nhắn.");
+            }
+
+            if (message.IsDeleted == true)
+            {
+                return (false, "Tin nhắn này đã được xóa trước đó.");
+            }
+
+            if (message.SenderUserId != currentUserId)
+            {
+                return (false, "Bạn không có quyền xóa tin nhắn này.");
+            }
+
+            message.IsDeleted = true;
+            message.EditedAt = DateTime.Now;
+
+            _chatThreadRepository.UpdateMessage(message);
+            await _chatThreadRepository.SaveChangesAsync();
+
+            return (true, "Xóa tin nhắn thành công.");
         }
     }
 }

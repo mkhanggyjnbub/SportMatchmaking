@@ -13,5 +13,8 @@ namespace Services
         Task<int> AddConfirmedParticipantsToThreadAsync(long postId);
 
         Task<ChatMessage> SendMessageAsync(long threadId, int senderUserId, string messageText);
+
+        Task<(bool success, string message)> EditMessageAsync(long messageId, long currentUserId, string newText);
+        Task<(bool success, string message)> DeleteMessageAsync(long messageId, long currentUserId);
     }
 }

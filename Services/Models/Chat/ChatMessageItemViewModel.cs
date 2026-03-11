@@ -11,5 +11,8 @@ namespace Services.Models.Chat
         public string MessageText { get; set; } = "";
         public DateTime SentAt { get; set; }
         public bool IsMine { get; set; }
+        public bool IsDeleted { get; set; }
+        public DateTime? EditedAt { get; set; }
+        public bool CanEditOrDelete { get; set; }
     }
 }

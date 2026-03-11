@@ -16,6 +16,10 @@ namespace Repositories
         Task<List<ChatThreadMember>> GetThreadMembersByThreadIdAsync(long threadId);
         Task AddThreadMembersAsync(List<ChatThreadMember> members);
 
+        Task<ChatMessage?> GetMessageByIdAsync(long messageId);
+        void UpdateMessage(ChatMessage message);
+
+
         Task AddMessageAsync(ChatMessage message);
         Task SaveChangesAsync();
     }
