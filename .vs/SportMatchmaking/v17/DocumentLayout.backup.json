@@ -1,0 +1,209 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|F:\\SP26\\PRN222\\Project\\SportMatchmaking\\SportMatchmaking\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SportMatchmaking\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|F:\\SP26\\PRN222\\Project\\SportMatchmaking\\Services\\Admin\\AdminUserService.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Services\\Admin\\AdminUserService.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|F:\\SP26\\PRN222\\Project\\SportMatchmaking\\Services\\Admin\\IAdminUserService.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Services\\Admin\\IAdminUserService.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|F:\\SP26\\PRN222\\Project\\SportMatchmaking\\Repositories\\Admin\\AdminUserRepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Repositories\\Admin\\AdminUserRepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|F:\\SP26\\PRN222\\Project\\SportMatchmaking\\Repositories\\Admin\\IAdminUserRepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Repositories\\Admin\\IAdminUserRepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|F:\\SP26\\PRN222\\Project\\SportMatchmaking\\SportMatchmaking\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SportMatchmaking\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|F:\\SP26\\PRN222\\Project\\SportMatchmaking\\SportMatchmaking\\Views\\AdminPost\\Details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SportMatchmaking\\Views\\AdminPost\\Details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|F:\\SP26\\PRN222\\Project\\SportMatchmaking\\SportMatchmaking\\Views\\AdminReport\\Details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SportMatchmaking\\Views\\AdminReport\\Details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|F:\\SP26\\PRN222\\Project\\SportMatchmaking\\SportMatchmaking\\Views\\AdminUser\\EditRole.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SportMatchmaking\\Views\\AdminUser\\EditRole.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|F:\\SP26\\PRN222\\Project\\SportMatchmaking\\SportMatchmaking\\Views\\AdminUser\\Index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SportMatchmaking\\Views\\AdminUser\\Index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|F:\\SP26\\PRN222\\Project\\SportMatchmaking\\GeneratePasswordHash.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:GeneratePasswordHash.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 10,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "GeneratePasswordHash.cs",
+              "DocumentMoniker": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\GeneratePasswordHash.cs",
+              "RelativeDocumentMoniker": "GeneratePasswordHash.cs",
+              "ToolTip": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\GeneratePasswordHash.cs",
+              "RelativeToolTip": "GeneratePasswordHash.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-10T00:09:48.712Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\SportMatchmaking\\Views\\AdminUser\\Index.cshtml",
+              "RelativeDocumentMoniker": "SportMatchmaking\\Views\\AdminUser\\Index.cshtml",
+              "ToolTip": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\SportMatchmaking\\Views\\AdminUser\\Index.cshtml",
+              "RelativeToolTip": "SportMatchmaking\\Views\\AdminUser\\Index.cshtml",
+              "ViewState": "AgIAAIMAAAAAAAAAAABBwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-03-09T17:50:54.02Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "EditRole.cshtml",
+              "DocumentMoniker": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\SportMatchmaking\\Views\\AdminUser\\EditRole.cshtml",
+              "RelativeDocumentMoniker": "SportMatchmaking\\Views\\AdminUser\\EditRole.cshtml",
+              "ToolTip": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\SportMatchmaking\\Views\\AdminUser\\EditRole.cshtml",
+              "RelativeToolTip": "SportMatchmaking\\Views\\AdminUser\\EditRole.cshtml",
+              "ViewState": "AgIAADkAAAAAAAAAAIBJwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-03-09T17:50:20.764Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Details.cshtml",
+              "DocumentMoniker": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\SportMatchmaking\\Views\\AdminReport\\Details.cshtml",
+              "RelativeDocumentMoniker": "SportMatchmaking\\Views\\AdminReport\\Details.cshtml",
+              "ToolTip": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\SportMatchmaking\\Views\\AdminReport\\Details.cshtml",
+              "RelativeToolTip": "SportMatchmaking\\Views\\AdminReport\\Details.cshtml",
+              "ViewState": "AgIAAHMAAAAAAAAAAABBwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-03-09T17:49:52.59Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Details.cshtml",
+              "DocumentMoniker": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\SportMatchmaking\\Views\\AdminPost\\Details.cshtml",
+              "RelativeDocumentMoniker": "SportMatchmaking\\Views\\AdminPost\\Details.cshtml",
+              "ToolTip": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\SportMatchmaking\\Views\\AdminPost\\Details.cshtml",
+              "RelativeToolTip": "SportMatchmaking\\Views\\AdminPost\\Details.cshtml",
+              "ViewState": "AgIAAGAAAAAAAAAAAEBVwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-03-09T17:49:32.379Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AdminUserService.cs",
+              "DocumentMoniker": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\Services\\Admin\\AdminUserService.cs",
+              "RelativeDocumentMoniker": "Services\\Admin\\AdminUserService.cs",
+              "ToolTip": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\Services\\Admin\\AdminUserService.cs",
+              "RelativeToolTip": "Services\\Admin\\AdminUserService.cs",
+              "ViewState": "AgIAAHoAAAAAAAAAAAAAwBUAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-09T17:47:50.624Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "IAdminUserService.cs",
+              "DocumentMoniker": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\Services\\Admin\\IAdminUserService.cs",
+              "RelativeDocumentMoniker": "Services\\Admin\\IAdminUserService.cs",
+              "ToolTip": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\Services\\Admin\\IAdminUserService.cs",
+              "RelativeToolTip": "Services\\Admin\\IAdminUserService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-09T17:47:43.632Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\SportMatchmaking\\appsettings.json",
+              "RelativeDocumentMoniker": "SportMatchmaking\\appsettings.json",
+              "ToolTip": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\SportMatchmaking\\appsettings.json",
+              "RelativeToolTip": "SportMatchmaking\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-03-09T17:35:59.081Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "AdminUserRepository.cs",
+              "DocumentMoniker": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\Repositories\\Admin\\AdminUserRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\Admin\\AdminUserRepository.cs",
+              "ToolTip": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\Repositories\\Admin\\AdminUserRepository.cs",
+              "RelativeToolTip": "Repositories\\Admin\\AdminUserRepository.cs",
+              "ViewState": "AgIAADYAAAAAAAAAAAAAAAUAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-09T17:45:19.288Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "IAdminUserRepository.cs",
+              "DocumentMoniker": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\Repositories\\Admin\\IAdminUserRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\Admin\\IAdminUserRepository.cs",
+              "ToolTip": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\Repositories\\Admin\\IAdminUserRepository.cs",
+              "RelativeToolTip": "Repositories\\Admin\\IAdminUserRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-09T17:45:10.614Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Program.cs",
+              "DocumentMoniker": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\SportMatchmaking\\Program.cs",
+              "RelativeDocumentMoniker": "SportMatchmaking\\Program.cs",
+              "ToolTip": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\SportMatchmaking\\Program.cs",
+              "RelativeToolTip": "SportMatchmaking\\Program.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABwAAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-09T17:35:56.545Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

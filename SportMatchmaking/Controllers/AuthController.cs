@@ -149,6 +149,13 @@ namespace SportMatchmaking.Controllers
                 HttpContext.Session.SetString("RoleId", user.RoleId.ToString());
 
                 TempData["Success"] = "Login successful";
+
+                // redirect theo role
+                if (user.Role.Name == "Admin")
+                {
+                    return RedirectToAction("Index", "AdminDashboard");
+                }
+
                 return RedirectToAction("Index", "Home");
             }
             catch (Exception ex)

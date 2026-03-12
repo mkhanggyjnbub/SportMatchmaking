@@ -60,7 +60,7 @@ namespace Services.Auth
                 Bio = dto.Bio,
                 City = dto.City,
                 District = dto.District,
-                RoleId = 1,
+                RoleId = 2,
                 EmailConfirmed = false,
                 IsBanned = false,
                 AvatarUrl = "/images/default-avatar.png",
