@@ -1,4 +1,4 @@
-﻿@model SportMatchmaking.Models.LoginVM
+@model SportMatchmaking.Models.LoginVM
 
 @{
     ViewData["Title"] = "Login";
@@ -12,9 +12,9 @@
         </div>
 
         <div class="register-body">
-            @if (TempData["Success"] != null)
+            @if (ViewBag.LoginSuccess != null)
             {
-                <div class="alert alert-success">@TempData["Success"]</div>
+                <div class="alert alert-success">@ViewBag.LoginSuccess</div>
             }
 
             <form asp-action="Login" method="post">
@@ -47,4 +47,14 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    @* Tự động chuyển hướng sau khi đăng nhập thành công *@
+    @if (ViewBag.RedirectUrl != null)
+    {
+        <script>
+            setTimeout(function () {
+                window.location.href = '@ViewBag.RedirectUrl';
+            }, 0); // đợi 1.5s để user kịp thấy thông báo
+        </script>
+    }
 }

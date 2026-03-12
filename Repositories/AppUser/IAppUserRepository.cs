@@ -13,6 +13,8 @@ namespace Repositories.AppUser
         AppUserEntity? GetByUserName(string userName);
         AppUserEntity? GetByPhone(string phone);
         AppUserEntity? GetByDisplayName(string displayName);
+        AppUserEntity? GetById(int userId);
+
         void Add(AppUserEntity user);
         void Update(AppUserEntity user);
     }
