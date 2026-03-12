@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\Services\\Services.csproj": {}
+    "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\Services\\Services.csproj": {}
   },
   "projects": {
-    "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\BusinessObjects\\BusinessObjects.csproj": {
+    "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\BusinessObjects\\BusinessObjects.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\BusinessObjects\\BusinessObjects.csproj",
+        "projectUniqueName": "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\BusinessObjects\\BusinessObjects.csproj",
         "projectName": "BusinessObjects",
-        "projectPath": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\BusinessObjects\\BusinessObjects.csproj",
-        "packagesPath": "C:\\Users\\dodan\\.nuget\\packages\\",
-        "outputPath": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\BusinessObjects\\obj\\",
+        "projectPath": "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\BusinessObjects\\BusinessObjects.csproj",
+        "packagesPath": "C:\\Users\\LENOVO\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\BusinessObjects\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\dodan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\LENOVO\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,7 +26,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -84,24 +83,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.308/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\DataAccessObjects\\DataAccessObjects.csproj": {
+    "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\DataAccessObjects\\DataAccessObjects.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\DataAccessObjects\\DataAccessObjects.csproj",
+        "projectUniqueName": "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\DataAccessObjects\\DataAccessObjects.csproj",
         "projectName": "DataAccessObjects",
-        "projectPath": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\DataAccessObjects\\DataAccessObjects.csproj",
-        "packagesPath": "C:\\Users\\dodan\\.nuget\\packages\\",
-        "outputPath": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\DataAccessObjects\\obj\\",
+        "projectPath": "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\DataAccessObjects\\DataAccessObjects.csproj",
+        "packagesPath": "C:\\Users\\LENOVO\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\DataAccessObjects\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\dodan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\LENOVO\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -110,15 +109,14 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\BusinessObjects\\BusinessObjects.csproj": {
-                "projectPath": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\BusinessObjects\\BusinessObjects.csproj"
+              "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\BusinessObjects\\BusinessObjects.csproj": {
+                "projectPath": "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\BusinessObjects\\BusinessObjects.csproj"
               }
             }
           }
@@ -154,24 +152,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.308/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\Repositories\\Repositories.csproj": {
+    "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\Repositories\\Repositories.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\Repositories\\Repositories.csproj",
+        "projectUniqueName": "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\Repositories\\Repositories.csproj",
         "projectName": "Repositories",
-        "projectPath": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\Repositories\\Repositories.csproj",
-        "packagesPath": "C:\\Users\\dodan\\.nuget\\packages\\",
-        "outputPath": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\Repositories\\obj\\",
+        "projectPath": "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\Repositories\\Repositories.csproj",
+        "packagesPath": "C:\\Users\\LENOVO\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\Repositories\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\dodan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\LENOVO\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -180,18 +178,17 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\BusinessObjects\\BusinessObjects.csproj": {
-                "projectPath": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\BusinessObjects\\BusinessObjects.csproj"
+              "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\BusinessObjects\\BusinessObjects.csproj": {
+                "projectPath": "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\BusinessObjects\\BusinessObjects.csproj"
               },
-              "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\DataAccessObjects\\DataAccessObjects.csproj": {
-                "projectPath": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\DataAccessObjects\\DataAccessObjects.csproj"
+              "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\DataAccessObjects\\DataAccessObjects.csproj": {
+                "projectPath": "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\DataAccessObjects\\DataAccessObjects.csproj"
               }
             }
           }
@@ -227,24 +224,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.308/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\Services\\Services.csproj": {
+    "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\Services\\Services.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\Services\\Services.csproj",
+        "projectUniqueName": "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\Services\\Services.csproj",
         "projectName": "Services",
-        "projectPath": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\Services\\Services.csproj",
-        "packagesPath": "C:\\Users\\dodan\\.nuget\\packages\\",
-        "outputPath": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\Services\\obj\\",
+        "projectPath": "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\Services\\Services.csproj",
+        "packagesPath": "C:\\Users\\LENOVO\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\Services\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\dodan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\LENOVO\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -253,18 +250,17 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\BusinessObjects\\BusinessObjects.csproj": {
-                "projectPath": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\BusinessObjects\\BusinessObjects.csproj"
+              "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\BusinessObjects\\BusinessObjects.csproj": {
+                "projectPath": "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\BusinessObjects\\BusinessObjects.csproj"
               },
-              "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\Repositories\\Repositories.csproj": {
-                "projectPath": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\Repositories\\Repositories.csproj"
+              "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\Repositories\\Repositories.csproj": {
+                "projectPath": "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\Repositories\\Repositories.csproj"
               }
             }
           }
@@ -310,7 +306,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.308/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

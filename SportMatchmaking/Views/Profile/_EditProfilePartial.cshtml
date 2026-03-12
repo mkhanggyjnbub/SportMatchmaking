@@ -1,0 +1,100 @@
+﻿@model SportMatchmaking.Models.ProfileVM
+
+<div class="modal-header">
+    <h5 class="modal-title">Update Profile</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+</div>
+
+<form id="editProfileForm" asp-controller="Profile" asp-action="UpdateProfile" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+    <div class="modal-body">
+        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+        <input type="hidden" asp-for="UserId" />
+        <input type="hidden" asp-for="AvatarUrl" />
+
+        <div class="text-center mb-3">
+            <img id="avatarPreview"
+                 src="@(string.IsNullOrEmpty(Model.AvatarUrl) ? "/images/default-avatar.png" : Model.AvatarUrl)"
+                 alt="Avatar"
+                 class="rounded-circle border"
+                 style="width:120px;height:120px;object-fit:cover;" />
+        </div>
+
+        <input type="hidden" asp-for="Email" />
+        <input type="hidden" asp-for="UserName" />
+
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input class="form-control" value="@Model.Email" readonly />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">UserName</label>
+            <input class="form-control" value="@Model.UserName" readonly />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="DisplayName" class="form-label"></label>
+            <input asp-for="DisplayName" class="form-control" />
+            <span asp-validation-for="DisplayName" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="AvatarFile" class="form-label">Upload Avatar</label>
+            <input asp-for="AvatarFile" type="file" class="form-control" accept=".jpg,.jpeg,.png,.webp" />
+            <span asp-validation-for="AvatarFile" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Bio" class="form-label"></label>
+            <textarea asp-for="Bio" class="form-control" rows="3"></textarea>
+            <span asp-validation-for="Bio" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="PhoneNumber" class="form-label"></label>
+            <input asp-for="PhoneNumber" class="form-control" />
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="City" class="form-label"></label>
+            <input asp-for="City" class="form-control" />
+            <span asp-validation-for="City" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="District" class="form-label"></label>
+            <input asp-for="District" class="form-control" />
+            <span asp-validation-for="District" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="SkillLevel" class="form-label">Skill Level</label>
+            <input asp-for="SkillLevel"
+                   type="number"
+                   class="form-control"
+                   min="1"
+                   max="10"
+                   placeholder="Enter skill level from 1 to 10" />
+            <span asp-validation-for="SkillLevel" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+    </div>
+</form>
+
+<partial name="_ValidationScriptsPartial" />
+
+<script>
+    document.getElementById("AvatarFile")?.addEventListener("change", function (e) {
+        const file = e.target.files[0];
+        if (file) {
+            document.getElementById("avatarPreview").src = URL.createObjectURL(file);
+        }
+    });
+</script>

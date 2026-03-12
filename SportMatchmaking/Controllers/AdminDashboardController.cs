@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Services.Admin;
+using SportMatchmaking.Filters;
 
 namespace SportMatchmaking.Controllers
 {
+    [AdminOnly]
     public class AdminDashboardController : Controller
     {
         private readonly IAdminDashboardService _adminDashboardService;

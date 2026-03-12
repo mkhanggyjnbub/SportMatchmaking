@@ -52,5 +52,9 @@ namespace DataAccessObjects
             _context.AppUsers.Update(user);
             _context.SaveChanges();
         }
+        public AppUser? GetById(int userId)
+        {
+            return _context.AppUsers.FirstOrDefault(x => x.UserId == userId);
+        }
     }
 }
