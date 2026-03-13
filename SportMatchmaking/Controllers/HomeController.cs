@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using SportMatchmaking.Filters;
 using SportMatchmaking.Models;
 
 namespace SportMatchmaking.Controllers

@@ -1,9 +1,11 @@
 ﻿using BusinessObjects;
 using Microsoft.AspNetCore.Mvc;
 using Services.Admin;
+using SportMatchmaking.Filters;
 
 namespace SportMatchmaking.Controllers
 {
+    [AdminOnly]
     public class AdminSportController : Controller
     {
         private readonly IAdminSportService _adminSportService;

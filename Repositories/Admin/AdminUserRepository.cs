@@ -38,11 +38,6 @@ namespace Repositories.Admin
             return await _adminUserDAO.ToggleBanAsync(userId);
         }
 
-        public async Task<bool> UpdateUserRoleAsync(int userId, int roleId)
-        {
-            return await _adminUserDAO.UpdateUserRoleAsync(userId, roleId);
-        }
-
         public async Task<bool> UpdateUserAsync(AppUserEntity updatedUser)
         {
             return await _adminUserDAO.UpdateUserAsync(updatedUser);

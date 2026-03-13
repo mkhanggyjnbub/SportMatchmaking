@@ -115,8 +115,6 @@
                                 <a asp-action="Details" asp-route-id="@user.UserId" class="btn btn-sm btn-info text-white">
                                     Chi tiết
                                 </a>
-                                <a asp-action="EditRole" asp-route-id="@user.UserId" class="btn btn-sm btn-warning">Đổi
-                                    Role</a>
 
                                 <form asp-action="ToggleBan" asp-route-id="@user.UserId" method="post" class="d-inline">
                                     @Html.AntiForgeryToken()

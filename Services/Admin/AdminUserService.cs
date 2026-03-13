@@ -58,37 +58,6 @@ namespace Services.Admin
                 : (false, "Cập nhật trạng thái khóa thất bại.");
         }
 
-        public async Task<(bool Success, string Message)> UpdateUserRoleAsync(int targetUserId, int newRoleId, int currentAdminUserId)
-        {
-            if (targetUserId <= 0 || newRoleId <= 0)
-            {
-                return (false, "Dữ liệu không hợp lệ.");
-            }
-
-            if (targetUserId == currentAdminUserId)
-            {
-                return (false, "Bạn không thể tự đổi role của chính mình.");
-            }
-
-            var user = await _adminUserRepository.GetUserByIdAsync(targetUserId);
-            if (user == null)
-            {
-                return (false, "Không tìm thấy user.");
-            }
-
-            var role = await _adminUserRepository.GetRoleByIdAsync(newRoleId);
-            if (role == null)
-            {
-                return (false, "Role không tồn tại.");
-            }
-
-            bool result = await _adminUserRepository.UpdateUserRoleAsync(targetUserId, newRoleId);
-
-            return result
-                ? (true, "Đổi role thành công.")
-                : (false, "Đổi role thất bại.");
-        }
-
         public async Task<(bool Success, string Message)> UpdateUserAsync(AppUserEntity updatedUser)
         {
             if (updatedUser == null || updatedUser.UserId <= 0)
