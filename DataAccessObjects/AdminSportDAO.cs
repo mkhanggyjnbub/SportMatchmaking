@@ -34,6 +34,7 @@ namespace DataAccessObjects
         public async Task<Sport?> GetSportByIdAsync(int sportId)
         {
             return await _context.Set<Sport>()
+                .Include(x => x.Image)
                 .FirstOrDefaultAsync(x => x.SportId == sportId);
         }
 

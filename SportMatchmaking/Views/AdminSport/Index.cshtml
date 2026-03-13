@@ -55,6 +55,7 @@
                             <td>@sport.TeamMax</td>
                             <td>@sport.ImageId</td>
                             <td class="admin-actions">
+                                <a asp-action="Details" asp-route-id="@sport.SportId" class="btn btn-sm btn-info text-white">Chi tiết</a>
                                 <a asp-action="Edit" asp-route-id="@sport.SportId" class="btn btn-sm btn-warning">Sửa</a>
 
                                 <form asp-action="Delete" asp-route-id="@sport.SportId" method="post" class="d-inline">
