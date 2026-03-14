@@ -57,5 +57,30 @@ namespace Repositories.Admin
         {
             return await _adminPostDAO.CountCompletedPostsAsync();
         }
+
+        public async Task<List<SportPostCountStat>> GetPostCountBySportAsync()
+        {
+            return await _adminPostDAO.GetPostCountBySportAsync();
+        }
+
+        public async Task<List<SportPostCountStat>> GetPostCountBySportOpenOrFullAsync()
+        {
+            return await _adminPostDAO.GetPostCountBySportOpenOrFullAsync();
+        }
+
+        public async Task<Dictionary<byte, int>> GetPostCountByStatusAsync()
+        {
+            return await _adminPostDAO.GetPostCountByStatusAsync();
+        }
+
+        public async Task<Dictionary<int, int>> GetWeeklyPostCountByYearAsync(int year)
+        {
+            return await _adminPostDAO.GetWeeklyPostCountByYearAsync(year);
+        }
+
+        public async Task<List<int>> GetAvailablePostYearsAsync()
+        {
+            return await _adminPostDAO.GetAvailablePostYearsAsync();
+        }
     }
 }

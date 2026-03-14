@@ -1,5 +1,6 @@
 ﻿using BusinessObjects;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace DataAccessObjects
 {
@@ -8,6 +9,8 @@ namespace DataAccessObjects
         private readonly SportMatchmakingContext _context;
 
         private const byte REPORT_TARGET_POST = 1;
+        private const byte POST_STATUS_OPEN = 1;
+        private const byte POST_STATUS_FULL = 2;
         private const byte POST_STATUS_COMPLETED = 4;
         private const byte POST_STATUS_CANCELLED = 5;
 
@@ -138,6 +141,63 @@ namespace DataAccessObjects
         {
             return await _context.Set<MatchPost>()
                 .CountAsync(x => x.Status == POST_STATUS_COMPLETED);
+        }
+
+        public async Task<List<SportPostCountStat>> GetPostCountBySportAsync()
+        {
+            return await _context.Set<Sport>()
+                .Select(s => new SportPostCountStat
+                {
+                    SportId = s.SportId,
+                    SportName = s.Name,
+                    PostCount = s.MatchPosts.Count()
+                })
+                .OrderByDescending(x => x.PostCount)
+                .ThenBy(x => x.SportName)
+                .ToListAsync();
+        }
+
+        public async Task<List<SportPostCountStat>> GetPostCountBySportOpenOrFullAsync()
+        {
+            return await _context.Set<Sport>()
+                .Select(s => new SportPostCountStat
+                {
+                    SportId = s.SportId,
+                    SportName = s.Name,
+                    PostCount = s.MatchPosts.Count(p => p.Status == POST_STATUS_OPEN || p.Status == POST_STATUS_FULL)
+                })
+                .OrderByDescending(x => x.PostCount)
+                .ThenBy(x => x.SportName)
+                .ToListAsync();
+        }
+
+        public async Task<Dictionary<byte, int>> GetPostCountByStatusAsync()
+        {
+            return await _context.Set<MatchPost>()
+                .GroupBy(x => x.Status)
+                .Select(g => new { Status = g.Key, Count = g.Count() })
+                .ToDictionaryAsync(x => x.Status, x => x.Count);
+        }
+
+        public async Task<Dictionary<int, int>> GetWeeklyPostCountByYearAsync(int year)
+        {
+            var createdDates = await _context.Set<MatchPost>()
+                .Where(x => x.CreatedAt.Year == year)
+                .Select(x => x.CreatedAt)
+                .ToListAsync();
+
+            return createdDates
+                .GroupBy(x => ISOWeek.GetWeekOfYear(x))
+                .ToDictionary(g => g.Key, g => g.Count());
+        }
+
+        public async Task<List<int>> GetAvailablePostYearsAsync()
+        {
+            return await _context.Set<MatchPost>()
+                .Select(x => x.CreatedAt.Year)
+                .Distinct()
+                .OrderByDescending(x => x)
+                .ToListAsync();
         }
     }
 }

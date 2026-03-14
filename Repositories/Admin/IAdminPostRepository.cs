@@ -19,5 +19,11 @@ namespace Repositories.Admin
         Task<List<MatchPost>> GetHighlyReportedPostsAsync(int minReportCount = 1);
         Task<int> CountPostsAsync();
         Task<int> CountCompletedPostsAsync();
+
+        Task<List<SportPostCountStat>> GetPostCountBySportAsync();
+        Task<List<SportPostCountStat>> GetPostCountBySportOpenOrFullAsync();
+        Task<Dictionary<byte, int>> GetPostCountByStatusAsync();
+        Task<Dictionary<int, int>> GetWeeklyPostCountByYearAsync(int year);
+        Task<List<int>> GetAvailablePostYearsAsync();
     }
 }

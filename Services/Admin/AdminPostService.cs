@@ -105,5 +105,30 @@ namespace Services.Admin
         {
             return await _adminPostRepository.CountCompletedPostsAsync();
         }
+
+        public async Task<List<SportPostCountStat>> GetPostCountBySportAsync()
+        {
+            return await _adminPostRepository.GetPostCountBySportAsync();
+        }
+
+        public async Task<List<SportPostCountStat>> GetPostCountBySportOpenOrFullAsync()
+        {
+            return await _adminPostRepository.GetPostCountBySportOpenOrFullAsync();
+        }
+
+        public async Task<Dictionary<byte, int>> GetPostCountByStatusAsync()
+        {
+            return await _adminPostRepository.GetPostCountByStatusAsync();
+        }
+
+        public async Task<Dictionary<int, int>> GetWeeklyPostCountByYearAsync(int year)
+        {
+            return await _adminPostRepository.GetWeeklyPostCountByYearAsync(year);
+        }
+
+        public async Task<List<int>> GetAvailablePostYearsAsync()
+        {
+            return await _adminPostRepository.GetAvailablePostYearsAsync();
+        }
     }
 }

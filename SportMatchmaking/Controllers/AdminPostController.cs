@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Services.Admin;
 using SportMatchmaking.Filters;
+using SportMatchmaking.Models;
 
 namespace SportMatchmaking.Controllers
 {
@@ -67,6 +68,50 @@ namespace SportMatchmaking.Controllers
             return View(posts);
         }
 
+        public async Task<IActionResult> Statistics(int? year)
+        {
+            var availableYears = await _adminPostService.GetAvailablePostYearsAsync();
+
+            int selectedYear = year ?? DateTime.Now.Year;
+            if (!availableYears.Any())
+            {
+                availableYears = new List<int> { selectedYear };
+            }
+            else if (!availableYears.Contains(selectedYear))
+            {
+                selectedYear = availableYears.Max();
+            }
+
+            var postCountBySport = await _adminPostService.GetPostCountBySportAsync();
+            var postCountBySportOpenOrFull = await _adminPostService.GetPostCountBySportOpenOrFullAsync();
+            var weeklyPostCount = await _adminPostService.GetWeeklyPostCountByYearAsync(selectedYear);
+            var postCountByStatus = await _adminPostService.GetPostCountByStatusAsync();
+
+            var vm = new AdminPostStatisticsVM
+            {
+                SelectedYear = selectedYear,
+                AvailableYears = availableYears,
+                SportLabels = postCountBySport.Select(x => x.SportName).ToList(),
+                SportCounts = postCountBySport.Select(x => x.PostCount).ToList(),
+                OpenOrFullSportLabels = postCountBySportOpenOrFull.Select(x => x.SportName).ToList(),
+                OpenOrFullSportCounts = postCountBySportOpenOrFull.Select(x => x.PostCount).ToList(),
+                WeekLabels = Enumerable.Range(1, 53).ToList(),
+                WeeklyPostCounts = Enumerable.Range(1, 53).Select(week => weeklyPostCount.GetValueOrDefault(week)).ToList(),
+                StatusLabels = postCountByStatus
+                    .OrderBy(x => x.Key)
+                    .Select(x => GetPostStatusText(x.Key))
+                    .ToList(),
+                StatusCounts = postCountByStatus
+                    .OrderBy(x => x.Key)
+                    .Select(x => x.Value)
+                    .ToList(),
+                TotalSports = postCountBySport.Count,
+                TotalPosts = postCountBySport.Sum(x => x.PostCount)
+            };
+
+            return View(vm);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Cancel(long id)
@@ -85,6 +130,20 @@ namespace SportMatchmaking.Controllers
 
             TempData[result.Success ? "Success" : "Error"] = result.Message;
             return RedirectToAction(nameof(Details), new { id });
+        }
+
+        private static string GetPostStatusText(byte status)
+        {
+            return status switch
+            {
+                1 => "Open",
+                2 => "Full",
+                3 => "Confirmed",
+                4 => "Completed",
+                5 => "Cancelled",
+                6 => "Expired",
+                _ => "Unknown"
+            };
         }
     }
 }

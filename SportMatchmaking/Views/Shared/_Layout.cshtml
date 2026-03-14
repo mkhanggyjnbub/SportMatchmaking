@@ -140,9 +140,13 @@
                     <span class="admin-sidebar-icon">🖼️</span>
                     <span class="admin-sidebar-label">Quản lý Image</span>
                 </a>
-                <a asp-controller="AdminPost" asp-action="Index" class="admin-sidebar-link @((currentController == "AdminPost") ? "active" : "")">
+                <a asp-controller="AdminPost" asp-action="Index" class="admin-sidebar-link @((currentController == "AdminPost" && currentAction != "Statistics") ? "active" : "")">
                     <span class="admin-sidebar-icon">📝</span>
                     <span class="admin-sidebar-label">Quản lý Bài đăng</span>
+                </a>
+                <a asp-controller="AdminPost" asp-action="Statistics" class="admin-sidebar-link @((currentController == "AdminPost" && currentAction == "Statistics") ? "active" : "")">
+                    <span class="admin-sidebar-icon">📊</span>
+                    <span class="admin-sidebar-label">Thống kê Bài đăng</span>
                 </a>
                 <a asp-controller="AdminReport" asp-action="Index" class="admin-sidebar-link @((currentController == "AdminReport") ? "active" : "")">
                     <span class="admin-sidebar-icon">🚩</span>

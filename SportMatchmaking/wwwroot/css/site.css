@@ -223,3 +223,14 @@ body.admin-sidebar-enabled.admin-sidebar-collapsed .admin-sidebar-label {
 .admin-actions .btn {
   margin-bottom: 4px;
 }
+
+.admin-chart-scroll-x {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.admin-chart-wide {
+  min-width: 1200px;
+  height: 340px;
+}
