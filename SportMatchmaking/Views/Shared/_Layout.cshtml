@@ -11,12 +11,15 @@
     <link rel="stylesheet" href="~/css/register.css" />
     <link rel="stylesheet" href="~/SportMatchmaking.styles.css" asp-append-version="true" />
 </head>
-<body>
+<body class="@(Context.Session.GetString("RoleName") == "Admin" ? "admin-sidebar-enabled" : "")">
     @{
         var userId = Context.Session.GetInt32("UserId");
         var avatarUrl = Context.Session.GetString("AvatarUrl") ?? "/images/default-avatar.png";
         var displayName = Context.Session.GetString("DisplayName") ?? "Account";
         var roleName = Context.Session.GetString("RoleName");
+        var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+        var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+        var isAdmin = roleName == "Admin";
     }
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
@@ -110,7 +113,46 @@
             </div>
         </nav>
     </header>
-    <div class="container">
+
+    @if (isAdmin)
+    {
+        <aside id="adminSidebar" class="admin-sidebar">
+            <div class="admin-sidebar-header">
+                <button type="button" id="adminSidebarToggle" class="btn btn-link text-white admin-sidebar-toggle" aria-label="Toggle admin sidebar">
+                    ☰
+                </button>
+                <div class="admin-sidebar-title">Admin Menu</div>
+            </div>
+            <nav class="admin-sidebar-nav">
+                <a asp-controller="AdminDashboard" asp-action="Index" class="admin-sidebar-link @((currentController == "AdminDashboard") ? "active" : "")">
+                    <span class="admin-sidebar-icon">🏠</span>
+                    <span class="admin-sidebar-label">Dashboard</span>
+                </a>
+                <a asp-controller="AdminUser" asp-action="Index" class="admin-sidebar-link @((currentController == "AdminUser") ? "active" : "")">
+                    <span class="admin-sidebar-icon">👤</span>
+                    <span class="admin-sidebar-label">Quản lý User</span>
+                </a>
+                <a asp-controller="AdminSport" asp-action="Index" class="admin-sidebar-link @((currentController == "AdminSport" && (currentAction == "Index" || currentAction == "Details" || currentAction == "Create" || currentAction == "Edit")) ? "active" : "")">
+                    <span class="admin-sidebar-icon">🏅</span>
+                    <span class="admin-sidebar-label">Quản lý Sport</span>
+                </a>
+                <a asp-controller="AdminSport" asp-action="Images" class="admin-sidebar-link @((currentController == "AdminSport" && (currentAction == "Images" || currentAction == "CreateImage" || currentAction == "EditImage")) ? "active" : "")">
+                    <span class="admin-sidebar-icon">🖼️</span>
+                    <span class="admin-sidebar-label">Quản lý Image</span>
+                </a>
+                <a asp-controller="AdminPost" asp-action="Index" class="admin-sidebar-link @((currentController == "AdminPost") ? "active" : "")">
+                    <span class="admin-sidebar-icon">📝</span>
+                    <span class="admin-sidebar-label">Quản lý Bài đăng</span>
+                </a>
+                <a asp-controller="AdminReport" asp-action="Index" class="admin-sidebar-link @((currentController == "AdminReport") ? "active" : "")">
+                    <span class="admin-sidebar-icon">🚩</span>
+                    <span class="admin-sidebar-label">Quản lý Report</span>
+                </a>
+            </nav>
+        </aside>
+    }
+
+    <div class="container app-main-container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
@@ -126,7 +168,7 @@
     </div>
 
     <footer class="border-top footer text-muted">
-        <div class="container">
+        <div class="container app-footer-container">
             &copy; 2026 - SportMatchmaking - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
@@ -135,6 +177,14 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
     <script>
+        const adminSidebarToggle = document.getElementById('adminSidebarToggle');
+
+        if (adminSidebarToggle) {
+            adminSidebarToggle.addEventListener('click', function () {
+                document.body.classList.toggle('admin-sidebar-collapsed');
+            });
+        }
+
         function openProfileModal() {
             fetch('/Profile/GetProfilePartial')
                 .then(response => response.text())
