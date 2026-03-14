@@ -1,11 +1,16 @@
 using BusinessObjects;
 using DataAccessObjects;
 using Microsoft.EntityFrameworkCore;
+using Repositories.Admin;   
 using Repositories.AppUser;
+using Repositories.JoinRequest;
+using Repositories.Notifications;
+using Repositories.PostParticipant;
+using Services.Admin;
 using Services.AppUser;
 using Services.Auth;
-using Services.Admin;
-using Repositories.Admin;   
+using Services.JoinRequest;
+using Services.Notifications;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,6 +49,19 @@ builder.Services.AddScoped<IAdminPostService, AdminPostService>();
 builder.Services.AddScoped<IAdminSportService, AdminSportService>();
 builder.Services.AddScoped<IAdminReportService, AdminReportService>();
 builder.Services.AddScoped<IAdminDashboardService, AdminDashboardService>();
+
+
+builder.Services.AddScoped<JoinRequestDAO>();
+builder.Services.AddScoped<NotificationDAO>();
+builder.Services.AddScoped<PostParticipantDAO>();
+builder.Services.AddScoped<IJoinRequestRepository, JoinRequestRepository>();
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+builder.Services.AddScoped<IJoinRequestService, JoinRequestService>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<IPostParticipantRepository, PostParticipantRepository>();
+
+
+
 
 builder.Services.AddSession(options =>
 {

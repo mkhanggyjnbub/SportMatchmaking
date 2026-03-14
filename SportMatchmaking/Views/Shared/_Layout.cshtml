@@ -1,4 +1,4 @@
-﻿@using Repositories.AppUser
+@using Repositories.AppUser
 @inject IHttpContextAccessor HttpContextAccessor
 <!DOCTYPE html>
 <html lang="en">
@@ -27,15 +27,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    @* <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul> *@
-
+                  
 
                     @* xử lí profile *@
 
@@ -51,6 +43,55 @@
                                 <a class="nav-link text-dark" asp-controller="Auth" asp-action="Register">Register</a>
                             </li>
                         }
+
+
+                        @if (userId != null && roleName != "Admin")
+                        {
+                            <li class="nav-item me-2 d-flex align-items-center">
+                                <a class="btn btn-outline-primary btn-sm"
+                                   asp-controller="JoinRequest"
+                                   asp-action="MyRequests">
+                                    Request tôi đã gửi
+                                </a>
+                            </li>
+                        }
+
+
+                        @if (userId != null && roleName != "Admin")
+                        {
+                            <li class="nav-item dropdown me-2 d-flex align-items-center" id="notificationDropdownWrapper">
+                                <a class="nav-link position-relative d-flex align-items-center justify-content-center p-0"
+                                   href="#"
+                                   id="notificationDropdown"
+                                   role="button"
+                                   data-bs-toggle="dropdown"
+                                   aria-expanded="false"
+                                   style="width: 36px; height: 36px; border-radius: 50%; border: 1px solid #dee2e6;">
+                                    <span class="me-0" style="font-size: 1.05rem; line-height: 1;">🔔</span>
+                                    <span id="notificationBadge"
+                                          class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle"
+                                          style="font-size: 0.65rem; display: none; min-width: 18px;">
+                                        0
+                                    </span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end p-0 shadow-sm" aria-labelledby="notificationDropdown" style="min-width: 340px;">
+                                    <li class="px-3 py-2 border-bottom d-flex justify-content-between align-items-center">
+                                        <span class="fw-semibold small">Thông báo</span>
+                                        <button type="button"
+                                                class="btn btn-link btn-sm p-0 small text-decoration-none"
+                                                onclick="markAllNotificationRead()">
+                                            Đánh dấu đã đọc
+                                        </button>
+                                    </li>
+                                    <li class="dropdown-item text-center text-muted small" id="notificationMenuLoading" style="font-size: 0.8rem;">
+                                        Đang tải thông báo...
+                                    </li>
+                                    <li id="notificationMenuContainer" class="p-0" style="max-height: 380px; overflow-y: auto;">
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+
                         @if (userId != null)
                         {
                             <li class="nav-item dropdown">
@@ -95,15 +136,7 @@
 
 
 
-                    @* Xử lí logout *@
-                    @* <ul class="navbar-nav ms-auto">
-                        @if (Context.Session.GetString("UserName") != null)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Auth" asp-action="Logout">Logout</a>
-                            </li>
-                        }
-                    </ul> *@
+                   
 
 
                 </div>
@@ -198,35 +231,35 @@
                 });
         }
 
-        function bindEditProfileForm() {
-            const form = document.getElementById('editProfileForm');
-            if (!form) return;
+        // function bindEditProfileForm() {
+        //     const form = document.getElementById('editProfileForm');
+        //     if (!form) return;
 
-            form.addEventListener('submit', function (e) {
-                e.preventDefault();
+        //     form.addEventListener('submit', function (e) {
+        //         e.preventDefault();
 
-                const formData = new FormData(form);
+        //         const formData = new FormData(form);
 
-                fetch(form.action, {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(async response => {
-                    const contentType = response.headers.get("content-type");
+        //         fetch(form.action, {
+        //             method: 'POST',
+        //             body: formData
+        //         })
+        //         .then(async response => {
+        //             const contentType = response.headers.get("content-type");
 
-                    if (contentType && contentType.includes("application/json")) {
-                        const result = await response.json();
-                        if (result.success) {
-                            location.reload();
-                        }
-                    } else {
-                        const html = await response.text();
-                        document.getElementById('profileModalContent').innerHTML = html;
-                        bindEditProfileForm();
-                    }
-                });
-            });
-        }
+        //             if (contentType && contentType.includes("application/json")) {
+        //                 const result = await response.json();
+        //                 if (result.success) {
+        //                     location.reload();
+        //                 }
+        //             } else {
+        //                 const html = await response.text();
+        //                 document.getElementById('profileModalContent').innerHTML = html;
+        //                 bindEditProfileForm();
+        //             }
+        //         });
+        //     });
+        // }
 
         function bindChangePasswordForm() {
             const form = document.getElementById('changePasswordForm');
@@ -259,6 +292,96 @@
                     }
                 });
             });
+        }
+
+        // ---------------- Thông báo (notification bell) ----------------
+        document.addEventListener('DOMContentLoaded', function () {
+            const userId = @((userId ?? 0));
+            if (!userId || '@roleName' === 'Admin') {
+                return;
+            }
+
+            const badge = document.getElementById('notificationBadge');
+            const menuLoading = document.getElementById('notificationMenuLoading');
+            const menuContainer = document.getElementById('notificationMenuContainer');
+            const dropdown = document.getElementById('notificationDropdown');
+
+            function updateBadge(count) {
+                if (!badge) return;
+                if (count > 0) {
+                    badge.style.display = 'inline-block';
+                    badge.textContent = count > 9 ? '9+' : count.toString();
+                } else {
+                    badge.style.display = 'none';
+                }
+            }
+
+            async function fetchNotificationCount() {
+                try {
+                    const response = await fetch('/Notification/Count');
+                    if (!response.ok) return;
+                    const data = await response.json();
+                    updateBadge(data.unreadCount ?? 0);
+                } catch {
+                    // ignore
+                }
+            }
+
+            async function loadNotificationDropdown() {
+                if (menuLoading) {
+                    menuLoading.style.display = 'block';
+                }
+                if (menuContainer) {
+                    menuContainer.innerHTML = '';
+                }
+
+                try {
+                    const response = await fetch('/Notification/Dropdown');
+                    if (!response.ok) return;
+                    const html = await response.text();
+                    if (menuContainer) {
+                        menuContainer.innerHTML = html;
+                    }
+                    if (menuLoading) {
+                        menuLoading.style.display = 'none';
+                    }
+
+                    // Mark all as read once opened
+                    try {
+                        await fetch('/Notification/MarkAllRead', { method: 'POST' });
+                        updateBadge(0);
+                    } catch {
+                        // ignore
+                    }
+                } catch {
+                    if (menuLoading) {
+                        menuLoading.textContent = 'Không tải được thông báo.';
+                    }
+                }
+            }
+
+            // Initial load
+            fetchNotificationCount();
+            // Polling every 20s
+            setInterval(fetchNotificationCount, 20000);
+
+            if (dropdown) {
+                dropdown.addEventListener('click', function () {
+                    loadNotificationDropdown();
+                });
+            }
+        });
+
+        async function markAllNotificationRead() {
+            try {
+                await fetch('/Notification/MarkAllRead', { method: 'POST' });
+                const badge = document.getElementById('notificationBadge');
+                if (badge) {
+                    badge.style.display = 'none';
+                }
+            } catch {
+                // ignore
+            }
         }
     </script>
 </body>

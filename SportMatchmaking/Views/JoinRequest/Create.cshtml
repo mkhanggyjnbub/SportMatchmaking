@@ -1,0 +1,72 @@
+﻿@model SportMatchmaking.Models.CreateJoinRequestVM
+
+@{
+    ViewData["Title"] = "Gửi yêu cầu tham gia";
+}
+
+<div class="container mt-4" style="max-width: 720px;">
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    <div class="card shadow-sm border-0 rounded-4">
+        <div class="card-body p-4">
+            <h2 class="mb-2">Gửi yêu cầu tham gia kèo</h2>
+            <p class="text-muted mb-4">
+                Nhập thông tin để gửi request tham gia vào bài đăng.
+            </p>
+
+            <form asp-action="Create" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <div class="mb-3">
+                    <label asp-for="PostId" class="form-label">PostId</label>
+                    <input asp-for="PostId" class="form-control" readonly />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="PartySize" class="form-label">PartySize</label>
+                    <input asp-for="PartySize" class="form-control" type="number" min="1" max="30" />
+                    <span asp-validation-for="PartySize" class="text-danger"></span>
+                    <div class="form-text">Số lượng người xin tham gia, bao gồm cả bạn.</div>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Message" class="form-label">Message</label>
+                    <textarea asp-for="Message" class="form-control" rows="4" placeholder="Ví dụ: Nhóm mình đi 2 người, đá đúng giờ..."></textarea>
+                    <span asp-validation-for="Message" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="GuestNames" class="form-label">GuestNames</label>
+                    <input asp-for="GuestNames" class="form-control" placeholder="Ví dụ: Huy, Long" />
+                    <span asp-validation-for="GuestNames" class="text-danger"></span>
+                    <div class="form-text">Có thể để trống nếu chỉ có một mình bạn.</div>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary px-4">
+                        Gửi yêu cầu
+                    </button>
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">
+                        Quay lại
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
