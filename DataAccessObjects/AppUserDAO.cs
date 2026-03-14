@@ -56,5 +56,10 @@ namespace DataAccessObjects
         {
             return _context.AppUsers.FirstOrDefault(x => x.UserId == userId);
         }
+        public Role? GetByName(string roleName)
+        {
+            return _context.Roles
+                .FirstOrDefault(r => r.Name == roleName);
+        }
     }
 }
