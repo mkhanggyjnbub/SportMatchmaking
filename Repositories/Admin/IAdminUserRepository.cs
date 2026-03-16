@@ -10,7 +10,6 @@ namespace Repositories.Admin
         Task<List<Role>> GetRolesAsync();
         Task<Role?> GetRoleByIdAsync(int roleId);
         Task<bool> ToggleBanAsync(int userId);
-        Task<bool> UpdateUserRoleAsync(int userId, int roleId);
         Task<bool> UpdateUserAsync(AppUserEntity updatedUser);
         Task<bool> ExistsByEmailAsync(string email, int? excludeUserId = null);
         Task<bool> ExistsByUserNameAsync(string userName, int? excludeUserId = null);

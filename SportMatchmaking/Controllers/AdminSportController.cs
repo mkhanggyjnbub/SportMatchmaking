@@ -23,6 +23,18 @@ namespace SportMatchmaking.Controllers
             return View(sports);
         }
 
+        public async Task<IActionResult> Details(int id)
+        {
+            var sport = await _adminSportService.GetSportByIdAsync(id);
+            if (sport == null)
+            {
+                TempData["Error"] = "Không tìm thấy môn thể thao.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(sport);
+        }
+
         [HttpGet]
         public async Task<IActionResult> Create()
         {

@@ -20,5 +20,11 @@ namespace Services.Admin
 
         Task<int> CountPostsAsync();
         Task<int> CountCompletedPostsAsync();
+
+        Task<List<SportPostCountStat>> GetPostCountBySportAsync();
+        Task<List<SportPostCountStat>> GetPostCountBySportOpenOrFullAsync();
+        Task<Dictionary<byte, int>> GetPostCountByStatusAsync();
+        Task<Dictionary<int, int>> GetWeeklyPostCountByYearAsync(int year);
+        Task<List<int>> GetAvailablePostYearsAsync();
     }
 }

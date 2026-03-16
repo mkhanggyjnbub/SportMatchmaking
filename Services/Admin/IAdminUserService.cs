@@ -11,7 +11,6 @@ namespace Services.Admin
         Task<Role?> GetRoleByIdAsync(int roleId);
 
         Task<(bool Success, string Message)> ToggleBanAsync(int targetUserId, int currentAdminUserId);
-        Task<(bool Success, string Message)> UpdateUserRoleAsync(int targetUserId, int newRoleId, int currentAdminUserId);
         Task<(bool Success, string Message)> UpdateUserAsync(AppUserEntity updatedUser);
 
         Task<int> CountUsersAsync();

@@ -83,31 +83,6 @@ namespace DataAccessObjects
             return true;
         }
 
-        public async Task<bool> UpdateUserRoleAsync(int userId, int roleId)
-        {
-            var user = await _context.Set<AppUser>()
-                .FirstOrDefaultAsync(x => x.UserId == userId);
-
-            if (user == null)
-            {
-                return false;
-            }
-
-            var roleExists = await _context.Set<Role>()
-                .AnyAsync(x => x.RoleId == roleId);
-
-            if (!roleExists)
-            {
-                return false;
-            }
-
-            user.RoleId = roleId;
-            user.UpdatedAt = DateTime.Now;
-
-            await _context.SaveChangesAsync();
-            return true;
-        }
-
         public async Task<bool> UpdateUserAsync(AppUser updatedUser)
         {
             var existingUser = await _context.Set<AppUser>()
