@@ -51,6 +51,10 @@ namespace Services.Auth
                 throw new Exception("Display name already exists");
             }
 
+            var userRole = _userRepository.GetByName("User");
+            if (userRole == null)
+                throw new Exception("Role 'User' does not exist in database");
+
             var user = new AppUserEntity
             {
                 Email = dto.Email.Trim(),
@@ -60,7 +64,7 @@ namespace Services.Auth
                 Bio = dto.Bio,
                 City = dto.City,
                 District = dto.District,
-                RoleId = 1,
+                RoleId = userRole.RoleId,
                 EmailConfirmed = false,
                 IsBanned = false,
                 AvatarUrl = "/images/default-avatar.png",

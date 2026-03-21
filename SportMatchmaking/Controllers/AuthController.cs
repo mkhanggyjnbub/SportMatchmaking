@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Services.Auth;
 using Services.DTOs;
 using SportMatchmaking.Models;
@@ -147,9 +147,27 @@ namespace SportMatchmaking.Controllers
                 HttpContext.Session.SetString("UserName", user.UserName);
                 HttpContext.Session.SetString("Email", user.Email);
                 HttpContext.Session.SetString("RoleId", user.RoleId.ToString());
+                HttpContext.Session.SetString("RoleName", user.Role.Name); // Admin hoặc User
 
-                TempData["Success"] = "Login successful";
-                return RedirectToAction("Index", "Home");
+                HttpContext.Session.SetString(
+           "AvatarUrl",
+           string.IsNullOrEmpty(user.AvatarUrl) ? "/images/default-avatar.png" : user.AvatarUrl
+       );
+
+                HttpContext.Session.SetString(
+                    "DisplayName",
+                    !string.IsNullOrEmpty(user.DisplayName) ? user.DisplayName : user.UserName
+                );
+
+
+                // Xác định URL chuyển hướng theo role
+                var redirectUrl = Url.Action("Index", user.Role.Name == "Admin" ? "AdminDashboard" : "Home");
+
+                // Trả lại view Login với thông báo và URL chuyển hướng (hiển thị ngay trên trang login)
+                ViewBag.LoginSuccess = "Login successful";
+                ViewBag.RedirectUrl = redirectUrl;
+
+                return View("Login", model);
             }
             catch (Exception ex)
             {
@@ -163,6 +181,13 @@ namespace SportMatchmaking.Controllers
             HttpContext.Session.Clear();
             return RedirectToAction("Login");
         }
+
+
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
+
 
     }
 }

@@ -1,3 +1,4 @@
+using BusinessObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,8 @@ namespace Repositories.AppUser
         AppUserEntity? GetByUserName(string userName);
         AppUserEntity? GetByPhone(string phone);
         AppUserEntity? GetByDisplayName(string displayName);
+        AppUserEntity? GetById(int userId);
+        Role? GetByName(string roleName);
         void Add(AppUserEntity user);
         void Update(AppUserEntity user);
     }

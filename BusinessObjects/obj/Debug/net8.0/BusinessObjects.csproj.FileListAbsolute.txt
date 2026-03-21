@@ -1,17 +1,3 @@
-D:\Project Prn\BusinessObjects\bin\Debug\net8.0\BusinessObjects.deps.json
-D:\Project Prn\BusinessObjects\bin\Debug\net8.0\BusinessObjects.runtimeconfig.json
-D:\Project Prn\BusinessObjects\bin\Debug\net8.0\BusinessObjects.dll
-D:\Project Prn\BusinessObjects\bin\Debug\net8.0\BusinessObjects.pdb
-D:\Project Prn\BusinessObjects\obj\Debug\net8.0\BusinessObjects.csproj.AssemblyReference.cache
-D:\Project Prn\BusinessObjects\obj\Debug\net8.0\BusinessObjects.GeneratedMSBuildEditorConfig.editorconfig
-D:\Project Prn\BusinessObjects\obj\Debug\net8.0\BusinessObjects.AssemblyInfoInputs.cache
-D:\Project Prn\BusinessObjects\obj\Debug\net8.0\BusinessObjects.AssemblyInfo.cs
-D:\Project Prn\BusinessObjects\obj\Debug\net8.0\BusinessObjects.csproj.CoreCompileInputs.cache
-D:\Project Prn\BusinessObjects\obj\Debug\net8.0\BusinessObjects.dll
-D:\Project Prn\BusinessObjects\obj\Debug\net8.0\refint\BusinessObjects.dll
-D:\Project Prn\BusinessObjects\obj\Debug\net8.0\BusinessObjects.pdb
-D:\Project Prn\BusinessObjects\obj\Debug\net8.0\BusinessObjects.genruntimeconfig.cache
-D:\Project Prn\BusinessObjects\obj\Debug\net8.0\ref\BusinessObjects.dll
 C:\Users\LENOVO\Documents\GitHub\SportMatchmaking\BusinessObjects\bin\Debug\net8.0\BusinessObjects.deps.json
 C:\Users\LENOVO\Documents\GitHub\SportMatchmaking\BusinessObjects\bin\Debug\net8.0\BusinessObjects.runtimeconfig.json
 C:\Users\LENOVO\Documents\GitHub\SportMatchmaking\BusinessObjects\bin\Debug\net8.0\BusinessObjects.dll
@@ -27,3 +13,18 @@ C:\Users\LENOVO\Documents\GitHub\SportMatchmaking\BusinessObjects\obj\Debug\net8
 C:\Users\LENOVO\Documents\GitHub\SportMatchmaking\BusinessObjects\obj\Debug\net8.0\BusinessObjects.pdb
 C:\Users\LENOVO\Documents\GitHub\SportMatchmaking\BusinessObjects\obj\Debug\net8.0\BusinessObjects.genruntimeconfig.cache
 C:\Users\LENOVO\Documents\GitHub\SportMatchmaking\BusinessObjects\obj\Debug\net8.0\ref\BusinessObjects.dll
+F:\SP26\PRN222\Project\SportMatchmaking\BusinessObjects\bin\Debug\net8.0\BusinessObjects.deps.json
+F:\SP26\PRN222\Project\SportMatchmaking\BusinessObjects\bin\Debug\net8.0\BusinessObjects.runtimeconfig.json
+F:\SP26\PRN222\Project\SportMatchmaking\BusinessObjects\bin\Debug\net8.0\BusinessObjects.dll
+F:\SP26\PRN222\Project\SportMatchmaking\BusinessObjects\bin\Debug\net8.0\BusinessObjects.pdb
+F:\SP26\PRN222\Project\SportMatchmaking\BusinessObjects\obj\Debug\net8.0\BusinessObjects.csproj.AssemblyReference.cache
+F:\SP26\PRN222\Project\SportMatchmaking\BusinessObjects\obj\Debug\net8.0\BusinessObjects.GeneratedMSBuildEditorConfig.editorconfig
+F:\SP26\PRN222\Project\SportMatchmaking\BusinessObjects\obj\Debug\net8.0\BusinessObjects.AssemblyInfoInputs.cache
+F:\SP26\PRN222\Project\SportMatchmaking\BusinessObjects\obj\Debug\net8.0\BusinessObjects.AssemblyInfo.cs
+F:\SP26\PRN222\Project\SportMatchmaking\BusinessObjects\obj\Debug\net8.0\BusinessObjects.csproj.CoreCompileInputs.cache
+F:\SP26\PRN222\Project\SportMatchmaking\BusinessObjects\obj\Debug\net8.0\BusinessObjects.sourcelink.json
+F:\SP26\PRN222\Project\SportMatchmaking\BusinessObjects\obj\Debug\net8.0\BusinessObjects.dll
+F:\SP26\PRN222\Project\SportMatchmaking\BusinessObjects\obj\Debug\net8.0\refint\BusinessObjects.dll
+F:\SP26\PRN222\Project\SportMatchmaking\BusinessObjects\obj\Debug\net8.0\BusinessObjects.pdb
+F:\SP26\PRN222\Project\SportMatchmaking\BusinessObjects\obj\Debug\net8.0\BusinessObjects.genruntimeconfig.cache
+F:\SP26\PRN222\Project\SportMatchmaking\BusinessObjects\obj\Debug\net8.0\ref\BusinessObjects.dll

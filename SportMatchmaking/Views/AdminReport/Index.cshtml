@@ -1,0 +1,155 @@
+﻿@model List<BusinessObjects.Report>
+
+@{
+    ViewData["Title"] = "Quản lý Report";
+
+    string GetReportStatusText(byte status)
+    {
+        return status switch
+        {
+            1 => "Open",
+            2 => "In Review",
+            3 => "Resolved",
+            4 => "Dismissed",
+            _ => "Unknown"
+        };
+    }
+}
+
+<h2 class="admin-page-title mb-1">Quản lý Report</h2>
+<p class="admin-page-subtitle mb-4">Theo dõi và xử lý báo cáo vi phạm.</p>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<form method="get" asp-action="Index" class="admin-filter row g-3 mb-4">
+    <div class="col-md-2">
+        <label class="form-label">Status</label>
+        <select name="status" class="form-select">
+            <option value="">-- Tất cả --</option>
+            @if (ViewBag.Status != null && (byte)ViewBag.Status == 1)
+            {
+                <option value="1" selected>Open</option>
+            }
+            else
+            {
+                <option value="1">Open</option>
+            }
+            @if (ViewBag.Status != null && (byte)ViewBag.Status == 2)
+            {
+                <option value="2" selected>In Review</option>
+            }
+            else
+            {
+                <option value="2">In Review</option>
+            }
+            @if (ViewBag.Status != null && (byte)ViewBag.Status == 3)
+            {
+                <option value="3" selected>Resolved</option>
+            }
+            else
+            {
+                <option value="3">Resolved</option>
+            }
+            @if (ViewBag.Status != null && (byte)ViewBag.Status == 4)
+            {
+                <option value="4" selected>Dismissed</option>
+            }
+            else
+            {
+                <option value="4">Dismissed</option>
+            }
+        </select>
+    </div>
+
+    <div class="col-md-2">
+        <label class="form-label">Target Type</label>
+        <select name="targetType" class="form-select">
+            <option value="">-- Tất cả --</option>
+            @if (ViewBag.TargetType != null && (byte)ViewBag.TargetType == 1)
+            {
+                <option value="1" selected>1 - Post</option>
+            }
+            else
+            {
+                <option value="1">1 - Post</option>
+            }
+            @if (ViewBag.TargetType != null && (byte)ViewBag.TargetType == 2)
+            {
+                <option value="2" selected>2 - User</option>
+            }
+            else
+            {
+                <option value="2">2 - User</option>
+            }
+        </select>
+    </div>
+
+    <div class="col-md-2">
+        <label class="form-label">Reason Code</label>
+        <input type="number" name="reasonCode" value="@ViewBag.ReasonCode" class="form-control" />
+    </div>
+
+    <div class="col-md-2">
+        <label class="form-label">Reporter UserId</label>
+        <input type="number" name="reporterUserId" value="@ViewBag.ReporterUserId" class="form-control" />
+    </div>
+
+    <div class="col-md-4 d-flex align-items-end gap-2">
+        <button type="submit" class="btn btn-primary">Lọc</button>
+        <a asp-action="Statistics" class="btn btn-warning">Thống kê</a>
+    </div>
+</form>
+
+<div class="admin-table-wrap">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0 admin-table">
+            <thead>
+                <tr>
+                    <th>ReportId</th>
+                    <th>ReporterUserId</th>
+                    <th>TargetType</th>
+                    <th>TargetPostId</th>
+                    <th>TargetUserId</th>
+                    <th>ReasonCode</th>
+                    <th>Status</th>
+                    <th>CreatedAt</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var report in Model)
+                    {
+                        <tr>
+                            <td>@report.ReportId</td>
+                            <td>@report.ReporterUserId</td>
+                            <td>@report.TargetType</td>
+                            <td>@report.TargetPostId</td>
+                            <td>@report.TargetUserId</td>
+                            <td>@report.ReasonCode</td>
+                            <td><span class="badge bg-secondary admin-badge">@GetReportStatusText(report.Status)</span></td>
+                            <td>@report.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@report.ReportId" class="btn btn-sm btn-info text-white">Chi tiết</a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="9" class="text-center py-4">Không có dữ liệu.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

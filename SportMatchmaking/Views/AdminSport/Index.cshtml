@@ -1,0 +1,81 @@
+﻿@model List<BusinessObjects.Sport>
+
+@{
+    ViewData["Title"] = "Quản lý Môn thể thao";
+}
+
+<h2 class="admin-page-title mb-1">Quản lý Môn thể thao</h2>
+<p class="admin-page-subtitle mb-4">Quản lý danh sách môn thể thao và thông tin đội chơi.</p>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<form method="get" asp-action="Index" class="admin-filter row g-3 mb-4">
+    <div class="col-md-5">
+        <label class="form-label">Tìm kiếm</label>
+        <input type="text" name="keyword" class="form-control" value="@ViewBag.Keyword" placeholder="Nhập tên môn thể thao..." />
+    </div>
+    <div class="col-md-2 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
+    </div>
+    <div class="col-md-5 text-md-end d-flex align-items-end justify-content-md-end gap-2">
+        <a asp-action="Create" class="btn btn-success">Thêm môn thể thao</a>
+        <a asp-action="Images" class="btn btn-info text-white">Quản lý ảnh</a>
+    </div>
+</form>
+
+<div class="admin-table-wrap">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0 admin-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tên môn</th>
+                    <th>TeamMin</th>
+                    <th>TeamMax</th>
+                    <th>ImageId</th>
+                    <th style="width:180px;">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var sport in Model)
+                    {
+                        <tr>
+                            <td>@sport.SportId</td>
+                            <td class="fw-semibold">@sport.Name</td>
+                            <td>@sport.TeamMin</td>
+                            <td>@sport.TeamMax</td>
+                            <td>@sport.ImageId</td>
+                            <td class="admin-actions">
+                                <a asp-action="Details" asp-route-id="@sport.SportId" class="btn btn-sm btn-info text-white">Chi tiết</a>
+                                <a asp-action="Edit" asp-route-id="@sport.SportId" class="btn btn-sm btn-warning">Sửa</a>
+
+                                <form asp-action="Delete" asp-route-id="@sport.SportId" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-sm btn-danger"
+                                            onclick="return confirm('Bạn có chắc muốn xóa môn thể thao này?')">
+                                        Xóa
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center py-4">Không có dữ liệu.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

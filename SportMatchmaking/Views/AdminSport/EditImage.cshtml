@@ -1,0 +1,33 @@
+﻿@model BusinessObjects.SportImage
+
+@{
+    ViewData["Title"] = "Sửa ảnh môn thể thao";
+}
+
+<h2 class="admin-page-title mb-1">Sửa ảnh môn thể thao</h2>
+<p class="admin-page-subtitle mb-4">Cập nhật URL ảnh trong thư viện.</p>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<div class="card admin-card">
+    <div class="card-body">
+        <form asp-action="EditImage" method="post" class="row g-3">
+            @Html.AntiForgeryToken()
+
+            <input asp-for="ImageId" type="hidden" />
+
+            <div class="col-12">
+                <label class="form-label">Image URL</label>
+                <input asp-for="ImageUrl" class="form-control" />
+            </div>
+
+            <div class="col-12 d-flex gap-2">
+                <button type="submit" class="btn btn-primary">Cập nhật</button>
+                <a asp-action="Images" class="btn btn-secondary">Quay lại</a>
+            </div>
+        </form>
+    </div>
+</div>
