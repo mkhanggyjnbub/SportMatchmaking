@@ -1,6 +1,4 @@
-@using Repositories.AppUser
-@inject IHttpContextAccessor HttpContextAccessor
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -11,16 +9,7 @@
     <link rel="stylesheet" href="~/css/register.css" />
     <link rel="stylesheet" href="~/SportMatchmaking.styles.css" asp-append-version="true" />
 </head>
-<body class="@(Context.Session.GetString("RoleName") == "Admin" ? "admin-sidebar-enabled" : "")">
-    @{
-        var userId = Context.Session.GetInt32("UserId");
-        var avatarUrl = Context.Session.GetString("AvatarUrl") ?? "/images/default-avatar.png";
-        var displayName = Context.Session.GetString("DisplayName") ?? "Account";
-        var roleName = Context.Session.GetString("RoleName");
-        var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
-        var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
-        var isAdmin = roleName == "Admin";
-    }
+<body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
@@ -30,182 +19,26 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                  
-
-                    @* xử lí profile *@
-
-                    <ul class="navbar-nav ms-auto">
-                        @if (Context.Session.GetString("UserName") == null)
-                        {
-                            <!-- Guest -->
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Auth" asp-action="Login">Login</a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Auth" asp-action="Register">Register</a>
-                            </li>
-                        }
-
-
-                        @if (userId != null && roleName != "Admin")
-                        {
-                            <li class="nav-item me-2 d-flex align-items-center">
-                                <a class="btn btn-outline-primary btn-sm"
-                                   asp-controller="JoinRequest"
-                                   asp-action="MyRequests">
-                                    Request tôi đã gửi
-                                </a>
-                            </li>
-                        }
-
-
-                        @if (userId != null && roleName != "Admin")
-                        {
-                            <li class="nav-item dropdown me-2 d-flex align-items-center" id="notificationDropdownWrapper">
-                                <a class="nav-link position-relative d-flex align-items-center justify-content-center p-0"
-                                   href="#"
-                                   id="notificationDropdown"
-                                   role="button"
-                                   data-bs-toggle="dropdown"
-                                   aria-expanded="false"
-                                   style="width: 36px; height: 36px; border-radius: 50%; border: 1px solid #dee2e6;">
-                                    <span class="me-0" style="font-size: 1.05rem; line-height: 1;">🔔</span>
-                                    <span id="notificationBadge"
-                                          class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle"
-                                          style="font-size: 0.65rem; display: none; min-width: 18px;">
-                                        0
-                                    </span>
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-end p-0 shadow-sm" aria-labelledby="notificationDropdown" style="min-width: 340px;">
-                                    <li class="px-3 py-2 border-bottom d-flex justify-content-between align-items-center">
-                                        <span class="fw-semibold small">Thông báo</span>
-                                        <button type="button"
-                                                class="btn btn-link btn-sm p-0 small text-decoration-none"
-                                                onclick="markAllNotificationRead()">
-                                            Đánh dấu đã đọc
-                                        </button>
-                                    </li>
-                                    <li class="dropdown-item text-center text-muted small" id="notificationMenuLoading" style="font-size: 0.8rem;">
-                                        Đang tải thông báo...
-                                    </li>
-                                    <li id="notificationMenuContainer" class="p-0" style="max-height: 380px; overflow-y: auto;">
-                                    </li>
-                                </ul>
-                            </li>
-                        }
-
-                        @if (userId != null)
-                        {
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle d-flex align-items-center gap-2"
-                                   href="#"
-                                   id="profileDropdown"
-                                   role="button"
-                                   data-bs-toggle="dropdown"
-                                   aria-expanded="false">
-                                    <img src="@avatarUrl"
-                                         alt="Avatar"
-                                         class="rounded-circle border"
-                                         style="width:40px;height:40px;object-fit:cover;" />
-                                </a>
-
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                                    <li>
-                                        <a class="dropdown-item" href="javascript:void(0)" onclick="openProfileModal()">
-                                            View Profile
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="javascript:void(0)" onclick="openEditProfileModal()">
-                                            Update Profile
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="javascript:void(0)" onclick="openChangePasswordModal()">
-                                            Change Password
-                                        </a>
-                                    </li>
-                                    <li><hr class="dropdown-divider" /></li>
-                                    <li>
-                                        <a class="dropdown-item text-danger" asp-controller="Auth" asp-action="Logout">
-                                            Logout
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                        }
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
                     </ul>
-
-
-
-                   
-
-
                 </div>
             </div>
         </nav>
     </header>
-
-    @if (isAdmin)
-    {
-        <aside id="adminSidebar" class="admin-sidebar">
-            <div class="admin-sidebar-header">
-                <button type="button" id="adminSidebarToggle" class="btn btn-link text-white admin-sidebar-toggle" aria-label="Toggle admin sidebar">
-                    ☰
-                </button>
-                <div class="admin-sidebar-title">Admin Menu</div>
-            </div>
-            <nav class="admin-sidebar-nav">
-                <a asp-controller="AdminDashboard" asp-action="Index" class="admin-sidebar-link @((currentController == "AdminDashboard") ? "active" : "")">
-                    <span class="admin-sidebar-icon">🏠</span>
-                    <span class="admin-sidebar-label">Dashboard</span>
-                </a>
-                <a asp-controller="AdminUser" asp-action="Index" class="admin-sidebar-link @((currentController == "AdminUser") ? "active" : "")">
-                    <span class="admin-sidebar-icon">👤</span>
-                    <span class="admin-sidebar-label">Quản lý User</span>
-                </a>
-                <a asp-controller="AdminSport" asp-action="Index" class="admin-sidebar-link @((currentController == "AdminSport" && (currentAction == "Index" || currentAction == "Details" || currentAction == "Create" || currentAction == "Edit")) ? "active" : "")">
-                    <span class="admin-sidebar-icon">🏅</span>
-                    <span class="admin-sidebar-label">Quản lý Sport</span>
-                </a>
-                <a asp-controller="AdminSport" asp-action="Images" class="admin-sidebar-link @((currentController == "AdminSport" && (currentAction == "Images" || currentAction == "CreateImage" || currentAction == "EditImage")) ? "active" : "")">
-                    <span class="admin-sidebar-icon">🖼️</span>
-                    <span class="admin-sidebar-label">Quản lý Image</span>
-                </a>
-                <a asp-controller="AdminPost" asp-action="Index" class="admin-sidebar-link @((currentController == "AdminPost" && currentAction != "Statistics") ? "active" : "")">
-                    <span class="admin-sidebar-icon">📝</span>
-                    <span class="admin-sidebar-label">Quản lý Bài đăng</span>
-                </a>
-                <a asp-controller="AdminPost" asp-action="Statistics" class="admin-sidebar-link @((currentController == "AdminPost" && currentAction == "Statistics") ? "active" : "")">
-                    <span class="admin-sidebar-icon">📊</span>
-                    <span class="admin-sidebar-label">Thống kê Bài đăng</span>
-                </a>
-                <a asp-controller="AdminReport" asp-action="Index" class="admin-sidebar-link @((currentController == "AdminReport") ? "active" : "")">
-                    <span class="admin-sidebar-icon">🚩</span>
-                    <span class="admin-sidebar-label">Quản lý Report</span>
-                </a>
-            </nav>
-        </aside>
-    }
-
-    <div class="container app-main-container">
+    <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-
-
-    <div class="modal fade" id="profileModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content" id="profileModalContent">
-            </div>
-        </div>
-    </div>
-
     <footer class="border-top footer text-muted">
-        <div class="container app-footer-container">
+        <div class="container">
             &copy; 2026 - SportMatchmaking - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
@@ -213,230 +46,5 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
-    <script>
-        const adminSidebarToggle = document.getElementById('adminSidebarToggle');
-
-        if (adminSidebarToggle) {
-            adminSidebarToggle.addEventListener('click', function () {
-                document.body.classList.toggle('admin-sidebar-collapsed');
-            });
-        }
-
-        function openProfileModal() {
-            fetch('/Profile/GetProfilePartial')
-                .then(response => response.text())
-                .then(html => {
-                    document.getElementById('profileModalContent').innerHTML = html;
-                    const modal = new bootstrap.Modal(document.getElementById('profileModal'));
-                    modal.show();
-                });
-        }
-
-        function openEditProfileModal() {
-            fetch('/Profile/GetEditProfilePartial')
-                .then(response => response.text())
-                .then(html => {
-                    document.getElementById('profileModalContent').innerHTML = html;
-                    const modal = new bootstrap.Modal(document.getElementById('profileModal'));
-                    modal.show();
-
-                    bindEditProfileForm();
-                });
-        }
-
-        function bindEditProfileForm() {
-            const form = document.getElementById('editProfileForm');
-            if (!form) return;
-
-            form.addEventListener('submit', function (e) {
-                e.preventDefault();
-
-                const formData = new FormData(form);
-
-                fetch(form.action, {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(async response => {
-                    const contentType = response.headers.get("content-type");
-
-                    if (contentType && contentType.includes("application/json")) {
-                        const result = await response.json();
-                        if (result.success) {
-                            location.reload();
-                        }
-                    } else {
-                        const html = await response.text();
-                        document.getElementById('profileModalContent').innerHTML = html;
-                        bindEditProfileForm();
-                    }
-                });
-            });
-        }
-
-        function openChangePasswordModal() {
-            fetch('/Profile/GetChangePasswordPartial')
-                .then(response => response.text())
-                .then(html => {
-                    document.getElementById('profileModalContent').innerHTML = html;
-                    const modal = new bootstrap.Modal(document.getElementById('profileModal'));
-                    modal.show();
-                    bindChangePasswordForm();
-                });
-        }
-
-        // function bindEditProfileForm() {
-        //     const form = document.getElementById('editProfileForm');
-        //     if (!form) return;
-
-        //     form.addEventListener('submit', function (e) {
-        //         e.preventDefault();
-
-        //         const formData = new FormData(form);
-
-        //         fetch(form.action, {
-        //             method: 'POST',
-        //             body: formData
-        //         })
-        //         .then(async response => {
-        //             const contentType = response.headers.get("content-type");
-
-        //             if (contentType && contentType.includes("application/json")) {
-        //                 const result = await response.json();
-        //                 if (result.success) {
-        //                     location.reload();
-        //                 }
-        //             } else {
-        //                 const html = await response.text();
-        //                 document.getElementById('profileModalContent').innerHTML = html;
-        //                 bindEditProfileForm();
-        //             }
-        //         });
-        //     });
-        // }
-
-        function bindChangePasswordForm() {
-            const form = document.getElementById('changePasswordForm');
-            if (!form) return;
-
-            form.addEventListener('submit', function (e) {
-                e.preventDefault();
-
-                const formData = new FormData(form);
-
-                fetch(form.action, {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(async response => {
-                    const contentType = response.headers.get("content-type");
-
-                    if (contentType && contentType.includes("application/json")) {
-                        const result = await response.json();
-                        if (result.success) {
-                            alert(result.message);
-                            const modalEl = document.getElementById('profileModal');
-                            const modal = bootstrap.Modal.getInstance(modalEl);
-                            modal.hide();
-                        }
-                    } else {
-                        const html = await response.text();
-                        document.getElementById('profileModalContent').innerHTML = html;
-                        bindChangePasswordForm();
-                    }
-                });
-            });
-        }
-
-        // ---------------- Thông báo (notification bell) ----------------
-        document.addEventListener('DOMContentLoaded', function () {
-            const userId = @((userId ?? 0));
-            if (!userId || '@roleName' === 'Admin') {
-                return;
-            }
-
-            const badge = document.getElementById('notificationBadge');
-            const menuLoading = document.getElementById('notificationMenuLoading');
-            const menuContainer = document.getElementById('notificationMenuContainer');
-            const dropdown = document.getElementById('notificationDropdown');
-
-            function updateBadge(count) {
-                if (!badge) return;
-                if (count > 0) {
-                    badge.style.display = 'inline-block';
-                    badge.textContent = count > 9 ? '9+' : count.toString();
-                } else {
-                    badge.style.display = 'none';
-                }
-            }
-
-            async function fetchNotificationCount() {
-                try {
-                    const response = await fetch('/Notification/Count');
-                    if (!response.ok) return;
-                    const data = await response.json();
-                    updateBadge(data.unreadCount ?? 0);
-                } catch {
-                    // ignore
-                }
-            }
-
-            async function loadNotificationDropdown() {
-                if (menuLoading) {
-                    menuLoading.style.display = 'block';
-                }
-                if (menuContainer) {
-                    menuContainer.innerHTML = '';
-                }
-
-                try {
-                    const response = await fetch('/Notification/Dropdown');
-                    if (!response.ok) return;
-                    const html = await response.text();
-                    if (menuContainer) {
-                        menuContainer.innerHTML = html;
-                    }
-                    if (menuLoading) {
-                        menuLoading.style.display = 'none';
-                    }
-
-                    // Mark all as read once opened
-                    try {
-                        await fetch('/Notification/MarkAllRead', { method: 'POST' });
-                        updateBadge(0);
-                    } catch {
-                        // ignore
-                    }
-                } catch {
-                    if (menuLoading) {
-                        menuLoading.textContent = 'Không tải được thông báo.';
-                    }
-                }
-            }
-
-            // Initial load
-            fetchNotificationCount();
-            // Polling every 20s
-            setInterval(fetchNotificationCount, 20000);
-
-            if (dropdown) {
-                dropdown.addEventListener('click', function () {
-                    loadNotificationDropdown();
-                });
-            }
-        });
-
-        async function markAllNotificationRead() {
-            try {
-                await fetch('/Notification/MarkAllRead', { method: 'POST' });
-                const badge = document.getElementById('notificationBadge');
-                if (badge) {
-                    badge.style.display = 'none';
-                }
-            } catch {
-                // ignore
-            }
-        }
-    </script>
 </body>
 </html>

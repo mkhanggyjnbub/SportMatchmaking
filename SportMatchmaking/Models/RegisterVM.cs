@@ -9,8 +9,6 @@ namespace SportMatchmaking.Models
         public string Email { get; set; } = null!;
 
         [Required]
-        [StringLength(20, MinimumLength = 3, ErrorMessage = "UserName must be from 3 to 20 characters.")]
-        [RegularExpression(@"^[A-Za-z][A-Za-z0-9_]*$", ErrorMessage = "UserName must start with a letter and can only contain letters, numbers, and underscore (_) without spaces.")]
         public string UserName { get; set; } = null!;
 
         [Required]
@@ -35,6 +33,5 @@ namespace SportMatchmaking.Models
         public string City { get; set; } = "";
 
         public string District { get; set; } = "";
-
     }
 }

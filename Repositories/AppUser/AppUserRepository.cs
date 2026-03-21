@@ -1,4 +1,3 @@
-using BusinessObjects;
 using DataAccessObjects;
 using System;
 using System.Collections.Generic;
@@ -43,11 +42,6 @@ namespace Repositories.AppUser
         public void Update(AppUserEntity user)
         {
             _appUserDAO.Update(user);
-        }
-        public AppUserEntity? GetById(int userId) => _appUserDAO.GetById(userId);
-        public Role? GetByName(string roleName)
-        {
-            return _appUserDAO.GetByName(roleName);
         }
     }
 }
