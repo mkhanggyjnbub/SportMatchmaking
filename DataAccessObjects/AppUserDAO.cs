@@ -31,7 +31,6 @@ namespace DataAccessObjects
         public AppUser? GetByEmail(string email)
         {
             return _context.AppUsers
-                .Include(x => x.Role)   
                 .FirstOrDefault(x => x.Email.ToLower() == email.Trim().ToLower());
         }
 
@@ -51,15 +50,6 @@ namespace DataAccessObjects
         {
             _context.AppUsers.Update(user);
             _context.SaveChanges();
-        }
-        public AppUser? GetById(int userId)
-        {
-            return _context.AppUsers.FirstOrDefault(x => x.UserId == userId);
-        }
-        public Role? GetByName(string roleName)
-        {
-            return _context.Roles
-                .FirstOrDefault(r => r.Name == roleName);
         }
     }
 }
