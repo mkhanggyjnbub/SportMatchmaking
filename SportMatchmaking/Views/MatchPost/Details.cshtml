@@ -1,0 +1,275 @@
+@model SportMatchmaking.Models.MatchPostDetailVM
+
+@{
+    ViewData["Title"] = "Chi tiết bài đăng";
+}
+
+<div class="match-page-shell">
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    }
+
+    <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
+        <div>
+            <div class="d-flex flex-wrap gap-2 mb-2">
+                <span class="badge text-bg-light">@Model.SportName</span>
+                <span class="badge text-bg-secondary">@Model.MatchTypeText</span>
+                <span class="badge @(Model.Status == 1 ? "text-bg-success" : "text-bg-warning")">@Model.StatusText</span>
+                @if (Model.IsUrgent)
+                {
+                    <span class="badge text-bg-danger">Urgent</span>
+                }
+            </div>
+            <h1 class="h2 mb-1">@Model.Title</h1>
+            <p class="text-muted mb-0">Bài đăng #@Model.PostId</p>
+        </div>
+
+        <div class="d-flex gap-2 flex-wrap">
+            <a asp-action="Index" class="btn btn-outline-secondary">Quay lại feed</a>
+
+            @if (Model.CanEdit)
+            {
+                <a asp-action="Edit" asp-route-id="@Model.PostId" class="btn btn-outline-primary">Sửa bài</a>
+            }
+
+            @if (Model.CanManageRequests)
+            {
+                <a asp-controller="JoinRequest" asp-action="PostRequests" asp-route-postId="@Model.PostId" class="btn btn-outline-dark">Quản lý request</a>
+            }
+
+            @if (Model.CanJoin)
+            {
+                <a asp-controller="JoinRequest" asp-action="Create" asp-route-postId="@Model.PostId" class="btn btn-primary">Xin tham gia</a>
+            }
+            else if (Model.HasPendingJoinRequest)
+            {
+                <span class="btn btn-outline-warning disabled">Đã gửi request</span>
+            }
+            else if (Model.AlreadyJoined)
+            {
+                <span class="btn btn-outline-success disabled">Đã tham gia</span>
+            }
+
+            @if (Model.CanReport)
+            {
+                <a asp-action="Report" asp-route-id="@Model.PostId" class="btn btn-outline-danger">Report bài</a>
+            }
+            else if (Model.HasActiveReportByCurrentUser)
+            {
+                <span class="btn btn-outline-danger disabled">Đã report</span>
+            }
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card match-surface-card border-0 shadow-sm mb-4">
+                <div class="card-body">
+                    @if (!string.IsNullOrWhiteSpace(Model.SportImageUrl))
+                    {
+                        <img src="@Model.SportImageUrl" alt="@Model.SportName" class="match-sport-detail-image mb-4" />
+                    }
+                    else
+                    {
+                        <div class="match-sport-detail-image match-sport-card-placeholder mb-4">
+                            <span>@Model.SportName</span>
+                        </div>
+                    }
+
+                    <h3 class="h5 mb-3">Thông tin trận</h3>
+
+                    <div class="row g-3 match-detail-grid">
+                        <div class="col-md-6">
+                            <div class="match-detail-item">
+                                <span class="match-detail-label">Bắt đầu</span>
+                                <strong>@Model.StartTime.ToString("dd/MM/yyyy HH:mm")</strong>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="match-detail-item">
+                                <span class="match-detail-label">Kết thúc</span>
+                                <strong>@(Model.EndTime.HasValue ? Model.EndTime.Value.ToString("dd/MM/yyyy HH:mm") : "Chưa đặt")</strong>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="match-detail-item">
+                                <span class="match-detail-label">Địa điểm</span>
+                                @{
+                                    var detailArea = string.Join(", ", new[] { Model.District, Model.City }
+                                        .Where(x => !string.IsNullOrWhiteSpace(x)));
+                                }
+                                <strong>@(string.IsNullOrWhiteSpace(Model.LocationText) ? "Chua cap nhat" : Model.LocationText)</strong>
+                                @if (!string.IsNullOrWhiteSpace(detailArea))
+                                {
+                                    <div class="text-muted small">@detailArea</div>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="match-detail-item">
+                                <span class="match-detail-label">Google Maps</span>
+                                @if (!string.IsNullOrWhiteSpace(Model.GoogleMapsUrl))
+                                {
+                                    <a href="@Model.GoogleMapsUrl" target="_blank" rel="noopener noreferrer">Mở bản đồ</a>
+                                }
+                                else
+                                {
+                                    <strong>Chưa có link</strong>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="match-detail-item">
+                                <span class="match-detail-label">Skill</span>
+                                <strong>@Model.SkillText</strong>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="match-detail-item">
+                                <span class="match-detail-label">Slot còn lại</span>
+                                <strong>@Model.SlotsRemaining / @Model.SlotsNeeded</strong>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="match-detail-item">
+                                <span class="match-detail-label">Phí dự kiến</span>
+                                <strong>@(Model.FeePerPerson.HasValue ? string.Format("{0:N0} đ/người", Model.FeePerPerson.Value) : "Trao đổi thêm")</strong>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="match-detail-item">
+                                <span class="match-detail-label">Hạn chốt</span>
+                                <strong>@(Model.ExpiresAt.HasValue ? Model.ExpiresAt.Value.ToString("dd/MM/yyyy HH:mm") : "Không đặt")</strong>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="match-detail-item">
+                                <span class="match-detail-label">Số report</span>
+                                <strong>@Model.ReportCount</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (!string.IsNullOrWhiteSpace(Model.Description))
+                    {
+                        <div class="mt-4">
+                            <h4 class="h6 text-uppercase text-muted">Mô tả</h4>
+                            <p class="mb-0">@Model.Description</p>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="card match-surface-card border-0 shadow-sm">
+                <div class="card-body">
+                    <h3 class="h5 mb-3">Danh sách thành viên đã chốt</h3>
+
+                    @if (Model.Participants == null || !Model.Participants.Any())
+                    {
+                        <div class="alert alert-light border mb-0">Chưa có ai xác nhận tham gia.</div>
+                    }
+                    else
+                    {
+                        <div class="vstack gap-3">
+                            @foreach (var participant in Model.Participants)
+                            {
+                                <div class="match-participant-row">
+                                    <img src="@participant.AvatarUrl" alt="@participant.DisplayName" class="match-avatar" />
+                                    <div class="flex-grow-1">
+                                        <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
+                                            <strong>@participant.DisplayName</strong>
+                                            <span class="badge text-bg-light">@participant.RoleText</span>
+                                            <span class="badge text-bg-secondary">PartySize: @participant.PartySize</span>
+                                        </div>
+                                        <div class="text-muted small">
+                                            Skill: @(participant.SkillLevel?.ToString() ?? "N/A")
+                                            · Khu vực: @(participant.District ?? "Chưa cập nhật"), @(participant.City ?? "Chưa cập nhật")
+                                            · Joined: @participant.JoinedAt.ToString("dd/MM/yyyy HH:mm")
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card match-surface-card border-0 shadow-sm mb-4">
+                <div class="card-body">
+                    <h3 class="h5 mb-3">Thông tin chủ kèo</h3>
+
+                    <div class="text-center mb-3">
+                        <img src="@Model.CreatorAvatarUrl" alt="@Model.CreatorDisplayName" class="match-avatar match-avatar-lg mb-2" />
+                        <div class="fw-semibold">@Model.CreatorDisplayName</div>
+                        <div class="text-muted small">@($"@{Model.CreatorUserName}")</div>
+                    </div>
+
+                    <div class="match-detail-item mb-3">
+                        <span class="match-detail-label">Khu vực</span>
+                        <strong>@(Model.CreatorDistrict ?? "Chưa cập nhật"), @(Model.CreatorCity ?? "Chưa cập nhật")</strong>
+                    </div>
+
+                    <div class="match-detail-item">
+                        <span class="match-detail-label">Skill hiện tại</span>
+                        <strong>@(Model.CreatorSkillLevel?.ToString() ?? "Chưa cập nhật")</strong>
+                    </div>
+                </div>
+            </div>
+
+            @if (Model.IsCreator)
+            {
+                <div class="card match-surface-card border-0 shadow-sm">
+                    <div class="card-body">
+                        <h3 class="h5 mb-3">Quản lý bài đăng</h3>
+
+                        <div class="d-grid gap-2">
+                            @if (Model.CanConfirm)
+                            {
+                                <form asp-action="UpdateStatus" method="post">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@Model.PostId" />
+                                    <input type="hidden" name="status" value="@((byte)BusinessObjects.PostStatus.Confirmed)" />
+                                    <button type="submit" class="btn btn-success w-100">Chốt trận</button>
+                                </form>
+                            }
+
+                            @if (Model.CanComplete)
+                            {
+                                <form asp-action="UpdateStatus" method="post">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@Model.PostId" />
+                                    <input type="hidden" name="status" value="@((byte)BusinessObjects.PostStatus.Completed)" />
+                                    <button type="submit" class="btn btn-outline-success w-100">Đánh dấu hoàn thành</button>
+                                </form>
+                            }
+
+                            @if (Model.CanCancel)
+                            {
+                                <form asp-action="Cancel" method="post" onsubmit="return confirm('Bạn có chắc muốn hủy bài đăng này không?');">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@Model.PostId" />
+                                    <button type="submit" class="btn btn-outline-danger w-100">Hủy bài đăng</button>
+                                </form>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

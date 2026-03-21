@@ -10,6 +10,7 @@ namespace Repositories.PostParticipant
     public interface IPostParticipantRepository
     {
         PostParticipantt? GetByPostAndUser(long postId, int userId);
+        IQueryable<PostParticipantt> GetQueryable();
         void Add(PostParticipantt entity);
         void Update(PostParticipantt entity);
     }

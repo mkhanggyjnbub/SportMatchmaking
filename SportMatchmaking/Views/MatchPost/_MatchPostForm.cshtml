@@ -1,0 +1,169 @@
+@model SportMatchmaking.Models.MatchPostFormVM
+
+<div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+<div class="row g-3">
+    <div class="col-lg-7">
+        <label asp-for="SportId" class="form-label">Mon the thao</label>
+        <select asp-for="SportId" asp-items="Model.SportOptions" class="form-select">
+            <option value="">-- Chon mon --</option>
+        </select>
+        <span asp-validation-for="SportId" class="text-danger"></span>
+    </div>
+
+    <div class="col-lg-5">
+        <label class="form-label">Anh theo mon</label>
+        <div class="match-sport-preview-card">
+            <img src="@Model.SelectedSportImageUrl"
+                 alt="Anh mon the thao"
+                 class="match-sport-preview-image @(string.IsNullOrWhiteSpace(Model.SelectedSportImageUrl) ? "d-none" : "")"
+                 data-sport-preview-image />
+            <div class="match-sport-preview-empty @(string.IsNullOrWhiteSpace(Model.SelectedSportImageUrl) ? "" : "d-none")"
+                 data-sport-preview-empty>
+                Chon mon de xem anh tu dong.
+            </div>
+        </div>
+        <input type="text"
+               class="form-control mt-2"
+               value="@Model.SelectedSportImageUrl"
+               placeholder="Link anh se tu lay theo mon da chon"
+               readonly
+               data-sport-preview-url />
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="MatchType" class="form-label">Loai tran</label>
+        <select asp-for="MatchType" asp-items="Model.MatchTypeOptions" class="form-select"></select>
+        <span asp-validation-for="MatchType" class="text-danger"></span>
+    </div>
+
+    <div class="col-12">
+        <label asp-for="Title" class="form-label">Tieu de</label>
+        <input asp-for="Title" class="form-control" placeholder="Vi du: Can them 2 ban danh cau toi nay" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="StartTime" class="form-label">Bat dau</label>
+        <input asp-for="StartTime" type="datetime-local" asp-format="{0:yyyy-MM-ddTHH:mm}" class="form-control" />
+        <span asp-validation-for="StartTime" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="EndTime" class="form-label">Ket thuc</label>
+        <input asp-for="EndTime" type="datetime-local" asp-format="{0:yyyy-MM-ddTHH:mm}" class="form-control" />
+        <span asp-validation-for="EndTime" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-8">
+        <label asp-for="LocationText" class="form-label">Dia diem (khong bat buoc)</label>
+        <input asp-for="LocationText" class="form-control" placeholder="San, trung tam hoac dia chi cu the" />
+        <span asp-validation-for="LocationText" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-4">
+        <label asp-for="GoogleMapsUrl" class="form-label">Google Maps URL</label>
+        <input asp-for="GoogleMapsUrl" class="form-control" placeholder="https://maps.google.com/..." />
+        <span asp-validation-for="GoogleMapsUrl" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="City" class="form-label">Thanh pho (khong bat buoc)</label>
+        <input asp-for="City" class="form-control" />
+        <span asp-validation-for="City" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="District" class="form-label">Quan/Huyen (khong bat buoc)</label>
+        <input asp-for="District" class="form-control" />
+        <span asp-validation-for="District" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-3">
+        <label asp-for="SkillMin" class="form-label">Skill min</label>
+        <input asp-for="SkillMin" type="number" min="1" max="10" class="form-control" />
+        <span asp-validation-for="SkillMin" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-3">
+        <label asp-for="SkillMax" class="form-label">Skill max</label>
+        <input asp-for="SkillMax" type="number" min="1" max="10" class="form-control" />
+        <span asp-validation-for="SkillMax" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-3">
+        <label asp-for="SlotsNeeded" class="form-label">So slot can them</label>
+        <input asp-for="SlotsNeeded" type="number" min="1" max="50" class="form-control" />
+        <span asp-validation-for="SlotsNeeded" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-3">
+        <label asp-for="FeePerPerson" class="form-label">Phi / nguoi</label>
+        <input asp-for="FeePerPerson" type="number" min="0" step="1000" class="form-control" />
+        <span asp-validation-for="FeePerPerson" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-6">
+        <label asp-for="ExpiresAt" class="form-label">Han chot</label>
+        <input asp-for="ExpiresAt" type="datetime-local" asp-format="{0:yyyy-MM-ddTHH:mm}" class="form-control" />
+        <span asp-validation-for="ExpiresAt" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-6 d-flex align-items-end">
+        <div class="form-check mb-2">
+            <input asp-for="IsUrgent" class="form-check-input" />
+            <label asp-for="IsUrgent" class="form-check-label">Danh dau gap</label>
+        </div>
+    </div>
+
+    <div class="col-12">
+        <label asp-for="Description" class="form-label">Mo ta</label>
+        <textarea asp-for="Description" rows="5" class="form-control" placeholder="Mo ta trinh do mong muon, chi phi, luu y them..."></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+</div>
+
+<script>
+    (() => {
+        const sportSelect = document.getElementById("SportId");
+        if (!sportSelect) {
+            return;
+        }
+
+        const sportImageMap = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.SportImageMap));
+        const previewImage = document.querySelector("[data-sport-preview-image]");
+        const previewEmpty = document.querySelector("[data-sport-preview-empty]");
+        const previewUrl = document.querySelector("[data-sport-preview-url]");
+
+        const renderSportPreview = () => {
+            const selectedOption = sportSelect.options[sportSelect.selectedIndex];
+            const sportId = sportSelect.value;
+            const sportName = selectedOption ? selectedOption.text.trim() : "";
+            const imageUrl = sportImageMap[sportId] || "";
+
+            if (previewUrl) {
+                previewUrl.value = imageUrl;
+            }
+
+            if (imageUrl) {
+                previewImage?.setAttribute("src", imageUrl);
+                previewImage?.setAttribute("alt", sportName ? `Anh mon ${sportName}` : "Anh mon the thao");
+                previewImage?.classList.remove("d-none");
+                previewEmpty?.classList.add("d-none");
+                return;
+            }
+
+            previewImage?.classList.add("d-none");
+            previewImage?.removeAttribute("src");
+            if (previewEmpty) {
+                previewEmpty.textContent = sportId
+                    ? `${sportName || "Mon nay"} chua co anh duoc cau hinh.`
+                    : "Chon mon de xem anh tu dong.";
+                previewEmpty.classList.remove("d-none");
+            }
+        };
+
+        sportSelect.addEventListener("change", renderSportPreview);
+        renderSportPreview();
+    })();
+</script>

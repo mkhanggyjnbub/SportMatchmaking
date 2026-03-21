@@ -1,0 +1,205 @@
+@model SportMatchmaking.Models.MatchPostIndexVM
+
+@{
+    ViewData["Title"] = "Feed kèo";
+    var isUser = Context.Session.GetString("RoleName") == "User";
+}
+
+<div class="match-page-shell">
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    }
+
+    <section class="match-feed-hero mb-4">
+        <div>
+            <span class="match-feed-kicker">Explore</span>
+            <h1 class="match-feed-title mb-2">Tìm trận phù hợp và chốt đội nhanh hơn</h1>
+            <p class="match-feed-subtitle mb-0">
+                Lọc theo môn, khu vực, skill, thời gian và mức độ gấp để tìm đúng kèo bạn muốn tham gia.
+            </p>
+        </div>
+
+        @if (isUser)
+        {
+            <a asp-action="Create" class="btn btn-primary btn-lg">Tạo bài đăng</a>
+        }
+    </section>
+
+    <form method="get" asp-action="Index" class="match-filter-panel card border-0 shadow-sm mb-4">
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-lg-3">
+                    <label class="form-label">Từ khóa</label>
+                    <input asp-for="Keyword" class="form-control" placeholder="Tiêu đề, địa điểm, môn..." />
+                </div>
+
+                <div class="col-lg-2">
+                    <label class="form-label">Môn thể thao</label>
+                    <select asp-for="SportId" asp-items="Model.SportOptions" class="form-select">
+                        <option value="">Tất cả</option>
+                    </select>
+                </div>
+
+                <div class="col-lg-2">
+                    <label class="form-label">Loại trận</label>
+                    <select asp-for="MatchType" asp-items="Model.MatchTypeOptions" class="form-select">
+                        <option value="">Tất cả</option>
+                    </select>
+                </div>
+
+                <div class="col-lg-2">
+                    <label class="form-label">Trạng thái</label>
+                    <select asp-for="Status" asp-items="Model.StatusOptions" class="form-select">
+                        <option value="">Tất cả</option>
+                    </select>
+                </div>
+
+                <div class="col-lg-3">
+                    <label asp-for="City" class="form-label">Thành phố</label>
+                    <input asp-for="City" class="form-control" placeholder="Ví dụ: Hồ Chí Minh" />
+                </div>
+
+                <div class="col-lg-3">
+                    <label asp-for="District" class="form-label">Quận/Huyện</label>
+                    <input asp-for="District" class="form-control" placeholder="Ví dụ: Thủ Đức" />
+                </div>
+
+                <div class="col-lg-2">
+                    <label asp-for="SkillLevel" class="form-label">Skill của bạn</label>
+                    <input asp-for="SkillLevel" type="number" min="1" max="10" class="form-control" />
+                </div>
+
+                <div class="col-lg-2">
+                    <label asp-for="IsUrgent" class="form-label">Urgent</label>
+                    <select asp-for="IsUrgent" class="form-select">
+                        <option value="">Tất cả</option>
+                        @if (Model.IsUrgent == true)
+                        {
+                            <option value="true" selected>Chỉ urgent</option>
+                        }
+                        else
+                        {
+                            <option value="true">Chỉ urgent</option>
+                        }
+                        @if (Model.IsUrgent == false)
+                        {
+                            <option value="false" selected>Không urgent</option>
+                        }
+                        else
+                        {
+                            <option value="false">Không urgent</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-lg-2">
+                    <label asp-for="StartFrom" class="form-label">Từ thời gian</label>
+                    <input asp-for="StartFrom" type="datetime-local" asp-format="{0:yyyy-MM-ddTHH:mm}" class="form-control" />
+                </div>
+
+                <div class="col-lg-3">
+                    <label asp-for="StartTo" class="form-label">Đến thời gian</label>
+                    <input asp-for="StartTo" type="datetime-local" asp-format="{0:yyyy-MM-ddTHH:mm}" class="form-control" />
+                </div>
+
+                <div class="col-12 d-flex gap-2 flex-wrap">
+                    <button type="submit" class="btn btn-primary">Lọc bài đăng</button>
+                    <a asp-action="Index" class="btn btn-outline-secondary">Xóa bộ lọc</a>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    @if (Model.Posts == null || !Model.Posts.Any())
+    {
+        <div class="alert alert-info">Chưa có bài đăng nào phù hợp với bộ lọc hiện tại.</div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var post in Model.Posts)
+            {
+                <div class="col-xl-4 col-md-6">
+                    <article class="card match-post-card h-100 border-0 shadow-sm">
+                        @if (!string.IsNullOrWhiteSpace(post.SportImageUrl))
+                        {
+                            <img src="@post.SportImageUrl" alt="@post.SportName" class="match-sport-card-image" />
+                        }
+                        else
+                        {
+                            <div class="match-sport-card-image match-sport-card-placeholder">
+                                <span>@post.SportName</span>
+                            </div>
+                        }
+
+                        <div class="card-body d-flex flex-column">
+                            <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+                                <div>
+                                    <div class="d-flex flex-wrap gap-2 mb-2">
+                                        <span class="badge text-bg-light">@post.SportName</span>
+                                        <span class="badge text-bg-secondary">@post.MatchTypeText</span>
+                                        <span class="badge @(post.Status == 1 ? "text-bg-success" : "text-bg-warning")">@post.StatusText</span>
+                                        @if (post.IsUrgent)
+                                        {
+                                            <span class="badge text-bg-danger">Urgent</span>
+                                        }
+                                    </div>
+                                    <h3 class="h5 mb-1">@post.Title</h3>
+                                    <div class="text-muted small">Chủ kèo: @post.CreatorName</div>
+                                </div>
+                            </div>
+
+                            <dl class="match-post-meta">
+                                <div>
+                                    <dt>Thời gian</dt>
+                                    <dd>
+                                        @post.StartTime.ToString("dd/MM/yyyy HH:mm")
+                                        @if (post.EndTime.HasValue)
+                                        {
+                                            <span>- @post.EndTime.Value.ToString("HH:mm")</span>
+                                        }
+                                    </dd>
+                                </div>
+                                <div>
+                                    <dt>Địa điểm</dt>
+                                    <dd>
+                                        @{
+                                            var postLocation = string.Join(", ", new[] { post.LocationText, post.District, post.City }
+                                                .Where(x => !string.IsNullOrWhiteSpace(x)));
+                                        }
+                                        @(string.IsNullOrWhiteSpace(postLocation) ? "Chua cap nhat" : postLocation)
+                                    </dd>
+                                </div>
+                                <div>
+                                    <dt>Slot còn lại</dt>
+                                    <dd>@post.SlotsRemaining / @post.SlotsNeeded</dd>
+                                </div>
+                                <div>
+                                    <dt>Skill</dt>
+                                    <dd>@post.SkillText</dd>
+                                </div>
+                                <div>
+                                    <dt>Phí dự kiến</dt>
+                                    <dd>@(post.FeePerPerson.HasValue ? string.Format("{0:N0} đ/người", post.FeePerPerson.Value) : "Trao đổi thêm")</dd>
+                                </div>
+                            </dl>
+
+                            <div class="mt-auto d-flex gap-2 flex-wrap">
+                                <a asp-action="Details" asp-route-id="@post.PostId" class="btn btn-primary">Xem chi tiết</a>
+                                @if (isUser)
+                                {
+                                    <a asp-action="Details" asp-route-id="@post.PostId" class="btn btn-outline-secondary">Xin tham gia</a>
+                                }
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            }
+        </div>
+    }
+</div>

@@ -7,6 +7,9 @@ namespace SportMatchmaking.Models
         [Required(ErrorMessage = "PostId là bắt buộc")]
         public long PostId { get; set; }
 
+        [Range(1, 10, ErrorMessage = "Kỹ năng phải từ 1 đến 10")]
+        public byte? SkillLevel { get; set; }
+
         [Required(ErrorMessage = "PartySize là bắt buộc")]
         [Range(1, 30, ErrorMessage = "PartySize phải từ 1 đến 30")]
         public int PartySize { get; set; } = 1;

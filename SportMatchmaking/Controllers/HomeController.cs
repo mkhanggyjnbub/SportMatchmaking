@@ -1,6 +1,5 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using SportMatchmaking.Filters;
 using SportMatchmaking.Models;
 
 namespace SportMatchmaking.Controllers
@@ -16,7 +15,14 @@ namespace SportMatchmaking.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var roleName = HttpContext.Session.GetString("RoleName");
+
+            if (roleName == "Admin")
+            {
+                return RedirectToAction("Index", "AdminDashboard");
+            }
+
+            return RedirectToAction("Index", "MatchPost");
         }
 
         public IActionResult Privacy()

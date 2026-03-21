@@ -20,6 +20,11 @@ namespace Repositories.PostParticipant
             return _postParticipantDAO.GetByPostAndUser(postId, userId);
         }
 
+        public IQueryable<BusinessObjects.PostParticipant> GetQueryable()
+        {
+            return _postParticipantDAO.GetQueryable();
+        }
+
         public void Add(BusinessObjects.PostParticipant entity)
         {
             _postParticipantDAO.Add(entity);

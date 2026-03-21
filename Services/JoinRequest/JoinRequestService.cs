@@ -1,13 +1,9 @@
-using Azure.Core;
+using BusinessObjects;
+using BusinessObjects.Enums;
 using Repositories.JoinRequest;
 using Repositories.PostParticipant;
 using Services.DTOs;
 using Services.Notifications;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Services.JoinRequest
 {
@@ -27,84 +23,105 @@ namespace Services.JoinRequest
             _notificationService = notificationService;
         }
 
+        public byte? GetUserSkillLevel(int userId)
+        {
+            return _joinRequestRepository.GetUserById(userId)?.SkillLevel;
+        }
+
         public void Create(CreateJoinRequestDTO dto)
         {
             var post = _joinRequestRepository.GetPostById(dto.PostId);
             if (post == null)
             {
-                throw new Exception("Bài đăng không tồn tại.");
+                throw new Exception("Bai dang khong ton tai.");
             }
 
             var requester = _joinRequestRepository.GetUserById(dto.RequesterUserId);
             if (requester == null)
             {
-                throw new Exception("Người dùng không tồn tại.");
+                throw new Exception("Nguoi dung khong ton tai.");
             }
 
             if (post.CreatorUserId == dto.RequesterUserId)
             {
-                throw new Exception("Bạn không thể gửi yêu cầu vào bài đăng của chính mình.");
+                throw new Exception("Ban khong the gui yeu cau vao bai dang cua chinh minh.");
             }
 
             var existingParticipant = _postParticipantRepository.GetByPostAndUser(dto.PostId, dto.RequesterUserId);
-            if (existingParticipant != null && existingParticipant.Status == 1)
+            if (existingParticipant != null && existingParticipant.Status == PostParticipantStatuses.Confirmed)
             {
-                throw new Exception("Bạn đã tham gia bài đăng này rồi, không thể gửi request thêm.");
+                throw new Exception("Ban da tham gia bai dang nay roi, khong the gui request them.");
             }
 
-            // Check skill
-            if (requester.SkillLevel.HasValue)
+            if (dto.SkillLevel.HasValue)
             {
-                if (post.SkillMin.HasValue && requester.SkillLevel.Value < post.SkillMin.Value)
+                if (dto.SkillLevel.Value < 1 || dto.SkillLevel.Value > 10)
                 {
-                    throw new Exception($"Trình độ của bạn chưa đạt mức tối thiểu ({post.SkillMin}).");
+                    throw new Exception("Ky nang cua ban phai tu 1 den 10.");
                 }
 
-                if (post.SkillMax.HasValue && requester.SkillLevel.Value > post.SkillMax.Value)
+                requester.SkillLevel = dto.SkillLevel.Value;
+                requester.UpdatedAt = DateTime.Now;
+            }
+
+            var effectiveSkillLevel = dto.SkillLevel ?? requester.SkillLevel;
+            var hasSkillRequirement = post.SkillMin.HasValue || post.SkillMax.HasValue;
+
+            if (hasSkillRequirement && !effectiveSkillLevel.HasValue)
+            {
+                throw new Exception("Vui long nhap ky nang cua ban de gui request vao keo nay.");
+            }
+
+            if (effectiveSkillLevel.HasValue)
+            {
+                if (post.SkillMin.HasValue && effectiveSkillLevel.Value < post.SkillMin.Value)
                 {
-                    throw new Exception($"Trình độ của bạn vượt quá mức tối đa ({post.SkillMax}).");
+                    throw new Exception($"Trinh do cua ban chua dat muc toi thieu ({post.SkillMin}).");
+                }
+
+                if (post.SkillMax.HasValue && effectiveSkillLevel.Value > post.SkillMax.Value)
+                {
+                    throw new Exception($"Trinh do cua ban vuot qua muc toi da ({post.SkillMax}).");
                 }
             }
 
-            // MatchPosts.Status = 1 là Open theo seed SQL
-            if (post.Status != 1)
+            if (post.Status != (byte)PostStatus.Open)
             {
-                throw new Exception("Bài đăng hiện không ở trạng thái mở.");
+                throw new Exception("Bai dang hien khong o trang thai mo.");
             }
 
             if (post.ExpiresAt.HasValue && post.ExpiresAt.Value < DateTime.Now)
             {
-                throw new Exception("Bài đăng đã hết hạn.");
+                throw new Exception("Bai dang da het han.");
             }
 
             if (post.StartTime <= DateTime.Now)
             {
-                throw new Exception("Kèo này đã tới giờ bắt đầu hoặc đã diễn ra.");
+                throw new Exception("Keo nay da toi gio bat dau hoac da dien ra.");
             }
 
             if (dto.PartySize < 1 || dto.PartySize > 30)
             {
-                throw new Exception("PartySize không hợp lệ.");
+                throw new Exception("PartySize khong hop le.");
             }
 
             var existingPending = _joinRequestRepository.GetPendingRequest(dto.PostId, dto.RequesterUserId);
             if (existingPending != null)
             {
-                throw new Exception("Bạn đã có một yêu cầu đang chờ duyệt ở bài này.");
+                throw new Exception("Ban da co mot yeu cau dang cho duyet o bai nay.");
             }
-
 
             var confirmedParticipantSlots = _joinRequestRepository.GetConfirmedParticipantSlots(dto.PostId);
             var remainingSlots = post.SlotsNeeded - confirmedParticipantSlots;
 
             if (remainingSlots <= 0)
             {
-                throw new Exception("Bài đăng đã đủ người.");
+                throw new Exception("Bai dang da du nguoi.");
             }
 
             if (dto.PartySize > remainingSlots)
             {
-                throw new Exception($"Số chỗ còn lại không đủ. Hiện chỉ còn {remainingSlots} chỗ.");
+                throw new Exception($"So cho con lai khong du. Hien chi con {remainingSlots} cho.");
             }
 
             var entity = new BusinessObjects.JoinRequest
@@ -114,7 +131,7 @@ namespace Services.JoinRequest
                 PartySize = dto.PartySize,
                 Message = string.IsNullOrWhiteSpace(dto.Message) ? null : dto.Message.Trim(),
                 GuestNames = string.IsNullOrWhiteSpace(dto.GuestNames) ? null : dto.GuestNames.Trim(),
-                Status = 1, // 1 = Pending
+                Status = 1,
                 CreatedAt = DateTime.Now,
                 DecidedAt = null,
                 DecidedByUserId = null
@@ -123,20 +140,20 @@ namespace Services.JoinRequest
             _joinRequestRepository.Add(entity);
             _joinRequestRepository.Save();
 
-            // Thông báo cho chủ bài viết có request mới
             _notificationService.NotifyNewJoinRequest(entity);
         }
+
         public List<PostJoinRequestItemDTO> GetRequestsOfPost(long postId, int currentUserId)
         {
             var post = _joinRequestRepository.GetPostById(postId);
             if (post == null)
             {
-                throw new Exception("Bài đăng không tồn tại.");
+                throw new Exception("Bai dang khong ton tai.");
             }
 
             if (post.CreatorUserId != currentUserId)
             {
-                throw new Exception("Bạn không có quyền xem danh sách request của bài đăng này.");
+                throw new Exception("Ban khong co quyen xem danh sach request cua bai dang nay.");
             }
 
             var requests = _joinRequestRepository.GetRequestsByPostId(postId);
@@ -149,12 +166,14 @@ namespace Services.JoinRequest
                 RequesterName = !string.IsNullOrWhiteSpace(x.RequesterUser?.DisplayName)
                     ? x.RequesterUser.DisplayName
                     : (x.RequesterUser?.UserName ?? "Unknown"),
+                RequesterSkillLevel = x.RequesterUser?.SkillLevel,
                 PartySize = x.PartySize,
                 Message = x.Message,
                 CreatedAt = x.CreatedAt,
                 Status = x.Status
             }).ToList();
         }
+
         public List<MyJoinRequestItemDTO> GetMyRequests(int currentUserId)
         {
             var requests = _joinRequestRepository.GetRequestsByRequesterUserId(currentUserId);
@@ -163,72 +182,70 @@ namespace Services.JoinRequest
             {
                 RequestId = x.RequestId,
                 PostId = x.PostId,
-                PostTitle = x.Post != null ? x.Post.Title : "(Không có tiêu đề)",
+                PostTitle = x.Post != null ? x.Post.Title : "(Khong co tieu de)",
                 PartySize = x.PartySize,
                 Message = x.Message,
                 CreatedAt = x.CreatedAt,
                 Status = x.Status
             }).ToList();
         }
+
         public void CancelRequest(long requestId, int currentUserId)
         {
             var request = _joinRequestRepository.GetById(requestId);
             if (request == null)
             {
-                throw new Exception("Request không tồn tại.");
+                throw new Exception("Request khong ton tai.");
             }
 
             if (request.RequesterUserId != currentUserId)
             {
-                throw new Exception("Bạn không có quyền hủy request này.");
+                throw new Exception("Ban khong co quyen huy request nay.");
             }
 
             if (request.Status != 1)
             {
-                throw new Exception("Chỉ có thể hủy request đang ở trạng thái Pending.");
+                throw new Exception("Chi co the huy request dang o trang thai Pending.");
             }
 
-            request.Status = 4; // Cancelled
+            request.Status = 4;
 
             _joinRequestRepository.Update(request);
             _joinRequestRepository.Save();
-
-            // Thông báo cho người gửi request là đã được chấp nhận
-            _notificationService.NotifyRequestAccepted(request);
         }
+
         public void AcceptRequest(long requestId, int currentUserId)
         {
             var request = _joinRequestRepository.GetById(requestId);
             if (request == null)
             {
-                throw new Exception("Request không tồn tại.");
+                throw new Exception("Request khong ton tai.");
             }
 
             var post = request.Post ?? _joinRequestRepository.GetPostById(request.PostId);
             if (post == null)
             {
-                throw new Exception("Bài đăng không tồn tại.");
+                throw new Exception("Bai dang khong ton tai.");
             }
 
             if (post.CreatorUserId != currentUserId)
             {
-                throw new Exception("Bạn không có quyền duyệt request của bài đăng này.");
+                throw new Exception("Ban khong co quyen duyet request cua bai dang nay.");
             }
 
             if (request.Status != 1)
             {
-                throw new Exception("Request này đã được xử lý trước đó.");
+                throw new Exception("Request nay da duoc xu ly truoc do.");
             }
 
-            // 1 = Open
-            if (post.Status != 1)
+            if (post.Status != (byte)PostStatus.Open)
             {
-                throw new Exception("Bài đăng hiện không còn mở.");
+                throw new Exception("Bai dang hien khong con mo.");
             }
 
             if (post.ExpiresAt.HasValue && post.ExpiresAt.Value < DateTime.Now)
             {
-                throw new Exception("Bài đăng đã hết hạn.");
+                throw new Exception("Bai dang da het han.");
             }
 
             var confirmedParticipantSlots = _joinRequestRepository.GetConfirmedParticipantSlots(post.PostId);
@@ -236,15 +253,15 @@ namespace Services.JoinRequest
 
             if (remainingSlots <= 0)
             {
-                throw new Exception("Bài đăng đã đủ người.");
+                throw new Exception("Bai dang da du nguoi.");
             }
 
             if (request.PartySize > remainingSlots)
             {
-                throw new Exception($"Không đủ slot để duyệt request này. Chỉ còn {remainingSlots} chỗ.");
+                throw new Exception($"Khong du slot de duyet request nay. Chi con {remainingSlots} cho.");
             }
 
-            request.Status = 2; // Accepted
+            request.Status = 2;
             request.DecidedAt = DateTime.Now;
             request.DecidedByUserId = currentUserId;
 
@@ -256,8 +273,8 @@ namespace Services.JoinRequest
                 {
                     PostId = post.PostId,
                     UserId = request.RequesterUserId,
-                    Role = 2,      // Participant
-                    Status = 1,    // Confirmed
+                    Role = PostParticipantRoles.Member,
+                    Status = PostParticipantStatuses.Confirmed,
                     PartySize = request.PartySize,
                     JoinedAt = DateTime.Now,
                     LeftAt = null
@@ -267,8 +284,8 @@ namespace Services.JoinRequest
             }
             else
             {
-                participant.Role = 2;
-                participant.Status = 1;
+                participant.Role = PostParticipantRoles.Member;
+                participant.Status = PostParticipantStatuses.Confirmed;
                 participant.PartySize = request.PartySize;
                 participant.LeftAt = null;
 
@@ -280,19 +297,17 @@ namespace Services.JoinRequest
                 _postParticipantRepository.Update(participant);
             }
 
-            // Tính lại slot sau khi vừa accept xong
-            var updatedConfirmedParticipantSlots =
-                _joinRequestRepository.GetConfirmedParticipantSlots(post.PostId) + request.PartySize;
+            var updatedConfirmedParticipantSlots = confirmedParticipantSlots + request.PartySize;
 
             if (updatedConfirmedParticipantSlots >= post.SlotsNeeded)
             {
-                post.Status = 2; // Full
+                post.Status = (byte)PostStatus.Full;
                 post.UpdatedAt = DateTime.Now;
                 _joinRequestRepository.UpdatePost(post);
             }
             else
             {
-                post.Status = 1; // vẫn Open
+                post.Status = (byte)PostStatus.Open;
                 post.UpdatedAt = DateTime.Now;
                 _joinRequestRepository.UpdatePost(post);
             }
@@ -300,8 +315,7 @@ namespace Services.JoinRequest
             _joinRequestRepository.Update(request);
             _joinRequestRepository.Save();
 
-            // Thông báo cho người gửi request là đã bị từ chối
-            _notificationService.NotifyRequestRejected(request);
+            _notificationService.NotifyRequestAccepted(request);
         }
 
         public void RejectRequest(long requestId, int currentUserId)
@@ -309,31 +323,33 @@ namespace Services.JoinRequest
             var request = _joinRequestRepository.GetById(requestId);
             if (request == null)
             {
-                throw new Exception("Request không tồn tại.");
+                throw new Exception("Request khong ton tai.");
             }
 
             var post = request.Post ?? _joinRequestRepository.GetPostById(request.PostId);
             if (post == null)
             {
-                throw new Exception("Bài đăng không tồn tại.");
+                throw new Exception("Bai dang khong ton tai.");
             }
 
             if (post.CreatorUserId != currentUserId)
             {
-                throw new Exception("Bạn không có quyền từ chối request của bài đăng này.");
+                throw new Exception("Ban khong co quyen tu choi request cua bai dang nay.");
             }
 
             if (request.Status != 1)
             {
-                throw new Exception("Request này đã được xử lý trước đó.");
+                throw new Exception("Request nay da duoc xu ly truoc do.");
             }
 
-            request.Status = 3; // Rejected
+            request.Status = 3;
             request.DecidedAt = DateTime.Now;
             request.DecidedByUserId = currentUserId;
 
             _joinRequestRepository.Update(request);
             _joinRequestRepository.Save();
+
+            _notificationService.NotifyRequestRejected(request);
         }
     }
 }

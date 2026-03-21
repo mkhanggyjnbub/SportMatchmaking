@@ -12,6 +12,7 @@ namespace Services.DTOs
         public long PostId { get; set; }
         public int RequesterUserId { get; set; }
         public string RequesterName { get; set; } = "";
+        public byte? RequesterSkillLevel { get; set; }
         public int PartySize { get; set; }
         public string? Message { get; set; }
         public DateTime CreatedAt { get; set; }

@@ -22,6 +22,11 @@ namespace DataAccessObjects
                 .FirstOrDefault(x => x.PostId == postId && x.UserId == userId);
         }
 
+        public IQueryable<PostParticipant> GetQueryable()
+        {
+            return _context.PostParticipants.AsQueryable();
+        }
+
         public void Add(PostParticipant entity)
         {
             _context.PostParticipants.Add(entity);

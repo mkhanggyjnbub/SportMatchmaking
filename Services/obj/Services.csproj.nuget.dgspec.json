@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\Services\\Services.csproj": {}
+    "D:\\Project Prn\\Services\\Services.csproj": {}
   },
   "projects": {
-    "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\BusinessObjects\\BusinessObjects.csproj": {
+    "D:\\Project Prn\\BusinessObjects\\BusinessObjects.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\BusinessObjects\\BusinessObjects.csproj",
+        "projectUniqueName": "D:\\Project Prn\\BusinessObjects\\BusinessObjects.csproj",
         "projectName": "BusinessObjects",
-        "projectPath": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\BusinessObjects\\BusinessObjects.csproj",
-        "packagesPath": "C:\\Users\\dodan\\.nuget\\packages\\",
-        "outputPath": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\BusinessObjects\\obj\\",
+        "projectPath": "D:\\Project Prn\\BusinessObjects\\BusinessObjects.csproj",
+        "packagesPath": "C:\\Users\\prokh\\.nuget\\packages\\",
+        "outputPath": "D:\\Project Prn\\BusinessObjects\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\dodan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\prokh\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -84,24 +84,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.308/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\DataAccessObjects\\DataAccessObjects.csproj": {
+    "D:\\Project Prn\\DataAccessObjects\\DataAccessObjects.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\DataAccessObjects\\DataAccessObjects.csproj",
+        "projectUniqueName": "D:\\Project Prn\\DataAccessObjects\\DataAccessObjects.csproj",
         "projectName": "DataAccessObjects",
-        "projectPath": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\DataAccessObjects\\DataAccessObjects.csproj",
-        "packagesPath": "C:\\Users\\dodan\\.nuget\\packages\\",
-        "outputPath": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\DataAccessObjects\\obj\\",
+        "projectPath": "D:\\Project Prn\\DataAccessObjects\\DataAccessObjects.csproj",
+        "packagesPath": "C:\\Users\\prokh\\.nuget\\packages\\",
+        "outputPath": "D:\\Project Prn\\DataAccessObjects\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\dodan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\prokh\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -117,8 +117,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\BusinessObjects\\BusinessObjects.csproj": {
-                "projectPath": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\BusinessObjects\\BusinessObjects.csproj"
+              "D:\\Project Prn\\BusinessObjects\\BusinessObjects.csproj": {
+                "projectPath": "D:\\Project Prn\\BusinessObjects\\BusinessObjects.csproj"
               }
             }
           }
@@ -162,24 +162,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.308/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\Repositories\\Repositories.csproj": {
+    "D:\\Project Prn\\Repositories\\Repositories.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\Repositories\\Repositories.csproj",
+        "projectUniqueName": "D:\\Project Prn\\Repositories\\Repositories.csproj",
         "projectName": "Repositories",
-        "projectPath": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\Repositories\\Repositories.csproj",
-        "packagesPath": "C:\\Users\\dodan\\.nuget\\packages\\",
-        "outputPath": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\Repositories\\obj\\",
+        "projectPath": "D:\\Project Prn\\Repositories\\Repositories.csproj",
+        "packagesPath": "C:\\Users\\prokh\\.nuget\\packages\\",
+        "outputPath": "D:\\Project Prn\\Repositories\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\dodan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\prokh\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -195,11 +195,11 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\BusinessObjects\\BusinessObjects.csproj": {
-                "projectPath": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\BusinessObjects\\BusinessObjects.csproj"
+              "D:\\Project Prn\\BusinessObjects\\BusinessObjects.csproj": {
+                "projectPath": "D:\\Project Prn\\BusinessObjects\\BusinessObjects.csproj"
               },
-              "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\DataAccessObjects\\DataAccessObjects.csproj": {
-                "projectPath": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\DataAccessObjects\\DataAccessObjects.csproj"
+              "D:\\Project Prn\\DataAccessObjects\\DataAccessObjects.csproj": {
+                "projectPath": "D:\\Project Prn\\DataAccessObjects\\DataAccessObjects.csproj"
               }
             }
           }
@@ -235,24 +235,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.308/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\Services\\Services.csproj": {
+    "D:\\Project Prn\\Services\\Services.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\Services\\Services.csproj",
+        "projectUniqueName": "D:\\Project Prn\\Services\\Services.csproj",
         "projectName": "Services",
-        "projectPath": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\Services\\Services.csproj",
-        "packagesPath": "C:\\Users\\dodan\\.nuget\\packages\\",
-        "outputPath": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\Services\\obj\\",
+        "projectPath": "D:\\Project Prn\\Services\\Services.csproj",
+        "packagesPath": "C:\\Users\\prokh\\.nuget\\packages\\",
+        "outputPath": "D:\\Project Prn\\Services\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\dodan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\prokh\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -268,11 +268,11 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\BusinessObjects\\BusinessObjects.csproj": {
-                "projectPath": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\BusinessObjects\\BusinessObjects.csproj"
+              "D:\\Project Prn\\BusinessObjects\\BusinessObjects.csproj": {
+                "projectPath": "D:\\Project Prn\\BusinessObjects\\BusinessObjects.csproj"
               },
-              "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\Repositories\\Repositories.csproj": {
-                "projectPath": "F:\\SP26\\PRN222\\Project\\SportMatchmaking\\Repositories\\Repositories.csproj"
+              "D:\\Project Prn\\Repositories\\Repositories.csproj": {
+                "projectPath": "D:\\Project Prn\\Repositories\\Repositories.csproj"
               }
             }
           }
@@ -318,7 +318,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.308/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
