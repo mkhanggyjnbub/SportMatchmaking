@@ -64,7 +64,7 @@ namespace SportMatchmaking.Controllers
                 _joinRequestService.Create(dto);
 
                 TempData["SuccessMessage"] = "Gửi yêu cầu tham gia thành công.";
-                return RedirectToAction(nameof(Create), new { postId = model.PostId });
+                return RedirectToAction(nameof(MyRequests));
             }
             catch (Exception ex)
             {
