@@ -1,0 +1,717 @@
+﻿@* vinh *@
+
+@model Services.Models.Chat.ChatIndexViewModel
+
+@{
+    ViewData["Title"] = "Chat";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat UI</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f7fb;
+            padding: 12px;
+            color: #1f2937;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .chat-page {
+            max-width: 1200px;
+            height: calc(100vh - 24px);
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            background: #ffffff;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e5e7eb;
+        }
+
+        .sidebar {
+            background: #ffffff;
+            border-right: 1px solid #dbe4f0;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            background: #1d4ed8;
+            color: white;
+        }
+
+            .sidebar-header h2 {
+                font-size: 22px;
+                margin-bottom: 6px;
+            }
+
+            .sidebar-header p {
+                font-size: 13px;
+                opacity: 0.9;
+            }
+
+        .search-box {
+            padding: 14px 16px;
+            border-bottom: 1px solid #e5e7eb;
+            background: #ffffff;
+        }
+
+            .search-box input {
+                width: 100%;
+                padding: 12px 14px;
+                border: 1px solid #cbd5e1;
+                border-radius: 10px;
+                outline: none;
+                background: #f8fafc;
+            }
+
+        .room-list {
+            flex: 1;
+            overflow-y: auto;
+            background: #ffffff;
+            min-height: 0;
+        }
+
+        .room-item {
+            display: flex;
+            gap: 12px;
+            padding: 16px;
+            border-bottom: 1px solid #eef2f7;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+            .room-item:hover {
+                background: #eff6ff;
+            }
+
+            .room-item.active {
+                background: #dbeafe;
+                border-left: 5px solid #1d4ed8;
+            }
+
+        .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #22c55e;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .room-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .room-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+            gap: 10px;
+        }
+
+        .room-name {
+            font-weight: 700;
+            color: #1e3a8a;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .room-time {
+            font-size: 12px;
+            color: #64748b;
+            flex-shrink: 0;
+        }
+
+        .room-last-message {
+            font-size: 13px;
+            color: #475569;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 4px;
+        }
+
+        .room-meta {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .empty-sidebar {
+            padding: 24px 18px;
+            text-align: center;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .chat-main {
+            display: grid;
+            grid-template-rows: 78px minmax(0, 1fr) 84px;
+            background: #f8fbff;
+            min-height: 0;
+        }
+
+        .chat-header {
+            background: #ffffff;
+            border-bottom: 1px solid #dbe4f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        .chat-header-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-width: 0;
+        }
+
+        .chat-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1d4ed8;
+        }
+
+        .chat-subtitle {
+            font-size: 13px;
+            color: #64748b;
+            margin-top: 3px;
+        }
+
+        .status-badge {
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: #dcfce7;
+            color: #15803d;
+            font-size: 13px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .messages {
+            padding: 22px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            min-height: 0;
+        }
+
+        .date-divider {
+            text-align: center;
+            font-size: 12px;
+            color: #64748b;
+            margin: 4px 0 10px;
+        }
+
+        .message-row {
+            display: flex;
+        }
+
+            .message-row.left {
+                justify-content: flex-start;
+            }
+
+            .message-row.right {
+                justify-content: flex-end;
+            }
+
+        .message-bubble {
+            max-width: 62%;
+            padding: 12px 14px;
+            border-radius: 16px;
+            line-height: 1.45;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            word-break: break-word;
+        }
+
+        .message-row.left .message-bubble {
+            background: #ffffff;
+            border: 1px solid #dbe4f0;
+            color: #1f2937;
+            border-bottom-left-radius: 6px;
+        }
+
+        .message-row.right .message-bubble {
+            background: #1d4ed8;
+            color: white;
+            border-bottom-right-radius: 6px;
+        }
+
+        .sender-name {
+            font-size: 12px;
+            font-weight: 700;
+            color: #16a34a;
+            margin-bottom: 6px;
+        }
+
+        .message-time {
+            margin-top: 8px;
+            font-size: 11px;
+            opacity: 0.8;
+            text-align: right;
+        }
+
+        .message-actions {
+            margin-top: 8px;
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+
+        .message-action-btn {
+            border: none;
+            background: transparent;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .edit-btn {
+            color: #f59e0b;
+        }
+
+        .delete-btn {
+            color: #ef4444;
+        }
+
+        .edited-text {
+            margin-top: 6px;
+            font-size: 11px;
+            opacity: 0.8;
+            text-align: right;
+            font-style: italic;
+        }
+
+        .deleted-message {
+            font-style: italic;
+            opacity: 0.85;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.45);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            padding: 20px;
+        }
+
+            .modal-overlay.show {
+                display: flex;
+            }
+
+        .edit-modal {
+            width: 100%;
+            max-width: 520px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
+            overflow: hidden;
+        }
+
+        .edit-modal-header {
+            padding: 16px 18px;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 18px;
+            font-weight: 700;
+            color: #1d4ed8;
+        }
+
+        .edit-modal-body {
+            padding: 18px;
+        }
+
+            .edit-modal-body textarea {
+                width: 100%;
+                min-height: 120px;
+                resize: vertical;
+                border: 1px solid #cbd5e1;
+                border-radius: 12px;
+                padding: 12px 14px;
+                outline: none;
+                font-size: 14px;
+                background: #f8fafc;
+            }
+
+        .edit-modal-footer {
+            padding: 14px 18px 18px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .modal-btn {
+            height: 42px;
+            padding: 0 18px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .modal-btn-cancel {
+            background: #e5e7eb;
+            color: #1f2937;
+        }
+
+        .modal-btn-save {
+            background: #1d4ed8;
+            color: white;
+        }
+
+        .empty-messages {
+            margin: auto 0;
+            text-align: center;
+            color: #64748b;
+            font-size: 14px;
+            padding: 30px 20px;
+        }
+
+        .input-area {
+            background: #ffffff;
+            border-top: 1px solid #dbe4f0;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+            .input-area input {
+                flex: 1;
+                height: 48px;
+                border: 1px solid #cbd5e1;
+                border-radius: 12px;
+                padding: 0 16px;
+                outline: none;
+                font-size: 14px;
+                background: #f8fafc;
+            }
+
+        .send-btn {
+            height: 48px;
+            padding: 0 22px;
+            border: none;
+            border-radius: 12px;
+            background: #22c55e;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+            .send-btn:hover {
+                background: #16a34a;
+            }
+
+            .send-btn:disabled {
+                background: #94a3b8;
+                cursor: not-allowed;
+            }
+
+        @@media (max-width: 900px) {
+            .chat-page {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-page">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Sport Chat</h2>
+                <p>Danh sách phòng bạn đang tham gia</p>
+            </div>
+
+            <div class="search-box">
+                <input type="text" placeholder="Tìm phòng chat..." disabled />
+            </div>
+
+            <div class="room-list">
+                @if (Model.Rooms == null || !Model.Rooms.Any())
+                {
+                    <div class="empty-sidebar">
+                        Bạn chưa tham gia phòng chat nào.
+                    </div>
+                }
+                else
+                {
+                    @foreach (var room in Model.Rooms)
+                    {
+                        <a href="/Chat/Index?currentUserId=@Model.CurrentUserId&threadId=@room.ThreadId"
+                           class="room-item @(room.IsSelected ? "active" : "")"
+                           style="text-decoration: none; color: inherit;">
+                            <div class="avatar">#@(room.PostId?.ToString() ?? room.ThreadId.ToString())</div>
+
+                            <div class="room-content">
+                                <div class="room-top">
+                                    <div class="room-name">@room.RoomName</div>
+                                    <div class="room-time">@room.LastMessageTimeText</div>
+                                </div>
+
+                                <div class="room-last-message">@room.LastMessage</div>
+                                <div class="room-meta">@room.MemberCount thành viên</div>
+                            </div>
+                        </a>
+                    }
+                }
+            </div>
+        </aside>
+
+        <section class="chat-main">
+            <div class="chat-header">
+                <div class="chat-header-left">
+                    <div class="avatar">
+                        @(Model.SelectedThreadId.HasValue ? "CH" : "--")
+                    </div>
+
+                    <div>
+                        <div class="chat-title">@Model.SelectedRoomTitle</div>
+                        <div class="chat-subtitle">@Model.SelectedRoomSubtitle</div>
+                    </div>
+                </div>
+
+                <div class="status-badge">
+                    @(Model.SelectedThreadId.HasValue
+                                        ? $"{Model.SelectedRoomMemberCount} thành viên"
+                                        : "Chưa chọn phòng")
+                </div>
+            </div>
+
+
+
+            <div class="messages" id="messageContainer">
+
+                            @if (TempData["ChatMessage"] != null)
+            {
+                var isSuccess = (TempData["ChatMessageType"]?.ToString() == "success");
+                var bgColor = isSuccess ? "#dcfce7" : "#fee2e2";
+                var textColor = isSuccess ? "#166534" : "#b91c1c";
+                var borderColor = isSuccess ? "#bbf7d0" : "#fecaca";
+
+                    <div style="padding: 10px 14px; border-radius: 10px; background: @bgColor; color: @textColor; font-size: 14px; border: 1px solid @borderColor;">
+                        @TempData["ChatMessage"]
+                    </div>
+            }
+            else if (TempData["ChatError"] != null)
+            {
+                    <div style="padding: 10px 14px; border-radius: 10px; background: #fee2e2; color: #b91c1c; font-size: 14px; border: 1px solid #fecaca;">
+                        @TempData["ChatError"]
+                    </div>
+            }
+                @if (Model.SelectedThreadId == null)
+                {
+                    <div class="empty-messages">
+                        Hãy chọn một phòng chat ở bên trái để xem nội dung.
+                    </div>
+                }
+                else if (Model.Messages == null || !Model.Messages.Any())
+                {
+                    <div class="empty-messages">
+                        Chưa có tin nhắn nào. Hãy bắt đầu cuộc trò chuyện.
+                    </div>
+                }
+                else
+                {
+                    <div class="date-divider">Tin nhắn</div>
+
+                    @foreach (var msg in Model.Messages)
+                    {
+                        <div class="message-row @(msg.IsMine ? "right" : "left")" data-message-id="@msg.MessageId">
+                            <div class="message-bubble">
+                                @if (!msg.IsMine)
+                                {
+                                    <div class="sender-name">@msg.SenderName</div>
+                                }
+
+                                <div class="message-text @(msg.IsDeleted ? "deleted-message" : "")">
+                                    @msg.MessageText
+                                </div>
+
+                                @if (msg.EditedAt.HasValue && !msg.IsDeleted)
+                                {
+                                    <div class="edited-text">(đã chỉnh sửa)</div>
+                                }
+
+                                <div class="message-time">@msg.SentAt.ToLocalTime().ToString("dd/MM HH:mm")</div>
+
+                                @if (msg.CanEditOrDelete)
+                                {
+                                    <div class="message-actions">
+                                        <button type="button"
+                                                class="message-action-btn edit-btn"
+                                                data-message-id="@msg.MessageId"
+                                                data-message-text="@Html.Raw(System.Text.Encodings.Web.HtmlEncoder.Default.Encode(msg.MessageText ?? ""))"
+                                                onclick="openEditModal(this)">
+                                            Sửa
+                                        </button>
+
+                                        <form method="post"
+                                              asp-action="DeleteMessageFromUi"
+                                              asp-controller="Chat"
+                                              style="display:inline;"
+                                              onsubmit="return confirm('Bạn có chắc muốn xóa tin nhắn này không?');">
+                                            <input type="hidden" name="messageId" value="@msg.MessageId" />
+                                            <input type="hidden" name="currentUserId" value="@Model.CurrentUserId" />
+                                            <input type="hidden" name="threadId" value="@Model.SelectedThreadId" />
+                                            <button type="submit" class="message-action-btn delete-btn">Xóa</button>
+                                        </form>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+
+
+
+            @if (Model.SelectedThreadId.HasValue)
+            {
+                <form method="post" asp-action="SendMessageFromUi" asp-controller="Chat" class="input-area">
+                    <input type="hidden" name="threadId" value="@Model.SelectedThreadId" />
+                    <input type="hidden" name="currentUserId" value="@Model.CurrentUserId" />
+
+                    <input type="text"
+                           name="messageText"
+                           placeholder="Nhập tin nhắn..."
+                           autocomplete="off"
+                           required />
+
+                    <button type="submit" class="send-btn">Gửi</button>
+                </form>
+            }
+            else
+            {
+                <div class="input-area">
+                    <input type="text" placeholder="Nhập tin nhắn..." disabled />
+                    <button class="send-btn" disabled>Gửi</button>
+                </div>
+            }
+        </section>
+    </div>
+    <div class="modal-overlay" id="editMessageModal">
+        <div class="edit-modal">
+            <div class="edit-modal-header">
+                Sửa tin nhắn
+            </div>
+
+            <form method="post" asp-action="EditMessageFromUi" asp-controller="Chat">
+                <div class="edit-modal-body">
+                    <input type="hidden" id="editMessageId" name="messageId" />
+                    <input type="hidden" name="currentUserId" value="@Model.CurrentUserId" />
+                    <input type="hidden" name="threadId" value="@Model.SelectedThreadId" />
+
+                    <textarea id="editMessageText"
+                              name="newText"
+                              placeholder="Nhập nội dung mới..."
+                              required></textarea>
+                </div>
+
+                <div class="edit-modal-footer">
+                    <button type="button" class="modal-btn modal-btn-cancel" onclick="closeEditModal()">
+                        Hủy
+                    </button>
+                    <button type="submit" class="modal-btn modal-btn-save">
+                        Lưu thay đổi
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        (function () {
+            var messageContainer = document.getElementById("messageContainer");
+            if (messageContainer) {
+                messageContainer.scrollTop = messageContainer.scrollHeight;
+            }
+        })();
+
+        function openEditModal(button) {
+            var messageId = button.getAttribute("data-message-id");
+            var messageText = button.getAttribute("data-message-text");
+
+            document.getElementById("editMessageId").value = messageId;
+            document.getElementById("editMessageText").value = messageText;
+            document.getElementById("editMessageModal").classList.add("show");
+        }
+
+        function closeEditModal() {
+            document.getElementById("editMessageModal").classList.remove("show");
+        }
+
+        window.addEventListener("click", function (event) {
+            var modal = document.getElementById("editMessageModal");
+            if (event.target === modal) {
+                closeEditModal();
+            }
+        });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+    <script>
+        const threadId = "@(Model.SelectedThreadId?.ToString() ?? "")";
+        const currentUserId = "@Model.CurrentUserId";
+
+        function reloadCurrentChatThread() {
+            if (!threadId) return;
+            window.location.href = `/Chat/Index?currentUserId=${currentUserId}&threadId=${threadId}`;
+        }
+
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/chathub")
+            .build();
+
+        connection.start().then(function () {
+            if (threadId) {
+                connection.invoke("JoinThread", threadId.toString());
+            }
+        }).catch(function (err) {
+            console.error(err.toString());
+        });
+
+        connection.on("ReceiveMessage", function (data) {
+            if (String(data.threadId) !== String(threadId)) return;
+            reloadCurrentChatThread();
+        });
+
+        connection.on("MessageEdited", function (data) {
+            reloadCurrentChatThread();
+        });
+
+        connection.on("MessageDeleted", function (data) {
+            reloadCurrentChatThread();
+        });
+    </script>
+</body>
+</html>
