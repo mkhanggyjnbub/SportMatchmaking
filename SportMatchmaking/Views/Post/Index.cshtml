@@ -1,0 +1,90 @@
+﻿@model List<BusinessObjects.MatchPost>
+
+@{
+    ViewData["Title"] = "Danh sách bài đăng";
+    var sports = ViewBag.Sports as List<BusinessObjects.Sport>;
+    int? selectedSportId = ViewBag.SportId as int?;
+}
+
+<h2 class="mb-3">Danh sách bài đăng</h2>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<div class="d-flex flex-wrap gap-2 align-items-end mb-3">
+    <form method="get" asp-action="Index" class="row g-2 align-items-end flex-grow-1">
+        <div class="col-md-5">
+            <label class="form-label">Tìm kiếm</label>
+            <input type="text" name="keyword" class="form-control" value="@ViewBag.Keyword" placeholder="Tiêu đề / mô tả / địa điểm" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Môn thể thao</label>
+            <select name="sportId" class="form-select">
+                <option value="">-- Tất cả --</option>
+                @if (sports != null)
+                {
+                    foreach (var s in sports)
+                    {
+                        <option value="@s.SportId" selected="@(selectedSportId.HasValue && selectedSportId.Value == s.SportId)">@s.Name</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="col-md-3 d-flex gap-2">
+            <button type="submit" class="btn btn-primary w-100">Lọc</button>
+            <a asp-action="Index" class="btn btn-outline-secondary w-100">Đặt lại</a>
+        </div>
+    </form>
+
+    @if (Context.Session.GetString("RoleName") == "User")
+    {
+        <a asp-action="Create" class="btn btn-success">Tạo bài</a>
+    }
+</div>
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-info">Chưa có bài đăng.</div>
+}
+else
+{
+    <div class="list-group">
+        @foreach (var post in Model)
+        {
+            var sportImageUrl = post.Sport?.Image?.ImageUrl;
+            <a class="list-group-item list-group-item-action" asp-action="Details" asp-route-id="@post.PostId">
+                <div class="d-flex gap-3">
+                    <div style="width:48px;">
+                        @if (!string.IsNullOrWhiteSpace(sportImageUrl))
+                        {
+                            <img src="@sportImageUrl" alt="@post.Sport?.Name" class="rounded" style="width:40px;height:40px;object-fit:cover;" />
+                        }
+                        else
+                        {
+                            <div class="bg-light border rounded d-flex align-items-center justify-content-center" style="width:40px;height:40px;">🏅</div>
+                        }
+                    </div>
+                    <div class="flex-grow-1">
+                        <div class="d-flex justify-content-between gap-2">
+                            <div class="fw-semibold">@post.Title</div>
+                            <small class="text-muted">@post.CreatedAt.ToString("dd/MM/yyyy HH:mm")</small>
+                        </div>
+                        <div class="text-muted small">
+                            <span class="me-2">@post.Sport?.Name</span>
+                            <span class="me-2">•</span>
+                            <span class="me-2">Slot: @post.SlotsNeeded</span>
+                            <span class="me-2">•</span>
+                            <span>@post.City @(!string.IsNullOrWhiteSpace(post.District) ? ("- " + post.District) : "")</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        }
+    </div>
+}

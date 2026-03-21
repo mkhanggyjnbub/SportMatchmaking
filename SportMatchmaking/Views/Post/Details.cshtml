@@ -1,0 +1,135 @@
+﻿@model BusinessObjects.MatchPost
+
+@{
+    ViewData["Title"] = "Chi tiết bài đăng";
+    var sportImageUrl = Model.Sport?.Image?.ImageUrl;
+
+    var userId = Context.Session.GetInt32("UserId");
+    var roleName = Context.Session.GetString("RoleName") ?? string.Empty;
+    var isAdmin = roleName == "Admin";
+    var isOwner = userId.HasValue && userId.Value == Model.CreatorUserId;
+
+    var participants = ViewBag.Participants as List<BusinessObjects.PostParticipant>;
+    int confirmedSlots = ViewBag.ConfirmedSlots ?? 0;
+    int remainingSlots = ViewBag.RemainingSlots ?? 0;
+    bool isCurrentUserConfirmedParticipant = ViewBag.IsCurrentUserConfirmedParticipant ?? false;
+
+    var confirmedParticipants = participants?
+        .Where(x => x.Status == (byte)BusinessObjects.ParticipantStatus.Confirmed)
+        .OrderByDescending(x => x.Role)
+        .ThenBy(x => x.UserId)
+        .ToList();
+}
+
+<h2 class="mb-3">@Model.Title</h2>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<div class="card mb-3">
+    <div class="card-body">
+        <div class="d-flex gap-3 align-items-start">
+            <div>
+                @if (!string.IsNullOrWhiteSpace(sportImageUrl))
+                {
+                    <img src="@sportImageUrl" alt="@Model.Sport?.Name" class="rounded" style="width:72px;height:72px;object-fit:cover;" />
+                }
+                else
+                {
+                    <div class="bg-light border rounded d-flex align-items-center justify-content-center" style="width:72px;height:72px;">🏅</div>
+                }
+            </div>
+            <div class="flex-grow-1">
+                <div class="text-muted mb-2">@Model.Sport?.Name</div>
+                <div class="row g-2">
+                    <div class="col-md-6"><strong>Bắt đầu:</strong> @Model.StartTime.ToString("dd/MM/yyyy HH:mm")</div>
+                    <div class="col-md-6"><strong>Kết thúc:</strong> @(Model.EndTime.HasValue? Model.EndTime.Value.ToString("dd/MM/yyyy HH:mm") : "-")</div>
+                    <div class="col-md-6"><strong>Địa điểm:</strong> @(string.IsNullOrWhiteSpace(Model.LocationText) ? "-" : Model.LocationText)</div>
+                    <div class="col-md-6"><strong>Khu vực:</strong> @Model.City @(!string.IsNullOrWhiteSpace(Model.District) ? ("- " + Model.District) : "")</div>
+                    <div class="col-md-6"><strong>Slot cần tìm:</strong> @Model.SlotsNeeded</div>
+                    <div class="col-md-6"><strong>Đã chốt:</strong> @confirmedSlots (<strong>Còn lại:</strong> @remainingSlots)</div>
+                </div>
+
+                @if (!string.IsNullOrWhiteSpace(Model.GoogleMapsUrl))
+                {
+                    <div class="mt-2">
+                        <a href="@Model.GoogleMapsUrl" target="_blank" rel="noopener">Mở Google Maps</a>
+                    </div>
+                }
+
+                @if (!string.IsNullOrWhiteSpace(Model.Description))
+                {
+                    <hr />
+                    <div style="white-space: pre-wrap;">@Model.Description</div>
+                }
+            </div>
+        </div>
+
+        <div class="mt-3 d-flex flex-wrap gap-2">
+            <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+
+            @if (isAdmin || isOwner)
+            {
+                <a asp-controller="PostParticipant" asp-action="Index" asp-route-postId="@Model.PostId" class="btn btn-outline-primary">
+                    Người tham gia
+                </a>
+            }
+
+            @if (isOwner)
+            {
+                <a asp-controller="JoinRequest" asp-action="PostRequests" asp-route-postId="@Model.PostId" class="btn btn-outline-info">
+                    Request vào kèo
+                </a>
+            }
+
+            @if (userId.HasValue && !isAdmin && !isOwner)
+            {
+                <a asp-controller="JoinRequest" asp-action="Create" asp-route-postId="@Model.PostId" class="btn btn-success">
+                    Gửi request tham gia
+                </a>
+            }
+
+            @if (userId.HasValue && !isAdmin && isCurrentUserConfirmedParticipant)
+            {
+                <form asp-controller="PostParticipant" asp-action="Leave" method="post" class="d-inline">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="postId" value="@Model.PostId" />
+                    <button type="submit" class="btn btn-outline-danger" onclick="return confirm('Bạn chắc chắn muốn rời kèo?')">
+                        Rời kèo
+                    </button>
+                </form>
+            }
+        </div>
+    </div>
+</div>
+
+@if (confirmedParticipants != null && confirmedParticipants.Any())
+{
+    <div class="card">
+        <div class="card-header bg-white">
+            <strong>Người đã chốt</strong>
+        </div>
+        <div class="card-body">
+            <div class="list-group">
+                @foreach (var p in confirmedParticipants)
+                {
+                    var name = string.IsNullOrWhiteSpace(p.User?.DisplayName) ? p.User?.UserName : p.User?.DisplayName;
+                    var roleText = p.Role == (byte)BusinessObjects.ParticipantRole.Host ? "Chủ kèo" : "Participant";
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="fw-semibold">@name</div>
+                            <div class="text-muted small">@roleText • PartySize: @p.PartySize</div>
+                        </div>
+                        <span class="badge text-bg-success">Confirmed</span>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}

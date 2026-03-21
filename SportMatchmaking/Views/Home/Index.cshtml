@@ -6,7 +6,16 @@
     <h1 class="display-4">Welcome</h1>
     <p class="mb-4">SportMatchmaking Management System</p>
 
-    <a asp-controller="AdminDashboard" asp-action="Index" class="btn btn-dark btn-lg">
-        Vào trang Admin
-    </a>
+    @if (Context.Session.GetString("RoleName") == "Admin")
+    {
+        <a asp-controller="AdminDashboard" asp-action="Index" class="btn btn-dark btn-lg">
+            Vào trang Admin
+        </a>
+    }
+    else
+    {
+        <a asp-controller="Post" asp-action="Index" class="btn btn-primary btn-lg">
+            Xem bài đăng
+        </a>
+    }
 </div>

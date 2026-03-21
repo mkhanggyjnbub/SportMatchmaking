@@ -36,10 +36,10 @@
             <thead>
                 <tr>
                     <th>ID</th>
+                    <th>Ảnh</th>
                     <th>Tên môn</th>
                     <th>TeamMin</th>
                     <th>TeamMax</th>
-                    <th>ImageId</th>
                     <th style="width:180px;">Thao tác</th>
                 </tr>
             </thead>
@@ -48,12 +48,22 @@
                 {
                     foreach (var sport in Model)
                     {
+                        var imageUrl = sport.Image?.ImageUrl;
                         <tr>
                             <td>@sport.SportId</td>
+                            <td style="width:72px;">
+                                @if (!string.IsNullOrWhiteSpace(imageUrl))
+                                {
+                                    <img src="@imageUrl" alt="@sport.Name" class="rounded" style="width:48px;height:48px;object-fit:cover;" />
+                                }
+                                else
+                                {
+                                    <div class="bg-light border rounded d-flex align-items-center justify-content-center" style="width:48px;height:48px;">🏅</div>
+                                }
+                            </td>
                             <td class="fw-semibold">@sport.Name</td>
                             <td>@sport.TeamMin</td>
                             <td>@sport.TeamMax</td>
-                            <td>@sport.ImageId</td>
                             <td class="admin-actions">
                                 <a asp-action="Details" asp-route-id="@sport.SportId" class="btn btn-sm btn-info text-white">Chi tiết</a>
                                 <a asp-action="Edit" asp-route-id="@sport.SportId" class="btn btn-sm btn-warning">Sửa</a>

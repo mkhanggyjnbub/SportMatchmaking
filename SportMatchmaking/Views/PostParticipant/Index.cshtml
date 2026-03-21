@@ -1,0 +1,140 @@
+﻿@model List<BusinessObjects.PostParticipant>
+
+@{
+    var post = ViewBag.Post as BusinessObjects.MatchPost;
+    ViewData["Title"] = "Người tham gia";
+
+    var roleName = Context.Session.GetString("RoleName") ?? string.Empty;
+    var isAdmin = roleName == "Admin";
+    var userId = Context.Session.GetInt32("UserId");
+    var isOwner = post != null && userId.HasValue && userId.Value == post.CreatorUserId;
+
+    var confirmedSlots = Model?
+        .Where(x => x.Role == (byte)BusinessObjects.ParticipantRole.Participant
+                 && x.Status == (byte)BusinessObjects.ParticipantStatus.Confirmed)
+        .Sum(x => x.PartySize) ?? 0;
+
+    var remainingSlots = post != null ? (post.SlotsNeeded - confirmedSlots) : 0;
+
+    var canMarkNoShow = (isAdmin || isOwner) && post != null && post.StartTime <= DateTime.Now;
+}
+
+<h2 class="mb-3">Danh sách người tham gia</h2>
+
+@if (post != null)
+{
+    <div class="text-muted mb-3">
+        <div><strong>Bài đăng:</strong> @post.Title</div>
+        <div><strong>Slot cần tìm:</strong> @post.SlotsNeeded</div>
+        <div><strong>Đã chốt:</strong> @confirmedSlots</div>
+        <div><strong>Còn lại:</strong> @(remainingSlots < 0 ? 0 : remainingSlots)</div>
+
+        @if (!canMarkNoShow)
+        {
+            <div class="small">(Chỉ có thể đánh dấu no-show sau khi trận đã bắt đầu)</div>
+        }
+    </div>
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-info">Chưa có người tham gia.</div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Người dùng</th>
+                    <th>Vai trò</th>
+                    <th>Trạng thái</th>
+                    <th>Số lượng</th>
+                    <th>Tham gia lúc</th>
+                    <th>Rời lúc</th>
+                    <th style="width:160px;">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var p in Model)
+                {
+                    string roleText = p.Role == (byte)BusinessObjects.ParticipantRole.Host ? "Chủ kèo" : "Người tham gia";
+                    string statusText = p.Status switch
+                    {
+                        (byte)BusinessObjects.ParticipantStatus.Confirmed => "Đã xác nhận",
+                        (byte)BusinessObjects.ParticipantStatus.Left => "Đã rời",
+                        (byte)BusinessObjects.ParticipantStatus.NoShow => "No-show",
+                        _ => "Không rõ"
+                    };
+
+                    var roleBadgeClass = p.Role == (byte)BusinessObjects.ParticipantRole.Host
+                    ? "text-bg-primary"
+                    : "text-bg-secondary";
+
+                    var statusBadgeClass = p.Status switch
+                    {
+                        (byte)BusinessObjects.ParticipantStatus.Confirmed => "text-bg-success",
+                        (byte)BusinessObjects.ParticipantStatus.Left => "text-bg-secondary",
+                        (byte)BusinessObjects.ParticipantStatus.NoShow => "text-bg-danger",
+                        _ => "text-bg-light"
+                    };
+
+                    <tr>
+                        <td>
+                            <div class="fw-semibold">
+                                @(string.IsNullOrWhiteSpace(p.User?.DisplayName) ? p.User?.UserName : p.User.DisplayName)
+                            </div>
+                            <div class="text-muted small">@p.User?.Email</div>
+                        </td>
+                        <td>
+                            <span class="badge @roleBadgeClass">@roleText</span>
+                        </td>
+                        <td>
+                            <span class="badge @statusBadgeClass">@statusText</span>
+                        </td>
+                        <td>@p.PartySize</td>
+                        <td>@p.JoinedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>@(p.LeftAt.HasValue? p.LeftAt.Value.ToString("dd/MM/yyyy HH:mm") : "-")</td>
+                        <td>
+                            @if (canMarkNoShow
+                                                && p.Role == (byte)BusinessObjects.ParticipantRole.Participant
+                                                && p.Status == (byte)BusinessObjects.ParticipantStatus.Confirmed)
+                            {
+                                <form asp-action="MarkNoShow" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="postId" value="@p.PostId" />
+                                    <input type="hidden" name="userId" value="@p.UserId" />
+                                    <button type="submit"
+                                            class="btn btn-sm btn-outline-danger"
+                                            onclick="return confirm('Bạn có chắc muốn đánh dấu no-show cho người này không?')">
+                                        Đánh dấu no-show
+                                    </button>
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<div class="d-flex gap-2 mt-3">
+    @if (post != null)
+    {
+        <a asp-controller="Post" asp-action="Details" asp-route-id="@post.PostId" class="btn btn-secondary">Quay lại</a>
+    }
+    else
+    {
+        <a asp-controller="Post" asp-action="Index" class="btn btn-secondary">Quay lại</a>
+    }
+</div>
