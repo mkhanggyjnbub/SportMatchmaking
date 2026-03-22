@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>BusinessObjects</id>
+    <version>1.0.0</version>
+    <authors>BusinessObjects</authors>
+    <description>Package Description</description>
+    <repository type="git" commit="60f90a0ede270587e2618079bd9348e4af9e5a4b" />
+    <dependencies>
+      <group targetFramework="net8.0">
+        <dependency id="Microsoft.EntityFrameworkCore.SqlServer" version="8.0.23" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="D:\PRN_Project\SportMatchmaking\BusinessObjects\bin\Debug\net8.0\BusinessObjects.runtimeconfig.json" target="lib\net8.0\BusinessObjects.runtimeconfig.json" />
+    <file src="D:\PRN_Project\SportMatchmaking\BusinessObjects\bin\Debug\net8.0\BusinessObjects.dll" target="lib\net8.0\BusinessObjects.dll" />
+  </files>
+</package>

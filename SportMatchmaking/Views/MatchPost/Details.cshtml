@@ -42,6 +42,16 @@
                 <a asp-controller="JoinRequest" asp-action="PostRequests" asp-route-postId="@Model.PostId" class="btn btn-outline-dark">Quản lý request</a>
             }
 
+            @if (Model.CanAccessChatRoom && Model.ChatThreadId.HasValue)
+            {
+                <a asp-controller="Chat"
+                   asp-action="Index"
+                   asp-route-threadId="@Model.ChatThreadId"
+                   class="btn btn-primary">
+                    Vào phòng chat
+                </a>
+            }
+
             @if (Model.CanJoin)
             {
                 <a asp-controller="JoinRequest" asp-action="Create" asp-route-postId="@Model.PostId" class="btn btn-primary">Xin tham gia</a>
@@ -65,6 +75,8 @@
             }
         </div>
     </div>
+
+
 
     <div class="row g-4">
         <div class="col-lg-8">

@@ -2,7 +2,10 @@ using BusinessObjects;
 using BusinessObjects.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Services;
 using Services.DTOs;
+
+using Services;
 using Services.MatchPosts;
 using SportMatchmaking.Filters;
 using SportMatchmaking.Models;
@@ -12,10 +15,21 @@ namespace SportMatchmaking.Controllers
     public class MatchPostController : Controller
     {
         private readonly IMatchPostService _matchPostService;
+        //vinh
+        private readonly IChatThreadService _chatThreadService;
 
-        public MatchPostController(IMatchPostService matchPostService)
+        //public MatchPostController(IMatchPostService matchPostService)
+        //{
+        //    _matchPostService = matchPostService;
+        //}
+
+        //vinh
+        public MatchPostController(
+    IMatchPostService matchPostService,
+    IChatThreadService chatThreadService)
         {
             _matchPostService = matchPostService;
+            _chatThreadService = chatThreadService;
         }
 
         [HttpGet]
@@ -31,7 +45,21 @@ namespace SportMatchmaking.Controllers
         }
 
         [HttpGet]
-        public IActionResult Details(long id)
+        //public IActionResult Details(long id)
+        //{
+        //    var post = _matchPostService.GetById(id);
+        //    if (post == null)
+        //    {
+        //        TempData["ErrorMessage"] = "Không tìm thấy bài đăng.";
+        //        return RedirectToAction(nameof(Index));
+        //    }
+
+        //    return View(MapDetail(post, GetCurrentUserId()));
+        //}
+
+        //vinh 
+        [HttpGet]
+        public async Task<IActionResult> Details(long id)
         {
             var post = _matchPostService.GetById(id);
             if (post == null)
@@ -40,7 +68,7 @@ namespace SportMatchmaking.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(MapDetail(post, GetCurrentUserId()));
+            return View(await MapDetail(post, GetCurrentUserId()));
         }
 
         [UserOnly]
@@ -410,8 +438,9 @@ namespace SportMatchmaking.Controllers
                     && (post.EndTime ?? post.StartTime) <= now
             };
         }
-
-        private MatchPostDetailVM MapDetail(MatchPost post, int? currentUserId)
+        //vinh
+        private async Task<MatchPostDetailVM> MapDetail(MatchPost post, int? currentUserId)
+        // private MatchPostDetailVM MapDetail(MatchPost post, int? currentUserId)
         {
             var now = DateTime.Now;
             var remainingSlots = _matchPostService.GetRemainingSlots(post);
@@ -428,6 +457,16 @@ namespace SportMatchmaking.Controllers
                 && post.Reports.Any(x =>
                     x.ReporterUserId == currentUserId.Value
                     && (x.Status == (byte)ReportStatus.Open || x.Status == (byte)ReportStatus.InReview));
+
+            //vinh
+            long? chatThreadId = null;
+
+            if (currentUserId.HasValue)
+            {
+                chatThreadId = await _chatThreadService.GetAccessiblePostThreadIdAsync(post.PostId, currentUserId.Value);
+            }
+
+            TempData["ChatDebug"] = $"CurrentUserId={currentUserId}, PostId={post.PostId}, ChatThreadId={chatThreadId}";
 
             return new MatchPostDetailVM
             {
@@ -481,6 +520,9 @@ namespace SportMatchmaking.Controllers
                     && post.Status != (byte)PostStatus.Completed
                     && post.Status != (byte)PostStatus.Cancelled,
                 CanManageRequests = isCreator,
+                //vinh
+                CanAccessChatRoom = chatThreadId.HasValue,
+                ChatThreadId = chatThreadId,
                 CanConfirm = isCreator
                     && post.Status != (byte)PostStatus.Completed
                     && post.Status != (byte)PostStatus.Cancelled

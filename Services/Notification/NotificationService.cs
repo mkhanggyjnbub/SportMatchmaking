@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 
+
 namespace Services.Notifications
 {
     public class NotificationService : INotificationService
@@ -14,12 +15,15 @@ namespace Services.Notifications
         private readonly INotificationRepository _notificationRepository;
         private readonly IJoinRequestRepository _joinRequestRepository;
 
+        private readonly INotificationRealtimeService _notificationRealtimeService;
         public NotificationService(
             INotificationRepository notificationRepository,
-            IJoinRequestRepository joinRequestRepository)
+            IJoinRequestRepository joinRequestRepository,
+            INotificationRealtimeService notificationRealtimeService)
         {
             _notificationRepository = notificationRepository;
             _joinRequestRepository = joinRequestRepository;
+            _notificationRealtimeService = notificationRealtimeService;
         }
 
         public void NotifyNewJoinRequest(BusinessObjects.JoinRequest request)
@@ -63,6 +67,7 @@ namespace Services.Notifications
 
             _notificationRepository.Add(notification);
             _notificationRepository.Save();
+            PushUnreadCountRealtime(post.CreatorUserId);
         }
 
         public void NotifyRequestAccepted(BusinessObjects.JoinRequest request)
@@ -127,6 +132,14 @@ namespace Services.Notifications
 
             _notificationRepository.Add(notification);
             _notificationRepository.Save();
+                
+            PushUnreadCountRealtime(request.RequesterUserId);
+        }
+
+        private void PushUnreadCountRealtime(int userId)
+        {
+            var unreadCount = _notificationRepository.GetUnreadCount(userId);
+            _notificationRealtimeService.PushUnreadCountAsync(userId, unreadCount).Wait();
         }
 
         public List<NotificationItemDTO> GetRecentNotifications(int userId, int take = 10)
@@ -153,7 +166,10 @@ namespace Services.Notifications
         {
             _notificationRepository.MarkAllAsRead(userId);
             _notificationRepository.Save();
+
         }
+
+       
     }
 }
 

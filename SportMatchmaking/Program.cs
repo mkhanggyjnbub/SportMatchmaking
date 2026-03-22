@@ -13,6 +13,7 @@ using Services.Auth;
 using Services.JoinRequest;
 using Services.MatchPosts;
 using Services.Notifications;
+using SportMatchmaking.Services;
 
 //vinh
 using Repositories;
@@ -75,6 +76,7 @@ builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<IJoinRequestService, JoinRequestService>();
 builder.Services.AddScoped<IMatchPostService, MatchPostService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<INotificationRealtimeService, NotificationRealtimeService>();
 builder.Services.AddScoped<IPostParticipantRepository, PostParticipantRepository>();
 
 
@@ -110,5 +112,6 @@ app.MapControllerRoute(
 
 //vinh
 app.MapHub<ChatHub>("/chathub");
+app.MapHub<NotificationHub>("/notificationhub");
 
 app.Run();

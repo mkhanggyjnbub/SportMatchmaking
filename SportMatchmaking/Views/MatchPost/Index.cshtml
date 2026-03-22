@@ -24,10 +24,18 @@
             </p>
         </div>
 
-        @if (isUser)
-        {
-            <a asp-action="Create" class="btn btn-primary btn-lg">Tạo bài đăng</a>
-        }
+        <div class="d-flex gap-2 flex-wrap">
+            <a asp-controller="Chat"
+               asp-action="Index"
+               class="btn btn-outline-primary btn-lg">
+                Kênh chat
+            </a>
+
+            @if (isUser)
+            {
+                <a asp-action="Create" class="btn btn-primary btn-lg">Tạo bài đăng</a>
+            }
+        </div>
     </section>
 
     <form method="get" asp-action="Index" class="match-filter-panel card border-0 shadow-sm mb-4">

@@ -1,8 +1,9 @@
 ﻿//vinh
 
 using BusinessObjects;
+using BusinessObjects.Enums;
 using Microsoft.EntityFrameworkCore;
-
+using BusinessObjects.Enums;
 
 namespace Repositories
 {
@@ -69,10 +70,12 @@ namespace Repositories
                 .ToListAsync();
         }
 
+
         public async Task<List<BusinessObjects.PostParticipant>> GetConfirmedParticipantsByPostIdAsync(long postId)
         {
             return await _context.PostParticipants
-                .Where(pp => pp.PostId == postId && pp.Status == 2) // 2 = Accepted
+                .Where(pp => pp.PostId == postId
+                          && pp.Status == PostParticipantStatuses.Confirmed)
                 .ToListAsync();
         }
 

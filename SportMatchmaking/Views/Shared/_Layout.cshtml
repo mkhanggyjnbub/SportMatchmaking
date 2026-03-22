@@ -3,6 +3,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - SportMatchmaking</title>
@@ -10,6 +11,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/register.css" />
     <link rel="stylesheet" href="~/SportMatchmaking.styles.css" asp-append-version="true" />
+    @RenderSection("Styles", required: false)
 </head>
 <body class="@(Context.Session.GetString("RoleName") == "Admin" ? "admin-sidebar-enabled" : "")">
     @{
@@ -229,6 +231,7 @@
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.7/signalr.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
     <script>
@@ -367,7 +370,7 @@
         }
 
         // ---------------- Thông báo (notification bell) ----------------
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', async function () {
             const userId = @((userId ?? 0));
             if (!userId || '@roleName' === 'Admin') {
                 return;
@@ -380,11 +383,13 @@
 
             function updateBadge(count) {
                 if (!badge) return;
+
                 if (count > 0) {
                     badge.style.display = 'inline-block';
                     badge.textContent = count > 9 ? '9+' : count.toString();
                 } else {
                     badge.style.display = 'none';
+                    badge.textContent = '0';
                 }
             }
 
@@ -392,6 +397,7 @@
                 try {
                     const response = await fetch('/Notification/Count');
                     if (!response.ok) return;
+
                     const data = await response.json();
                     updateBadge(data.unreadCount ?? 0);
                 } catch {
@@ -402,7 +408,9 @@
             async function loadNotificationDropdown() {
                 if (menuLoading) {
                     menuLoading.style.display = 'block';
+                    menuLoading.textContent = 'Đang tải thông báo...';
                 }
+
                 if (menuContainer) {
                     menuContainer.innerHTML = '';
                 }
@@ -410,15 +418,17 @@
                 try {
                     const response = await fetch('/Notification/Dropdown');
                     if (!response.ok) return;
+
                     const html = await response.text();
+
                     if (menuContainer) {
                         menuContainer.innerHTML = html;
                     }
+
                     if (menuLoading) {
                         menuLoading.style.display = 'none';
                     }
 
-                    // Mark all as read once opened
                     try {
                         await fetch('/Notification/MarkAllRead', { method: 'POST' });
                         updateBadge(0);
@@ -427,15 +437,35 @@
                     }
                 } catch {
                     if (menuLoading) {
+                        menuLoading.style.display = 'block';
                         menuLoading.textContent = 'Không tải được thông báo.';
                     }
                 }
             }
 
-            // Initial load
-            fetchNotificationCount();
-            // Polling every 20s
-            setInterval(fetchNotificationCount, 20000);
+            await fetchNotificationCount();
+
+            const notificationConnection = new signalR.HubConnectionBuilder()
+                .withUrl('/notificationhub')
+                .withAutomaticReconnect()
+                .build();
+
+            notificationConnection.on('ReceiveNotification', function (data) {
+                if (!data) return;
+
+                updateBadge(data.unreadCount ?? 0);
+            });
+
+            async function startNotificationConnection() {
+                try {
+                    await notificationConnection.start();
+                    await notificationConnection.invoke('JoinUserGroup', userId.toString());
+                } catch {
+                    setTimeout(startNotificationConnection, 3000);
+                }
+            }
+
+            startNotificationConnection();
 
             if (dropdown) {
                 dropdown.addEventListener('click', function () {

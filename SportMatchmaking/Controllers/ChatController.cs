@@ -1,13 +1,14 @@
 ﻿//vinh
 
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Services;
-using Services.Models.Chat;
 using SportMatchmaking.Hubs;
 
 namespace SportMatchmaking.Controllers
 {
+    [Route("MatchPost/Chat")]
     public class ChatController : Controller
     {
         private readonly IChatThreadService _chatThreadService;
@@ -21,14 +22,25 @@ namespace SportMatchmaking.Controllers
             _hubContext = hubContext;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Index(int currentUserId, long? threadId)
+        private int? GetCurrentUserId()
         {
-            var model = await _chatThreadService.GetChatIndexDataAsync(currentUserId, threadId);
+            return HttpContext.Session.GetInt32("UserId");
+        }
+
+        [HttpGet("")]
+        public async Task<IActionResult> Index(long? threadId)
+        {
+            var currentUserId = GetCurrentUserId();
+            if (!currentUserId.HasValue)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            var model = await _chatThreadService.GetChatIndexDataAsync(currentUserId.Value, threadId);
             return View(model);
         }
 
-        [HttpPost]
+        [HttpPost("create-post-thread")]
         public async Task<IActionResult> CreatePostThread(long postId)
         {
             try
@@ -55,7 +67,7 @@ namespace SportMatchmaking.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("add-confirmed-participants")]
         public async Task<IActionResult> AddConfirmedParticipants(long postId)
         {
             try
@@ -80,12 +92,18 @@ namespace SportMatchmaking.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> SendMessageFromUi(long threadId, int currentUserId, string messageText)
+        [HttpPost("send")]
+        public async Task<IActionResult> SendMessageFromUi(long threadId, string messageText)
         {
+            var currentUserId = GetCurrentUserId();
+            if (!currentUserId.HasValue)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
             try
             {
-                await _chatThreadService.SendMessageAsync(threadId, currentUserId, messageText);
+                await _chatThreadService.SendMessageAsync(threadId, currentUserId.Value, messageText);
 
                 await _hubContext.Clients.Group(threadId.ToString())
                     .SendAsync("ReceiveMessage", new
@@ -95,7 +113,6 @@ namespace SportMatchmaking.Controllers
 
                 return RedirectToAction("Index", new
                 {
-                    currentUserId = currentUserId,
                     threadId = threadId
                 });
             }
@@ -105,16 +122,21 @@ namespace SportMatchmaking.Controllers
 
                 return RedirectToAction("Index", new
                 {
-                    currentUserId = currentUserId,
                     threadId = threadId
                 });
             }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> EditMessageFromUi(long messageId, long currentUserId, long threadId, string newText)
+        [HttpPost("edit")]
+        public async Task<IActionResult> EditMessageFromUi(long messageId, long threadId, string newText)
         {
-            var result = await _chatThreadService.EditMessageAsync(messageId, currentUserId, newText);
+            var currentUserId = GetCurrentUserId();
+            if (!currentUserId.HasValue)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            var result = await _chatThreadService.EditMessageAsync(messageId, currentUserId.Value, newText);
 
             if (result.success)
             {
@@ -131,15 +153,20 @@ namespace SportMatchmaking.Controllers
 
             return RedirectToAction("Index", new
             {
-                currentUserId = currentUserId,
                 threadId = threadId
             });
         }
 
-        [HttpPost]
-        public async Task<IActionResult> DeleteMessageFromUi(long messageId, long currentUserId, long threadId)
+        [HttpPost("delete")]
+        public async Task<IActionResult> DeleteMessageFromUi(long messageId, long threadId)
         {
-            var result = await _chatThreadService.DeleteMessageAsync(messageId, currentUserId);
+            var currentUserId = GetCurrentUserId();
+            if (!currentUserId.HasValue)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            var result = await _chatThreadService.DeleteMessageAsync(messageId, currentUserId.Value);
 
             if (result.success)
             {
@@ -156,7 +183,6 @@ namespace SportMatchmaking.Controllers
 
             return RedirectToAction("Index", new
             {
-                currentUserId = currentUserId,
                 threadId = threadId
             });
         }

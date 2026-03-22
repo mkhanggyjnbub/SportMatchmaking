@@ -3258,23 +3258,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\prokh\\.nuget\\packages\\": {},
+    "C:\\Users\\Admin\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Project Prn\\Services\\Services.csproj",
+      "projectUniqueName": "D:\\PRN_Project\\SportMatchmaking\\Services\\Services.csproj",
       "projectName": "Services",
-      "projectPath": "D:\\Project Prn\\Services\\Services.csproj",
-      "packagesPath": "C:\\Users\\prokh\\.nuget\\packages\\",
-      "outputPath": "D:\\Project Prn\\Services\\obj\\",
+      "projectPath": "D:\\PRN_Project\\SportMatchmaking\\Services\\Services.csproj",
+      "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+      "outputPath": "D:\\PRN_Project\\SportMatchmaking\\Services\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\prokh\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -3290,11 +3290,11 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "D:\\Project Prn\\BusinessObjects\\BusinessObjects.csproj": {
-              "projectPath": "D:\\Project Prn\\BusinessObjects\\BusinessObjects.csproj"
+            "D:\\PRN_Project\\SportMatchmaking\\BusinessObjects\\BusinessObjects.csproj": {
+              "projectPath": "D:\\PRN_Project\\SportMatchmaking\\BusinessObjects\\BusinessObjects.csproj"
             },
-            "D:\\Project Prn\\Repositories\\Repositories.csproj": {
-              "projectPath": "D:\\Project Prn\\Repositories\\Repositories.csproj"
+            "D:\\PRN_Project\\SportMatchmaking\\Repositories\\Repositories.csproj": {
+              "projectPath": "D:\\PRN_Project\\SportMatchmaking\\Repositories\\Repositories.csproj"
             }
           }
         }
@@ -3309,7 +3309,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.300"
+      "SdkAnalysisLevel": "10.0.100"
     },
     "frameworks": {
       "net8.0": {
@@ -3340,17 +3340,11 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.103/PortableRuntimeIdentifierGraph.json"
       }
     }
   },
   "logs": [
-    {
-      "code": "Undefined",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Problem reading the cache file D:\\Project Prn\\Services\\obj\\project.nuget.cache : '<' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 2 | BytePositionInLine: 0."
-    },
     {
       "code": "NU1701",
       "level": "Warning",

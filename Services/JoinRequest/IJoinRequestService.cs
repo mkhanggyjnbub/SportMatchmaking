@@ -14,7 +14,12 @@ namespace Services.JoinRequest
         List<PostJoinRequestItemDTO> GetRequestsOfPost(long postId, int currentUserId);
         List<MyJoinRequestItemDTO> GetMyRequests(int currentUserId);
         void CancelRequest(long requestId, int currentUserId);
-        void AcceptRequest(long requestId, int currentUserId);
+
+        //vinh
+        Task AcceptRequest(long requestId, int currentUserId);
+
+        //void AcceptRequest(long requestId, int currentUserId);
+
         void RejectRequest(long requestId, int currentUserId);
     }
 }
