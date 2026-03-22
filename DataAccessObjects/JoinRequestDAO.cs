@@ -92,5 +92,10 @@ namespace DataAccessObjects
         {
             _context.SaveChanges();
         }
+        public BusinessObjects.JoinRequest? GetByPostAndRequester(long postId, int requesterUserId)
+        {
+            return _context.JoinRequests
+                .FirstOrDefault(x => x.PostId == postId && x.RequesterUserId == requesterUserId);
+        }
     }
 }

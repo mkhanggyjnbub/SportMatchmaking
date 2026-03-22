@@ -73,6 +73,23 @@ namespace DataAccessObjects
             }
         }
 
+        /// <summary>
+        /// Xóa toàn bộ thông báo của user (không phải soft delete).
+        /// </summary>
+        public void DeleteAllForUser(int userId)
+        {
+            var items = _context.Notifications
+                .Where(x => x.UserId == userId)
+                .ToList();
+
+            if (items.Count == 0)
+            {
+                return;
+            }
+
+            _context.Notifications.RemoveRange(items);
+        }
+
         public void Save()
         {
             _context.SaveChanges();

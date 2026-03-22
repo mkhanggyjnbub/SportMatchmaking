@@ -43,6 +43,11 @@ namespace Repositories.Notifications
             _notificationDao.MarkAllAsRead(userId);
         }
 
+        public void DeleteAllForUser(int userId)
+        {
+            _notificationDao.DeleteAllForUser(userId);
+        }
+
         public void Save()
         {
             _notificationDao.Save();

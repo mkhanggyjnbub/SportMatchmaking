@@ -96,13 +96,20 @@
                                     </span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end p-0 shadow-sm" aria-labelledby="notificationDropdown" style="min-width: 340px;">
-                                    <li class="px-3 py-2 border-bottom d-flex justify-content-between align-items-center">
-                                        <span class="fw-semibold small">Thông báo</span>
-                                        <button type="button"
-                                                class="btn btn-link btn-sm p-0 small text-decoration-none"
-                                                onclick="markAllNotificationRead()">
-                                            Đánh dấu đã đọc
-                                        </button>
+                                    <li class="px-3 py-2 border-bottom">
+                                        <div class="fw-semibold small mb-2">Thông báo</div>
+                                        <div class="d-flex justify-content-end gap-2 flex-wrap">
+                                            <button type="button"
+                                                    class="btn btn-link btn-sm p-0 small text-decoration-none"
+                                                    onclick="markAllNotificationRead()">
+                                                Đánh dấu đã đọc
+                                            </button>
+                                            <button type="button"
+                                                    class="btn btn-link btn-sm p-0 small text-danger text-decoration-none"
+                                                    onclick="deleteAllNotifications()">
+                                                Xóa tất cả
+                                            </button>
+                                        </div>
                                     </li>
                                     <li class="dropdown-item text-center text-muted small" id="notificationMenuLoading" style="font-size: 0.8rem;">
                                         Đang tải thông báo...
@@ -450,6 +457,29 @@
                 const badge = document.getElementById('notificationBadge');
                 if (badge) {
                     badge.style.display = 'none';
+                }
+            } catch {
+                // ignore
+            }
+        }
+
+        async function deleteAllNotifications() {
+            if (!confirm('Bạn có chắc muốn xóa tất cả thông báo? Thao tác này không thể hoàn tác.')) {
+                return;
+            }
+            try {
+                const resp = await fetch('/Notification/DeleteAll', { method: 'POST' });
+                if (!resp.ok) return;
+                const badge = document.getElementById('notificationBadge');
+                if (badge) {
+                    badge.style.display = 'none';
+                }
+                const menuContainer = document.getElementById('notificationMenuContainer');
+                if (menuContainer) {
+                    const r = await fetch('/Notification/Dropdown');
+                    if (r.ok) {
+                        menuContainer.innerHTML = await r.text();
+                    }
                 }
             } catch {
                 // ignore

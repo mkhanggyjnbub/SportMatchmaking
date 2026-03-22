@@ -1,4 +1,4 @@
-﻿using Services.DTOs;
+using Services.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +14,10 @@ namespace Services.Auth
         void VerifyOtp(VerifyOtpDTO dto);
         void ResendOtp(string email);
         AppUserLogin Login(LoginDTO dto);
+
+        void RequestPasswordReset(string email);
+        string VerifyForgotPasswordOtp(string email, string otp);
+        void ResendForgotPasswordOtp(string email);
+        void CompletePasswordReset(string token, string newPassword);
     }
 }

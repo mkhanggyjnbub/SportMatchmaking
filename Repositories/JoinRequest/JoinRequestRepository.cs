@@ -1,5 +1,6 @@
 ﻿using BusinessObjects;
 using DataAccessObjects;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -70,6 +71,10 @@ namespace Repositories.JoinRequest
         BusinessObjects.AppUser? IJoinRequestRepository.GetUserById(int userId)
         {
             return _joinRequestDAO.GetUserById(userId);
+        }
+        public BusinessObjects.JoinRequest? GetByPostAndRequester(long postId, int requesterUserId)
+        {
+            return _joinRequestDAO.GetByPostAndRequester(postId, requesterUserId);
         }
     }
 }

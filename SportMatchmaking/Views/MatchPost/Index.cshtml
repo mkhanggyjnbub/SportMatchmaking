@@ -193,7 +193,7 @@
                                 <a asp-action="Details" asp-route-id="@post.PostId" class="btn btn-primary">Xem chi tiết</a>
                                 @if (isUser)
                                 {
-                                    <a asp-action="Details" asp-route-id="@post.PostId" class="btn btn-outline-secondary">Xin tham gia</a>
+                                    <a asp-controller="JoinRequest" asp-action="Create" asp-route-postId="@post.PostId" class="btn btn-outline-secondary">Xin tham gia</a>
                                 }
                             </div>
                         </div>

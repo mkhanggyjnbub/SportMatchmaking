@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Project Prn\\DataAccessObjects\\DataAccessObjects.csproj": {}
+    "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\DataAccessObjects\\DataAccessObjects.csproj": {}
   },
   "projects": {
-    "D:\\Project Prn\\BusinessObjects\\BusinessObjects.csproj": {
+    "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\BusinessObjects\\BusinessObjects.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Project Prn\\BusinessObjects\\BusinessObjects.csproj",
+        "projectUniqueName": "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\BusinessObjects\\BusinessObjects.csproj",
         "projectName": "BusinessObjects",
-        "projectPath": "D:\\Project Prn\\BusinessObjects\\BusinessObjects.csproj",
-        "packagesPath": "C:\\Users\\prokh\\.nuget\\packages\\",
-        "outputPath": "D:\\Project Prn\\BusinessObjects\\obj\\",
+        "projectPath": "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\BusinessObjects\\BusinessObjects.csproj",
+        "packagesPath": "C:\\Users\\LENOVO\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\BusinessObjects\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\prokh\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\LENOVO\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,7 +26,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -88,20 +87,20 @@
         }
       }
     },
-    "D:\\Project Prn\\DataAccessObjects\\DataAccessObjects.csproj": {
+    "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\DataAccessObjects\\DataAccessObjects.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Project Prn\\DataAccessObjects\\DataAccessObjects.csproj",
+        "projectUniqueName": "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\DataAccessObjects\\DataAccessObjects.csproj",
         "projectName": "DataAccessObjects",
-        "projectPath": "D:\\Project Prn\\DataAccessObjects\\DataAccessObjects.csproj",
-        "packagesPath": "C:\\Users\\prokh\\.nuget\\packages\\",
-        "outputPath": "D:\\Project Prn\\DataAccessObjects\\obj\\",
+        "projectPath": "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\DataAccessObjects\\DataAccessObjects.csproj",
+        "packagesPath": "C:\\Users\\LENOVO\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\DataAccessObjects\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\prokh\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\LENOVO\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -110,15 +109,14 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\Project Prn\\BusinessObjects\\BusinessObjects.csproj": {
-                "projectPath": "D:\\Project Prn\\BusinessObjects\\BusinessObjects.csproj"
+              "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\BusinessObjects\\BusinessObjects.csproj": {
+                "projectPath": "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\BusinessObjects\\BusinessObjects.csproj"
               }
             }
           }

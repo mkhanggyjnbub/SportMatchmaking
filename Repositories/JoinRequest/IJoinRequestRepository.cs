@@ -17,6 +17,7 @@ namespace Repositories.JoinRequest
         int GetConfirmedParticipantSlots(long postId);
         List<BusinessObjects.JoinRequest> GetRequestsByPostId(long postId);
         List<BusinessObjects.JoinRequest> GetRequestsByRequesterUserId(int requesterUserId);
+        BusinessObjects.JoinRequest? GetByPostAndRequester(long postId, int requesterUserId);
         void Add(BusinessObjects.JoinRequest entity);
         void Update(BusinessObjects.JoinRequest entity);
         void UpdatePost(MatchPost post);
