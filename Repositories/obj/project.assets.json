@@ -2748,23 +2748,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\prokh\\.nuget\\packages\\": {},
+    "C:\\Users\\LENOVO\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Project Prn\\Repositories\\Repositories.csproj",
+      "projectUniqueName": "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\Repositories\\Repositories.csproj",
       "projectName": "Repositories",
-      "projectPath": "D:\\Project Prn\\Repositories\\Repositories.csproj",
-      "packagesPath": "C:\\Users\\prokh\\.nuget\\packages\\",
-      "outputPath": "D:\\Project Prn\\Repositories\\obj\\",
+      "projectPath": "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\Repositories\\Repositories.csproj",
+      "packagesPath": "C:\\Users\\LENOVO\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\Repositories\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\prokh\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\LENOVO\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -2773,18 +2773,17 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "D:\\Project Prn\\BusinessObjects\\BusinessObjects.csproj": {
-              "projectPath": "D:\\Project Prn\\BusinessObjects\\BusinessObjects.csproj"
+            "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\BusinessObjects\\BusinessObjects.csproj": {
+              "projectPath": "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\BusinessObjects\\BusinessObjects.csproj"
             },
-            "D:\\Project Prn\\DataAccessObjects\\DataAccessObjects.csproj": {
-              "projectPath": "D:\\Project Prn\\DataAccessObjects\\DataAccessObjects.csproj"
+            "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\DataAccessObjects\\DataAccessObjects.csproj": {
+              "projectPath": "C:\\Users\\LENOVO\\Documents\\GitHub\\SportMatchmaking\\DataAccessObjects\\DataAccessObjects.csproj"
             }
           }
         }
@@ -2823,13 +2822,5 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
       }
     }
-  },
-  "logs": [
-    {
-      "code": "Undefined",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Problem reading the cache file D:\\Project Prn\\Repositories\\obj\\project.nuget.cache : '<' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 2 | BytePositionInLine: 0."
-    }
-  ]
+  }
 }
