@@ -1,4 +1,4 @@
-﻿using DataAccessObjects;
+using DataAccessObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +28,21 @@ namespace Repositories.PostParticipant
         public void Update(BusinessObjects.PostParticipant entity)
         {
             _postParticipantDAO.Update(entity);
+        }
+
+        public Task SaveAsync()
+        {
+            return _postParticipantDAO.SaveChangesAsync();
+        }
+
+        public Task<List<BusinessObjects.PostParticipant>> GetByPostIdAsync(long postId)
+        {
+            return _postParticipantDAO.GetByPostIdAsync(postId);
+        }
+
+        public Task<int> GetConfirmedParticipantSlotsAsync(long postId)
+        {
+            return _postParticipantDAO.GetConfirmedParticipantSlotsAsync(postId);
         }
     }
 }

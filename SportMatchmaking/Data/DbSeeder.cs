@@ -1,6 +1,5 @@
 using BusinessObjects;
 using Microsoft.EntityFrameworkCore;
-using BusinessObjects;
 
 namespace SportMatchmaking.Data
 {
