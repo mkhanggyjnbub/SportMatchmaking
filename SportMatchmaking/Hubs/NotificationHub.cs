@@ -19,5 +19,30 @@ namespace SportMatchmaking.Hubs
                 await Groups.RemoveFromGroupAsync(Context.ConnectionId, $"user_{userId}");
             }
         }
+
+        public async Task NotifyUser(string userId, string title, string message, string type = "info")
+        {
+            if (!string.IsNullOrWhiteSpace(userId))
+            {
+                await Clients.Group($"user_{userId}").SendAsync("ReceiveNotification", new
+                {
+                    title = title,
+                    message = message,
+                    type = type,
+                    timestamp = DateTime.UtcNow
+                });
+            }
+        }
+
+        public async Task BroadcastNotification(string title, string message, string type = "info")
+        {
+            await Clients.All.SendAsync("ReceiveNotification", new
+            {
+                title = title,
+                message = message,
+                type = type,
+                timestamp = DateTime.UtcNow
+            });
+        }
     }
 }
