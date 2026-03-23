@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Services.Admin;
 using SportMatchmaking.Filters;
+using SportMatchmaking.Models;
 
 namespace SportMatchmaking.Controllers
 {
@@ -9,10 +10,14 @@ namespace SportMatchmaking.Controllers
     public class AdminSportController : Controller
     {
         private readonly IAdminSportService _adminSportService;
+        private readonly IWebHostEnvironment _environment;
+        private static readonly string[] AllowedImageExtensions = [".jpg", ".jpeg", ".png", ".webp"];
+        private const long MaxImageFileSize = 5 * 1024 * 1024;
 
-        public AdminSportController(IAdminSportService adminSportService)
+        public AdminSportController(IAdminSportService adminSportService, IWebHostEnvironment environment)
         {
             _adminSportService = adminSportService;
+            _environment = environment;
         }
 
         public async Task<IActionResult> Index(string? keyword)
@@ -113,19 +118,32 @@ namespace SportMatchmaking.Controllers
         [HttpGet]
         public IActionResult CreateImage()
         {
-            return View();
+            return View(new SportImageUploadVM());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateImage(SportImage sportImage)
+        public async Task<IActionResult> CreateImage(SportImageUploadVM model)
         {
+            var imageUrl = SaveUploadedSportImage(model.ImageFile, null);
+            if (!ModelState.IsValid || string.IsNullOrWhiteSpace(imageUrl))
+            {
+                TempData["Error"] = ModelState.Values.SelectMany(x => x.Errors).FirstOrDefault()?.ErrorMessage ?? "Vui lòng chọn file ảnh hợp lệ.";
+                return View(model);
+            }
+
+            var sportImage = new SportImage
+            {
+                ImageUrl = imageUrl
+            };
+
             var result = await _adminSportService.AddSportImageAsync(sportImage);
 
             if (!result.Success)
             {
                 TempData["Error"] = result.Message;
-                return View(sportImage);
+                DeleteSportImageFileIfExists(imageUrl);
+                return View(model);
             }
 
             TempData["Success"] = result.Message;
@@ -142,19 +160,55 @@ namespace SportMatchmaking.Controllers
                 return RedirectToAction(nameof(Images));
             }
 
-            return View(image);
+            return View(new SportImageUploadVM
+            {
+                ImageId = image.ImageId,
+                CurrentImageUrl = image.ImageUrl
+            });
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditImage(SportImage sportImage)
+        public async Task<IActionResult> EditImage(SportImageUploadVM model)
         {
-            var result = await _adminSportService.UpdateSportImageAsync(sportImage);
+            var existingImage = await _adminSportService.GetSportImageByIdAsync(model.ImageId);
+            if (existingImage == null)
+            {
+                TempData["Error"] = "Không tìm thấy ảnh môn thể thao.";
+                return RedirectToAction(nameof(Images));
+            }
+
+            var imageUrl = SaveUploadedSportImage(model.ImageFile, existingImage.ImageUrl);
+            if (!ModelState.IsValid)
+            {
+                model.CurrentImageUrl = existingImage.ImageUrl;
+                TempData["Error"] = ModelState.Values.SelectMany(x => x.Errors).FirstOrDefault()?.ErrorMessage ?? "Dữ liệu ảnh không hợp lệ.";
+                return View(model);
+            }
+
+            var updatedImage = new SportImage
+            {
+                ImageId = model.ImageId,
+                ImageUrl = imageUrl
+            };
+
+            var result = await _adminSportService.UpdateSportImageAsync(updatedImage);
 
             if (!result.Success)
             {
                 TempData["Error"] = result.Message;
-                return View(sportImage);
+                if (!string.Equals(imageUrl, existingImage.ImageUrl, StringComparison.OrdinalIgnoreCase))
+                {
+                    DeleteSportImageFileIfExists(imageUrl);
+                }
+
+                model.CurrentImageUrl = existingImage.ImageUrl;
+                return View(model);
+            }
+
+            if (!string.Equals(imageUrl, existingImage.ImageUrl, StringComparison.OrdinalIgnoreCase))
+            {
+                DeleteSportImageFileIfExists(existingImage.ImageUrl);
             }
 
             TempData["Success"] = result.Message;
@@ -165,10 +219,77 @@ namespace SportMatchmaking.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteImage(int id)
         {
+            var existingImage = await _adminSportService.GetSportImageByIdAsync(id);
             var result = await _adminSportService.DeleteSportImageAsync(id);
+
+            if (result.Success && existingImage != null)
+            {
+                DeleteSportImageFileIfExists(existingImage.ImageUrl);
+            }
 
             TempData[result.Success ? "Success" : "Error"] = result.Message;
             return RedirectToAction(nameof(Images));
+        }
+
+        private string? SaveUploadedSportImage(IFormFile? imageFile, string? currentImageUrl)
+        {
+            if (imageFile == null || imageFile.Length <= 0)
+            {
+                if (string.IsNullOrWhiteSpace(currentImageUrl))
+                {
+                    ModelState.AddModelError(nameof(SportImageUploadVM.ImageFile), "Vui lòng chọn file ảnh.");
+                }
+
+                return currentImageUrl;
+            }
+
+            var extension = Path.GetExtension(imageFile.FileName).ToLowerInvariant();
+            if (!AllowedImageExtensions.Contains(extension))
+            {
+                ModelState.AddModelError(nameof(SportImageUploadVM.ImageFile), "Chỉ chấp nhận file .jpg, .jpeg, .png, .webp.");
+                return currentImageUrl;
+            }
+
+            if (imageFile.Length > MaxImageFileSize)
+            {
+                ModelState.AddModelError(nameof(SportImageUploadVM.ImageFile), "Kích thước ảnh tối đa 5MB.");
+                return currentImageUrl;
+            }
+
+            var folderPath = Path.Combine(_environment.WebRootPath, "uploads", "sports");
+            if (!Directory.Exists(folderPath))
+            {
+                Directory.CreateDirectory(folderPath);
+            }
+
+            var fileName = $"{Guid.NewGuid():N}{extension}";
+            var savePath = Path.Combine(folderPath, fileName);
+
+            using var stream = new FileStream(savePath, FileMode.Create);
+            imageFile.CopyTo(stream);
+
+            return $"/uploads/sports/{fileName}";
+        }
+
+        private void DeleteSportImageFileIfExists(string? imageUrl)
+        {
+            if (string.IsNullOrWhiteSpace(imageUrl))
+            {
+                return;
+            }
+
+            const string uploadPrefix = "/uploads/sports/";
+            if (!imageUrl.StartsWith(uploadPrefix, StringComparison.OrdinalIgnoreCase))
+            {
+                return;
+            }
+
+            var relativePath = imageUrl.TrimStart('/').Replace('/', Path.DirectorySeparatorChar);
+            var fullPath = Path.Combine(_environment.WebRootPath, relativePath);
+            if (System.IO.File.Exists(fullPath))
+            {
+                System.IO.File.Delete(fullPath);
+            }
         }
     }
 }

@@ -13,6 +13,7 @@ namespace Services.DTOs
         public bool? IsUrgent { get; set; }
         public byte? MatchType { get; set; }
         public int? CreatorUserId { get; set; }
+        public int? ViewerUserId { get; set; }
         public bool ExploreOnlyActivePosts { get; set; }
     }
 }

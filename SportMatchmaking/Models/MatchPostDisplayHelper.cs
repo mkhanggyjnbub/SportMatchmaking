@@ -1,4 +1,5 @@
 using BusinessObjects;
+using BusinessObjects.Enums;
 
 namespace SportMatchmaking.Models
 {
@@ -54,6 +55,23 @@ namespace SportMatchmaking.Models
         {
             var item = Statuses.FirstOrDefault(x => x.Value == status);
             return string.IsNullOrWhiteSpace(item.Label) ? $"Status {status}" : item.Label;
+        }
+
+        public static string GetParticipantRoleText(byte role)
+        {
+            return role == PostParticipantRoles.Creator ? "Chủ kèo" : "Participant";
+        }
+
+        public static string GetParticipantStatusText(byte status)
+        {
+            return status switch
+            {
+                PostParticipantStatuses.Confirmed => "Đã chốt",
+                PostParticipantStatuses.Left => "Đã rời",
+                PostParticipantStatuses.Removed => "Bị xóa",
+                PostParticipantStatuses.NoShow => "No-show",
+                _ => $"Status {status}"
+            };
         }
 
         public static string GetSkillText(byte? skillMin, byte? skillMax)

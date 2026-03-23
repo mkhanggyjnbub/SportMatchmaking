@@ -133,7 +133,24 @@ namespace Services.JoinRequest
 
                 if (existingRequest.Status == 2)
                 {
-                    throw new Exception("Bạn đã được chấp nhận ở bài đăng này rồi.");
+                    if (existingParticipant == null || existingParticipant.Status == PostParticipantStatuses.Confirmed)
+                    {
+                        throw new Exception("Bạn đã được chấp nhận ở bài đăng này rồi.");
+                    }
+
+                    existingRequest.PartySize = dto.PartySize;
+                    existingRequest.Message = string.IsNullOrWhiteSpace(dto.Message) ? null : dto.Message.Trim();
+                    existingRequest.GuestNames = string.IsNullOrWhiteSpace(dto.GuestNames) ? null : dto.GuestNames.Trim();
+                    existingRequest.Status = 1;
+                    existingRequest.CreatedAt = DateTime.Now;
+                    existingRequest.DecidedAt = null;
+                    existingRequest.DecidedByUserId = null;
+
+                    _joinRequestRepository.Update(existingRequest);
+                    _joinRequestRepository.Save();
+
+                    _notificationService.NotifyNewJoinRequest(existingRequest);
+                    return;
                 }
 
                 if (existingRequest.Status == 3 || existingRequest.Status == 4)
