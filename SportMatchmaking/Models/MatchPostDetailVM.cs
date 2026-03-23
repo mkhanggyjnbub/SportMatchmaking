@@ -41,6 +41,11 @@ namespace SportMatchmaking.Models
         public bool CanEdit { get; set; }
         public bool CanCancel { get; set; }
         public bool CanManageRequests { get; set; }
+
+        //vinh 
+        public bool CanAccessChatRoom { get; set; }
+        public long? ChatThreadId { get; set; }
+
         public bool CanConfirm { get; set; }
         public bool CanComplete { get; set; }
         public bool CanReport { get; set; }

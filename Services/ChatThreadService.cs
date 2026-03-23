@@ -32,6 +32,20 @@ namespace Services
             return $"User {senderUserId}";
         }
 
+        private static string FormatThreadRoomName(ChatThread thread, MatchPost? post)
+        {
+            if (post != null && !string.IsNullOrWhiteSpace(post.Title))
+            {
+                return post.Title.Trim();
+            }
+
+            if (thread.PostId.HasValue)
+            {
+                return $"Bài đăng #{thread.PostId}";
+            }
+
+            return $"Phòng #{thread.ThreadId}";
+        }
         public async Task<ChatIndexViewModel> GetChatIndexDataAsync(int currentUserId, long? threadId)
         {
             var threads = await _chatThreadRepository.GetThreadsByUserIdAsync(currentUserId);
@@ -46,14 +60,22 @@ namespace Services
                 var members = await _chatThreadRepository.GetThreadMembersByThreadIdAsync(thread.ThreadId);
                 var memberCount = members.Count;
 
+                MatchPost? post = null;
+                if (thread.PostId.HasValue)
+                {
+                    post = await _chatThreadRepository.GetPostByIdAsync(thread.PostId.Value);
+                }
+
                 roomItems.Add(new ChatRoomItemViewModel
                 {
                     ThreadId = thread.ThreadId,
                     PostId = thread.PostId,
-                    RoomName = thread.PostId.HasValue
-                        ? $"Bài đăng #{thread.PostId}"
-                        : $"Phòng #{thread.ThreadId}",
-                    LastMessage = lastMessage?.MessageText ?? "Chưa có tin nhắn",
+                    RoomName = FormatThreadRoomName(thread, post),
+                    LastMessage = lastMessage == null
+                        ? "Chưa có tin nhắn"
+                        : (lastMessage.IsDeleted == true
+                            ? "Tin nhắn đã bị xóa"
+                            : (lastMessage.MessageText ?? "")),
                     LastMessageTimeText = lastMessage != null
                         ? FormatRoomTime(lastMessage.SentAt.ToLocalTime())
                         : "",
@@ -110,9 +132,13 @@ namespace Services
 
                 if (selectedThread != null)
                 {
-                    selectedRoomTitle = selectedThread.PostId.HasValue
-                        ? $"Bài đăng #{selectedThread.PostId}"
-                        : $"Phòng #{selectedThread.ThreadId}";
+                    MatchPost? selectedPost = null;
+                    if (selectedThread.PostId.HasValue)
+                    {
+                        selectedPost = await _chatThreadRepository.GetPostByIdAsync(selectedThread.PostId.Value);
+                    }
+
+                    selectedRoomTitle = FormatThreadRoomName(selectedThread, selectedPost);
 
                     var selectedMembers = await _chatThreadRepository.GetThreadMembersByThreadIdAsync(selectedThreadId.Value);
                     selectedRoomMemberCount = selectedMembers.Count;
@@ -185,11 +211,7 @@ namespace Services
                 return 0;
             }
 
-            var creatorParticipant = await _chatThreadRepository.GetCreatorParticipantByPostIdAsync(postId);
-            if (creatorParticipant == null)
-            {
-                throw new Exception("Creator participant does not exist.");
-            }
+
 
             var thread = await EnsurePostGroupThreadCreatedAsync(postId);
 
@@ -201,7 +223,7 @@ namespace Services
             var usersToAdd = new List<int>();
 
             // luôn đảm bảo creator có trong phòng
-            usersToAdd.Add(creatorParticipant.UserId);
+            usersToAdd.Add(post.CreatorUserId);
 
             // thêm các participant đã accepted
             usersToAdd.AddRange(
@@ -229,6 +251,27 @@ namespace Services
             await _chatThreadRepository.SaveChangesAsync();
 
             return newMembers.Count;
+        }
+
+
+        public async Task<long?> GetAccessiblePostThreadIdAsync(long postId, int currentUserId)
+        {
+            var post = await _chatThreadRepository.GetPostByIdAsync(postId);
+            if (post == null)
+            {
+                return null;
+            }
+
+            var thread = await _chatThreadRepository.GetPostGroupThreadByPostIdAsync(postId);
+            if (thread == null)
+            {
+                return null;
+            }
+
+            var members = await _chatThreadRepository.GetThreadMembersByThreadIdAsync(thread.ThreadId);
+            var isMember = members.Any(x => x.UserId == currentUserId);
+
+            return isMember ? thread.ThreadId : (long?)null;
         }
 
         public async Task<ChatMessage> SendMessageAsync(long threadId, int senderUserId, string messageText)

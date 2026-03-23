@@ -1,7 +1,6 @@
 {
   "ExpandedNodes": [
     "",
-    "\\SportMatchmaking",
     "\\SportMatchmaking\\Controllers",
     "\\SportMatchmaking\\Views",
     "\\SportMatchmaking\\Views\\AdminDashboard",
@@ -11,6 +10,5 @@
     "\\SportMatchmaking\\Views\\AdminUser",
     "\\SportMatchmaking\\Views\\Home"
   ],
-  "SelectedNode": "\\SportMatchmaking\\appsettings.json",
   "PreviewInSolutionExplorer": false
 }
