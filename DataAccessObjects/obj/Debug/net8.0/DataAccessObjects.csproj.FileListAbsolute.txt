@@ -1,38 +1,3 @@
-C:\Users\LENOVO\Documents\GitHub\SportMatchmaking\DataAccessObjects\bin\Debug\net8.0\DataAccessObjects.deps.json
-C:\Users\LENOVO\Documents\GitHub\SportMatchmaking\DataAccessObjects\bin\Debug\net8.0\DataAccessObjects.dll
-C:\Users\LENOVO\Documents\GitHub\SportMatchmaking\DataAccessObjects\bin\Debug\net8.0\DataAccessObjects.pdb
-C:\Users\LENOVO\Documents\GitHub\SportMatchmaking\DataAccessObjects\bin\Debug\net8.0\BusinessObjects.dll
-C:\Users\LENOVO\Documents\GitHub\SportMatchmaking\DataAccessObjects\bin\Debug\net8.0\BusinessObjects.pdb
-C:\Users\LENOVO\Documents\GitHub\SportMatchmaking\DataAccessObjects\obj\Debug\net8.0\DataAccessObjects.csproj.AssemblyReference.cache
-C:\Users\LENOVO\Documents\GitHub\SportMatchmaking\DataAccessObjects\obj\Debug\net8.0\DataAccessObjects.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\LENOVO\Documents\GitHub\SportMatchmaking\DataAccessObjects\obj\Debug\net8.0\DataAccessObjects.AssemblyInfoInputs.cache
-C:\Users\LENOVO\Documents\GitHub\SportMatchmaking\DataAccessObjects\obj\Debug\net8.0\DataAccessObjects.AssemblyInfo.cs
-C:\Users\LENOVO\Documents\GitHub\SportMatchmaking\DataAccessObjects\obj\Debug\net8.0\DataAccessObjects.csproj.CoreCompileInputs.cache
-C:\Users\LENOVO\Documents\GitHub\SportMatchmaking\DataAccessObjects\obj\Debug\net8.0\DataAccessObjects.sourcelink.json
-C:\Users\LENOVO\Documents\GitHub\SportMatchmaking\DataAccessObjects\obj\Debug\net8.0\DataAcce.79975846.Up2Date
-C:\Users\LENOVO\Documents\GitHub\SportMatchmaking\DataAccessObjects\obj\Debug\net8.0\DataAccessObjects.dll
-C:\Users\LENOVO\Documents\GitHub\SportMatchmaking\DataAccessObjects\obj\Debug\net8.0\refint\DataAccessObjects.dll
-C:\Users\LENOVO\Documents\GitHub\SportMatchmaking\DataAccessObjects\obj\Debug\net8.0\DataAccessObjects.pdb
-C:\Users\LENOVO\Documents\GitHub\SportMatchmaking\DataAccessObjects\obj\Debug\net8.0\ref\DataAccessObjects.dll
-<<<<<<< HEAD
-F:\SP26\PRN222\Project\SportMatchmaking\DataAccessObjects\bin\Debug\net8.0\DataAccessObjects.deps.json
-F:\SP26\PRN222\Project\SportMatchmaking\DataAccessObjects\bin\Debug\net8.0\DataAccessObjects.runtimeconfig.json
-F:\SP26\PRN222\Project\SportMatchmaking\DataAccessObjects\bin\Debug\net8.0\DataAccessObjects.dll
-F:\SP26\PRN222\Project\SportMatchmaking\DataAccessObjects\bin\Debug\net8.0\DataAccessObjects.pdb
-F:\SP26\PRN222\Project\SportMatchmaking\DataAccessObjects\bin\Debug\net8.0\BusinessObjects.dll
-F:\SP26\PRN222\Project\SportMatchmaking\DataAccessObjects\bin\Debug\net8.0\BusinessObjects.pdb
-F:\SP26\PRN222\Project\SportMatchmaking\DataAccessObjects\obj\Debug\net8.0\DataAccessObjects.csproj.AssemblyReference.cache
-F:\SP26\PRN222\Project\SportMatchmaking\DataAccessObjects\obj\Debug\net8.0\DataAccessObjects.GeneratedMSBuildEditorConfig.editorconfig
-F:\SP26\PRN222\Project\SportMatchmaking\DataAccessObjects\obj\Debug\net8.0\DataAccessObjects.AssemblyInfoInputs.cache
-F:\SP26\PRN222\Project\SportMatchmaking\DataAccessObjects\obj\Debug\net8.0\DataAccessObjects.AssemblyInfo.cs
-F:\SP26\PRN222\Project\SportMatchmaking\DataAccessObjects\obj\Debug\net8.0\DataAccessObjects.csproj.CoreCompileInputs.cache
-F:\SP26\PRN222\Project\SportMatchmaking\DataAccessObjects\obj\Debug\net8.0\DataAccessObjects.sourcelink.json
-F:\SP26\PRN222\Project\SportMatchmaking\DataAccessObjects\obj\Debug\net8.0\DataAcce.79975846.Up2Date
-F:\SP26\PRN222\Project\SportMatchmaking\DataAccessObjects\obj\Debug\net8.0\DataAccessObjects.dll
-F:\SP26\PRN222\Project\SportMatchmaking\DataAccessObjects\obj\Debug\net8.0\refint\DataAccessObjects.dll
-F:\SP26\PRN222\Project\SportMatchmaking\DataAccessObjects\obj\Debug\net8.0\DataAccessObjects.pdb
-F:\SP26\PRN222\Project\SportMatchmaking\DataAccessObjects\obj\Debug\net8.0\DataAccessObjects.genruntimeconfig.cache
-F:\SP26\PRN222\Project\SportMatchmaking\DataAccessObjects\obj\Debug\net8.0\ref\DataAccessObjects.dll
 D:\Project Prn\DataAccessObjects\bin\Debug\net8.0\DataAccessObjects.deps.json
 D:\Project Prn\DataAccessObjects\bin\Debug\net8.0\DataAccessObjects.runtimeconfig.json
 D:\Project Prn\DataAccessObjects\bin\Debug\net8.0\DataAccessObjects.dll
@@ -51,24 +16,3 @@ D:\Project Prn\DataAccessObjects\obj\Debug\net8.0\refint\DataAccessObjects.dll
 D:\Project Prn\DataAccessObjects\obj\Debug\net8.0\DataAccessObjects.pdb
 D:\Project Prn\DataAccessObjects\obj\Debug\net8.0\DataAccessObjects.genruntimeconfig.cache
 D:\Project Prn\DataAccessObjects\obj\Debug\net8.0\ref\DataAccessObjects.dll
-=======
-D:\PRN222_demo\Final_Project\DataAccessObjects\bin\Debug\net8.0\DataAccessObjects.deps.json
-D:\PRN222_demo\Final_Project\DataAccessObjects\bin\Debug\net8.0\DataAccessObjects.dll
-D:\PRN222_demo\Final_Project\DataAccessObjects\bin\Debug\net8.0\DataAccessObjects.pdb
-D:\PRN222_demo\Final_Project\DataAccessObjects\bin\Debug\net8.0\BusinessObjects.dll
-D:\PRN222_demo\Final_Project\DataAccessObjects\bin\Debug\net8.0\BusinessObjects.pdb
-D:\PRN222_demo\Final_Project\DataAccessObjects\obj\Debug\net8.0\DataAccessObjects.csproj.AssemblyReference.cache
-D:\PRN222_demo\Final_Project\DataAccessObjects\obj\Debug\net8.0\DataAccessObjects.GeneratedMSBuildEditorConfig.editorconfig
-D:\PRN222_demo\Final_Project\DataAccessObjects\obj\Debug\net8.0\DataAccessObjects.AssemblyInfoInputs.cache
-D:\PRN222_demo\Final_Project\DataAccessObjects\obj\Debug\net8.0\DataAccessObjects.AssemblyInfo.cs
-D:\PRN222_demo\Final_Project\DataAccessObjects\obj\Debug\net8.0\DataAccessObjects.csproj.CoreCompileInputs.cache
-D:\PRN222_demo\Final_Project\DataAccessObjects\obj\Debug\net8.0\DataAccessObjects.sourcelink.json
-D:\PRN222_demo\Final_Project\DataAccessObjects\obj\Debug\net8.0\DataAcce.79975846.Up2Date
-D:\PRN222_demo\Final_Project\DataAccessObjects\obj\Debug\net8.0\DataAccessObjects.dll
-D:\PRN222_demo\Final_Project\DataAccessObjects\obj\Debug\net8.0\refint\DataAccessObjects.dll
-D:\PRN222_demo\Final_Project\DataAccessObjects\obj\Debug\net8.0\DataAccessObjects.pdb
-D:\PRN222_demo\Final_Project\DataAccessObjects\obj\Debug\net8.0\ref\DataAccessObjects.dll
->>>>>>> origin/vinh2
-C:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\e3492d952a9dcb37\DataAccessObjects\obj\Debug\net8.0\DataAccessObjects.dll
-C:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\e3492d952a9dcb37\DataAccessObjects\obj\Debug\net8.0\refint\DataAccessObjects.dll
-C:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\e3492d952a9dcb37\DataAccessObjects\obj\Debug\net8.0\DataAccessObjects.pdb
