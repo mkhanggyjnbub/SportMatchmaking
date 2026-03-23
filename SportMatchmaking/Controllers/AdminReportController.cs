@@ -18,16 +18,42 @@ namespace SportMatchmaking.Controllers
             byte? status,
             byte? targetType,
             byte? reasonCode,
-            int? reporterUserId)
+            int? reporterUserId,
+            int page = 1,
+            int pageSize = 10)
         {
             var reports = await _adminReportService.GetReportsAsync(status, targetType, reasonCode, reporterUserId);
+
+            page = page < 1 ? 1 : page;
+            pageSize = pageSize <= 0 ? 10 : pageSize;
+
+            var totalItems = reports.Count;
+            var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+            if (totalPages == 0)
+            {
+                totalPages = 1;
+            }
+
+            if (page > totalPages)
+            {
+                page = totalPages;
+            }
+
+            var pagedReports = reports
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
 
             ViewBag.Status = status;
             ViewBag.TargetType = targetType;
             ViewBag.ReasonCode = reasonCode;
             ViewBag.ReporterUserId = reporterUserId;
+            ViewBag.CurrentPage = page;
+            ViewBag.PageSize = pageSize;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.TotalItems = totalItems;
 
-            return View(reports);
+            return View(pagedReports);
         }
 
         public async Task<IActionResult> Details(long id)
@@ -98,9 +124,15 @@ namespace SportMatchmaking.Controllers
 
         private int GetCurrentAdminUserId()
         {
+            var sessionUserId = HttpContext?.Session.GetInt32("UserId");
+            if (sessionUserId.HasValue && sessionUserId.Value > 0)
+            {
+                return sessionUserId.Value;
+            }
+
             var userIdClaim = User?.Claims?.FirstOrDefault(c => c.Type == "UserId")?.Value;
 
-            if (int.TryParse(userIdClaim, out int userId))
+            if (int.TryParse(userIdClaim, out int userId) && userId > 0)
             {
                 return userId;
             }

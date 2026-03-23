@@ -2,6 +2,9 @@
 
 @{
     ViewData["Title"] = "Quản lý Môn thể thao";
+    var currentPage = ViewBag.CurrentPage != null ? (int)ViewBag.CurrentPage : 1;
+    var totalPages = ViewBag.TotalPages != null ? (int)ViewBag.TotalPages : 1;
+    var pageSize = ViewBag.PageSize != null ? (int)ViewBag.PageSize : 10;
 }
 
 <h2 class="admin-page-title mb-1">Quản lý Môn thể thao</h2>
@@ -32,7 +35,7 @@
 
 <div class="admin-table-wrap">
     <div class="table-responsive">
-        <table class="table table-hover align-middle mb-0 admin-table">
+        <table class="table table-hover align-middle mb-0 admin-table admin-table-mobile-cards">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -49,12 +52,12 @@
                     foreach (var sport in Model)
                     {
                         <tr>
-                            <td>@sport.SportId</td>
-                            <td class="fw-semibold">@sport.Name</td>
-                            <td>@sport.TeamMin</td>
-                            <td>@sport.TeamMax</td>
-                            <td>@sport.ImageId</td>
-                            <td class="admin-actions">
+                            <td data-label="ID">@sport.SportId</td>
+                            <td data-label="Tên môn" class="fw-semibold">@sport.Name</td>
+                            <td data-label="TeamMin">@sport.TeamMin</td>
+                            <td data-label="TeamMax">@sport.TeamMax</td>
+                            <td data-label="ImageId">@sport.ImageId</td>
+                            <td data-label="Thao tác" class="admin-actions">
                                 <a asp-action="Details" asp-route-id="@sport.SportId" class="btn btn-sm btn-info text-white">Chi tiết</a>
                                 <a asp-action="Edit" asp-route-id="@sport.SportId" class="btn btn-sm btn-warning">Sửa</a>
 
@@ -79,3 +82,37 @@
         </table>
     </div>
 </div>
+
+@if (totalPages > 1)
+{
+    <nav class="mt-3">
+        <ul class="pagination mb-0">
+            <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-route-keyword="@ViewBag.Keyword"
+                   asp-route-page="@(currentPage - 1)"
+                   asp-route-pageSize="@pageSize">Trước</a>
+            </li>
+
+            @for (int i = 1; i <= totalPages; i++)
+            {
+                <li class="page-item @(i == currentPage ? "active" : "")">
+                    <a class="page-link"
+                       asp-action="Index"
+                       asp-route-keyword="@ViewBag.Keyword"
+                       asp-route-page="@i"
+                       asp-route-pageSize="@pageSize">@i</a>
+                </li>
+            }
+
+            <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-route-keyword="@ViewBag.Keyword"
+                   asp-route-page="@(currentPage + 1)"
+                   asp-route-pageSize="@pageSize">Sau</a>
+            </li>
+        </ul>
+    </nav>
+}

@@ -14,7 +14,7 @@
 
 <div class="admin-table-wrap">
     <div class="table-responsive">
-        <table class="table table-hover mb-0 admin-table">
+        <table class="table table-hover mb-0 admin-table admin-table-mobile-cards">
             <thead>
                 <tr>
                     <th>Reason Code</th>
@@ -27,8 +27,8 @@
                     foreach (var item in Model)
                     {
                         <tr>
-                            <td>@item.Key</td>
-                            <td><span class="badge bg-primary admin-badge">@item.Value</span></td>
+                            <td data-label="Reason Code">@item.Key</td>
+                            <td data-label="Số lượng"><span class="badge bg-primary admin-badge">@item.Value</span></td>
                         </tr>
                     }
                 }

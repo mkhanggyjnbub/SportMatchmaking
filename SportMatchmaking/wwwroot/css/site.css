@@ -140,280 +140,369 @@ body.admin-sidebar-enabled.admin-sidebar-collapsed .admin-sidebar-label {
   transition-delay: 0.2s;
 }
 
+@media (max-width: 1199.98px) {
+  .admin-page-title {
+    font-size: 1.5rem;
+  }
+
+  .admin-stat-number {
+    font-size: 1.55rem;
+  }
+}
+
 @media (max-width: 991.98px) {
-  body.admin-sidebar-enabled .admin-sidebar {
-    width: 76px;
+  .admin-page-title {
+    font-size: 1.35rem;
   }
 
-  body.admin-sidebar-enabled .app-main-container,
-  body.admin-sidebar-enabled .app-footer-container {
-    margin-left: 76px;
+  .admin-page-subtitle {
+    font-size: 0.95rem;
+    margin-top: -4px;
   }
 
-  body.admin-sidebar-enabled .admin-sidebar-title,
-  body.admin-sidebar-enabled .admin-sidebar-label {
-    opacity: 0;
-    max-width: 0;
+  .admin-filter {
+    padding: 12px;
   }
-}
 
-.admin-page-title {
-  font-weight: 700;
-  color: #1f2a44;
-}
+  .admin-card .card-body {
+    padding: 0.95rem;
+  }
 
-.admin-page-subtitle {
-  color: #6b7280;
-  margin-top: -8px;
-}
+  .admin-table thead th,
+  .admin-table td {
+    font-size: 0.92rem;
+    white-space: nowrap;
+  }
 
-.admin-card {
-  border: none;
-  border-radius: 14px;
-  box-shadow: 0 10px 25px rgba(16, 24, 40, 0.06);
-}
+  .admin-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
 
-.admin-filter {
-  background: #fff;
-  border-radius: 14px;
-  box-shadow: 0 8px 20px rgba(16, 24, 40, 0.05);
-  padding: 16px;
-}
+  .admin-actions .btn {
+    margin-bottom: 0;
+  }
 
-.admin-table-wrap {
-  background: #fff;
-  border-radius: 14px;
-  box-shadow: 0 8px 20px rgba(16, 24, 40, 0.05);
-  overflow: hidden;
-}
+  .admin-actions form {
+    display: inline-flex;
+  }
 
-.admin-table thead th {
-  background: #1f2a44;
-  color: #fff;
-  border: none;
-  white-space: nowrap;
-}
+  .admin-stat-card .card-body {
+    padding: 0.9rem 1rem;
+  }
 
-.admin-table td {
-  vertical-align: middle;
-}
+  .admin-stat-number {
+    font-size: 1.4rem;
+  }
 
-.admin-stat-card {
-  border: none;
-  border-radius: 14px;
-  color: #fff;
-}
-
-.admin-stat-card .card-body {
-  padding: 1rem 1.2rem;
-}
-
-.admin-stat-number {
-  font-size: 1.8rem;
-  font-weight: 700;
-  line-height: 1;
-}
-
-.admin-badge {
-  font-size: 0.78rem;
-  border-radius: 999px;
-  padding: 0.35rem 0.55rem;
-}
-
-.admin-actions .btn {
-  margin-bottom: 4px;
-}
-
-.admin-chart-scroll-x {
-  width: 100%;
-  overflow-x: auto;
-  overflow-y: hidden;
-}
-
-.admin-chart-wide {
-  min-width: 1200px;
-  height: 340px;
-}
-
-.match-page-shell {
-  padding-bottom: 24px;
-}
-
-.match-feed-hero {
-  background: linear-gradient(135deg, #0f172a, #1d4ed8);
-  color: #fff;
-  border-radius: 20px;
-  padding: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.18);
-}
-
-.match-feed-kicker {
-  display: inline-block;
-  padding: 6px 10px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.16);
-  font-size: 0.78rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: 12px;
-}
-
-.match-feed-title {
-  font-weight: 800;
-  max-width: 720px;
-}
-
-.match-feed-subtitle {
-  color: rgba(255, 255, 255, 0.82);
-  max-width: 680px;
-}
-
-.match-filter-panel,
-.match-surface-card,
-.match-post-card {
-  border-radius: 18px;
-}
-
-.match-post-card {
-  overflow: hidden;
-}
-
-.match-sport-card-image {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  display: block;
-}
-
-.match-sport-card-placeholder {
-  background:
-    radial-gradient(circle at top left, rgba(125, 211, 252, 0.35), transparent 42%),
-    linear-gradient(135deg, #0f172a, #1d4ed8);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 18px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-}
-
-.match-sport-detail-image {
-  width: 100%;
-  height: 260px;
-  object-fit: cover;
-  border-radius: 18px;
-  display: block;
-}
-
-.match-sport-thumb {
-  width: 56px;
-  height: 56px;
-  object-fit: cover;
-  border-radius: 14px;
-  flex-shrink: 0;
-}
-
-.match-sport-preview-card {
-  min-height: 170px;
-  border-radius: 18px;
-  border: 1px solid #dbeafe;
-  background: linear-gradient(135deg, #eff6ff, #f8fafc);
-  overflow: hidden;
-}
-
-.match-sport-preview-image {
-  width: 100%;
-  height: 170px;
-  object-fit: cover;
-  display: block;
-}
-
-.match-sport-preview-empty {
-  min-height: 170px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 18px;
-  color: #475569;
-  font-weight: 500;
-}
-
-.match-post-meta {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 12px;
-  margin-bottom: 20px;
-}
-
-.match-post-meta dt {
-  font-size: 0.78rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: #64748b;
-  margin-bottom: 2px;
-}
-
-.match-post-meta dd {
-  margin-bottom: 0;
-  color: #0f172a;
-  font-weight: 500;
-}
-
-.match-detail-grid .match-detail-item {
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 14px;
-  padding: 14px 16px;
-  height: 100%;
-}
-
-.match-detail-label {
-  display: block;
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  color: #64748b;
-  letter-spacing: 0.06em;
-  margin-bottom: 6px;
-}
-
-.match-participant-row {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 14px;
-  border-radius: 16px;
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-}
-
-.match-avatar {
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #e2e8f0;
-}
-
-.match-avatar-lg {
-  width: 88px;
-  height: 88px;
+  .admin-quick-actions .btn {
+    min-width: 0;
+  }
 }
 
 @media (max-width: 767.98px) {
-  .match-feed-hero {
-    padding: 22px;
-    flex-direction: column;
-    align-items: flex-start;
+  .admin-page-title {
+    font-size: 1.2rem;
   }
 
-  .match-participant-row {
-    align-items: flex-start;
+  .admin-page-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .admin-filter .btn {
+    width: 100%;
+  }
+
+  .admin-card {
+    border-radius: 12px;
+  }
+
+  .admin-filter,
+  .admin-table-wrap {
+    border-radius: 12px;
+  }
+
+  .admin-badge {
+    font-size: 0.74rem;
+  }
+
+  .pagination {
+    flex-wrap: wrap;
+    row-gap: 6px;
+  }
+
+  .pagination .page-link {
+    padding: 0.35rem 0.55rem;
+    font-size: 0.88rem;
+  }
+
+  .admin-quick-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .admin-quick-actions .btn {
+    width: 100%;
+  }
+
+  .admin-detail-list dt,
+  .admin-detail-list dd {
+    width: 100%;
+    max-width: 100%;
+    flex: 0 0 100%;
+  }
+
+  .admin-detail-list dt {
+    margin-bottom: 0.2rem;
+  }
+
+  .admin-detail-list dd {
+    margin-bottom: 0.75rem;
+  }
+
+  .admin-table.admin-table-mobile-cards {
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  .admin-table.admin-table-mobile-cards thead {
+    display: none;
+  }
+
+  .admin-table.admin-table-mobile-cards tbody,
+  .admin-table.admin-table-mobile-cards tr,
+  .admin-table.admin-table-mobile-cards td {
+    display: block;
+    width: 100%;
+  }
+
+  .admin-table.admin-table-mobile-cards tr {
+    border-bottom: 1px solid #e2e8f0;
+    padding: 0.6rem 0.7rem;
+  }
+
+  .admin-table.admin-table-mobile-cards tr:last-child {
+    border-bottom: none;
+  }
+
+  .admin-table.admin-table-mobile-cards td {
+    border: none;
+    padding: 0.28rem 0;
+    white-space: normal;
+  }
+
+  .admin-table.admin-table-mobile-cards td::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #64748b;
+    margin-bottom: 0.1rem;
+    font-weight: 700;
+  }
+}
+
+.admin-quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.admin-quick-actions .btn {
+  min-width: 170px;
+}
+
+.admin-detail-list dt {
+  color: #475569;
+  font-weight: 600;
+}
+
+.admin-detail-list dd {
+  color: #0f172a;
+}
+
+@media (max-width: 991.98px) {
+  .admin-quick-actions .btn {
+    min-width: 0;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .admin-quick-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .admin-quick-actions .btn {
+    width: 100%;
+  }
+
+  .admin-detail-list dt,
+  .admin-detail-list dd {
+    width: 100%;
+    max-width: 100%;
+    flex: 0 0 100%;
+  }
+
+  .admin-detail-list dt {
+    margin-bottom: 0.2rem;
+  }
+
+  .admin-detail-list dd {
+    margin-bottom: 0.75rem;
+  }
+
+  .admin-table.admin-table-mobile-cards {
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  .admin-table.admin-table-mobile-cards thead {
+    display: none;
+  }
+
+  .admin-table.admin-table-mobile-cards tbody,
+  .admin-table.admin-table-mobile-cards tr,
+  .admin-table.admin-table-mobile-cards td {
+    display: block;
+    width: 100%;
+  }
+
+  .admin-table.admin-table-mobile-cards tr {
+    border-bottom: 1px solid #e2e8f0;
+    padding: 0.6rem 0.7rem;
+  }
+
+  .admin-table.admin-table-mobile-cards tr:last-child {
+    border-bottom: none;
+  }
+
+  .admin-table.admin-table-mobile-cards td {
+    border: none;
+    padding: 0.28rem 0;
+    white-space: normal;
+  }
+
+  .admin-table.admin-table-mobile-cards td::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #64748b;
+    margin-bottom: 0.1rem;
+    font-weight: 700;
+  }
+}
+
+/* Better responsive behavior when admin sidebar is enabled */
+@media (max-width: 1399.98px) {
+  body.admin-sidebar-enabled .app-main-container {
+    max-width: none;
+    width: auto;
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  body.admin-sidebar-enabled .admin-filter .row > [class*='col-'] {
+    margin-bottom: 0.35rem;
+  }
+
+  body.admin-sidebar-enabled .admin-filter .btn {
+    min-height: 38px;
+  }
+}
+
+@media (max-width: 1299.98px) {
+  body.admin-sidebar-enabled .admin-filter {
+    padding: 12px;
+  }
+
+  body.admin-sidebar-enabled .admin-filter .d-flex.align-items-end,
+  body.admin-sidebar-enabled .admin-filter .d-flex.align-items-end.gap-2,
+  body.admin-sidebar-enabled .admin-filter .d-flex.align-items-end.gap-2.flex-wrap {
+    align-items: stretch !important;
+  }
+
+  body.admin-sidebar-enabled .admin-filter .d-flex.align-items-end .btn,
+  body.admin-sidebar-enabled .admin-filter .d-flex.align-items-end.gap-2 .btn,
+  body.admin-sidebar-enabled .admin-filter .d-flex.align-items-end.gap-2.flex-wrap .btn {
+    flex: 1 1 auto;
+  }
+}
+
+/* On medium desktop with sidebar, treat admin lists like mobile cards earlier */
+@media (max-width: 1199.98px) {
+  body.admin-sidebar-enabled .admin-table.admin-table-mobile-cards thead {
+    display: none;
+  }
+
+  body.admin-sidebar-enabled .admin-table.admin-table-mobile-cards tbody,
+  body.admin-sidebar-enabled .admin-table.admin-table-mobile-cards tr,
+  body.admin-sidebar-enabled .admin-table.admin-table-mobile-cards td {
+    display: block;
+    width: 100%;
+  }
+
+  body.admin-sidebar-enabled .admin-table.admin-table-mobile-cards tr {
+    border-bottom: 1px solid #e2e8f0;
+    padding: 0.55rem 0.65rem;
+  }
+
+  body.admin-sidebar-enabled .admin-table.admin-table-mobile-cards tr:last-child {
+    border-bottom: none;
+  }
+
+  body.admin-sidebar-enabled .admin-table.admin-table-mobile-cards td {
+    border: none;
+    padding: 0.25rem 0;
+    white-space: normal;
+  }
+
+  body.admin-sidebar-enabled .admin-table.admin-table-mobile-cards td::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 0.71rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #64748b;
+    margin-bottom: 0.1rem;
+    font-weight: 700;
+  }
+
+  body.admin-sidebar-enabled .admin-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: stretch;
+  }
+
+  body.admin-sidebar-enabled .admin-actions .btn,
+  body.admin-sidebar-enabled .admin-actions form,
+  body.admin-sidebar-enabled .admin-actions form .btn {
+    width: 100%;
+  }
+
+  body.admin-sidebar-enabled .admin-filter .btn {
+    width: 100%;
+  }
+
+  body.admin-sidebar-enabled .admin-filter .col-md-2.d-flex.align-items-end,
+  body.admin-sidebar-enabled .admin-filter .col-md-4.d-flex.align-items-end,
+  body.admin-sidebar-enabled .admin-filter .col-md-5.text-md-end.d-flex.align-items-end {
+    display: block !important;
+  }
+}
+
+/* Tight layout optimization for low-height screens */
+@media (max-height: 760px) {
+  .admin-sidebar {
+    top: 64px;
+  }
+
+  .admin-sidebar-link {
+    padding: 8px 10px;
   }
 }

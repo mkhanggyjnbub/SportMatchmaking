@@ -15,17 +15,41 @@ namespace SportMatchmaking.Controllers
             _adminUserService = adminUserService;
         }
 
-        public async Task<IActionResult> Index(string? keyword, int? roleId, bool? isBanned)
+        public async Task<IActionResult> Index(string? keyword, int? roleId, bool? isBanned, int page = 1, int pageSize = 10)
         {
             var users = await _adminUserService.GetUsersAsync(keyword, roleId, isBanned);
             var roles = await _adminUserService.GetRolesAsync();
+
+            page = page < 1 ? 1 : page;
+            pageSize = pageSize <= 0 ? 10 : pageSize;
+
+            var totalItems = users.Count;
+            var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+            if (totalPages == 0)
+            {
+                totalPages = 1;
+            }
+
+            if (page > totalPages)
+            {
+                page = totalPages;
+            }
+
+            var pagedUsers = users
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
 
             ViewBag.Keyword = keyword;
             ViewBag.RoleId = roleId;
             ViewBag.IsBanned = isBanned;
             ViewBag.Roles = roles;
+            ViewBag.CurrentPage = page;
+            ViewBag.PageSize = pageSize;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.TotalItems = totalItems;
 
-            return View(users);
+            return View(pagedUsers);
         }
 
         public async Task<IActionResult> Details(int id)

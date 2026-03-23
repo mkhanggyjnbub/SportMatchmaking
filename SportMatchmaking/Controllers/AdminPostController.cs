@@ -28,11 +28,33 @@ namespace SportMatchmaking.Controllers
             byte? status,
             string? city,
             string? district,
-            int? creatorUserId)
+            int? creatorUserId,
+            int page = 1,
+            int pageSize = 10)
         {
             var posts = await _adminPostService.GetPostsAsync(keyword, sportId, status, city, district, creatorUserId);
             var sports = await _adminSportService.GetSportsAsync();
             var users = await _adminUserService.GetUsersAsync();
+
+            page = page < 1 ? 1 : page;
+            pageSize = pageSize <= 0 ? 10 : pageSize;
+
+            var totalItems = posts.Count;
+            var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+            if (totalPages == 0)
+            {
+                totalPages = 1;
+            }
+
+            if (page > totalPages)
+            {
+                page = totalPages;
+            }
+
+            var pagedPosts = posts
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
 
             ViewBag.Keyword = keyword;
             ViewBag.SportId = sportId;
@@ -42,8 +64,12 @@ namespace SportMatchmaking.Controllers
             ViewBag.CreatorUserId = creatorUserId;
             ViewBag.Sports = sports;
             ViewBag.Users = users;
+            ViewBag.CurrentPage = page;
+            ViewBag.PageSize = pageSize;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.TotalItems = totalItems;
 
-            return View(posts);
+            return View(pagedPosts);
         }
 
         public async Task<IActionResult> Details(long id)

@@ -1,10 +1,10 @@
 @model SportMatchmaking.Models.SportImageUploadVM
 
 @{
-    ViewData["Title"] = "Thêm ảnh môn thể thao";
+    ViewData["Title"] = "Upload ảnh môn thể thao";
 }
 
-<h2 class="admin-page-title mb-1">Thêm ảnh môn thể thao</h2>
+<h2 class="admin-page-title mb-1">Upload ảnh môn thể thao</h2>
 <p class="admin-page-subtitle mb-4">Tải file ảnh mới cho thư viện môn thể thao.</p>
 
 @if (TempData["Error"] != null)
@@ -25,7 +25,7 @@
             </div>
 
             <div class="col-12 d-flex gap-2">
-                <button type="submit" class="btn btn-primary">Lưu</button>
+                <button type="submit" class="btn btn-primary">Upload ảnh</button>
                 <a asp-action="Images" class="btn btn-secondary">Quay lại</a>
             </div>
         </form>

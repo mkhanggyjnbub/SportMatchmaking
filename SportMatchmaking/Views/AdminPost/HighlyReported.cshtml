@@ -2,6 +2,20 @@
 
 @{
     ViewData["Title"] = "Bài đăng bị report nhiều";
+
+    string GetPostStatusText(byte status)
+    {
+        return status switch
+        {
+            1 => "Open",
+            2 => "Full",
+            3 => "Confirmed",
+            4 => "Completed",
+            5 => "Cancelled",
+            6 => "Expired",
+            _ => "Unknown"
+        };
+    }
 }
 
 <h2 class="admin-page-title mb-1">Bài đăng bị report nhiều</h2>
@@ -14,7 +28,7 @@
 
 <div class="admin-table-wrap">
     <div class="table-responsive">
-        <table class="table table-hover align-middle mb-0 admin-table">
+        <table class="table table-hover align-middle mb-0 admin-table admin-table-mobile-cards">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -31,12 +45,12 @@
                     foreach (var post in Model)
                     {
                         <tr>
-                            <td>@post.PostId</td>
-                            <td class="fw-semibold">@post.Title</td>
-                            <td>@post.CreatorUserId</td>
-                            <td><span class="badge bg-secondary admin-badge">@post.Status</span></td>
-                            <td>@post.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
-                            <td>
+                            <td data-label="ID">@post.PostId</td>
+                            <td data-label="Title" class="fw-semibold">@post.Title</td>
+                            <td data-label="CreatorUserId">@post.CreatorUserId</td>
+                            <td data-label="Status"><span class="badge bg-secondary admin-badge">@GetPostStatusText(post.Status)</span></td>
+                            <td data-label="CreatedAt">@post.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td data-label="Thao tác" class="admin-actions">
                                 <a asp-action="Details" asp-route-id="@post.PostId" class="btn btn-sm btn-info text-white">Chi tiết</a>
                             </td>
                         </tr>

@@ -20,12 +20,37 @@ namespace SportMatchmaking.Controllers
             _environment = environment;
         }
 
-        public async Task<IActionResult> Index(string? keyword)
+        public async Task<IActionResult> Index(string? keyword, int page = 1, int pageSize = 10)
         {
             var sports = await _adminSportService.GetSportsAsync(keyword);
             ViewBag.Keyword = keyword;
 
-            return View(sports);
+            page = page < 1 ? 1 : page;
+            pageSize = pageSize <= 0 ? 10 : pageSize;
+
+            var totalItems = sports.Count;
+            var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+            if (totalPages == 0)
+            {
+                totalPages = 1;
+            }
+
+            if (page > totalPages)
+            {
+                page = totalPages;
+            }
+
+            var pagedSports = sports
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            ViewBag.CurrentPage = page;
+            ViewBag.PageSize = pageSize;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.TotalItems = totalItems;
+
+            return View(pagedSports);
         }
 
         public async Task<IActionResult> Details(int id)
@@ -123,10 +148,36 @@ namespace SportMatchmaking.Controllers
         // SPORT IMAGE
         // =========================
 
-        public async Task<IActionResult> Images()
+        public async Task<IActionResult> Images(int page = 1, int pageSize = 10)
         {
             var images = await _adminSportService.GetSportImagesAsync();
-            return View(images);
+
+            page = page < 1 ? 1 : page;
+            pageSize = pageSize <= 0 ? 10 : pageSize;
+
+            var totalItems = images.Count;
+            var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+            if (totalPages == 0)
+            {
+                totalPages = 1;
+            }
+
+            if (page > totalPages)
+            {
+                page = totalPages;
+            }
+
+            var pagedImages = images
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            ViewBag.CurrentPage = page;
+            ViewBag.PageSize = pageSize;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.TotalItems = totalItems;
+
+            return View(pagedImages);
         }
 
         [HttpGet]
