@@ -1,11 +1,11 @@
-﻿@model BusinessObjects.SportImage
+@model SportMatchmaking.Models.SportImageUploadVM
 
 @{
     ViewData["Title"] = "Thêm ảnh môn thể thao";
 }
 
 <h2 class="admin-page-title mb-1">Thêm ảnh môn thể thao</h2>
-<p class="admin-page-subtitle mb-4">Thêm URL ảnh mới cho thư viện môn thể thao.</p>
+<p class="admin-page-subtitle mb-4">Tải file ảnh mới cho thư viện môn thể thao.</p>
 
 @if (TempData["Error"] != null)
 {
@@ -14,12 +14,14 @@
 
 <div class="card admin-card">
     <div class="card-body">
-        <form asp-action="CreateImage" method="post" class="row g-3">
+        <form asp-action="CreateImage" method="post" enctype="multipart/form-data" class="row g-3">
             @Html.AntiForgeryToken()
 
             <div class="col-12">
-                <label class="form-label">Image URL</label>
-                <input asp-for="ImageUrl" class="form-control" />
+                <label asp-for="ImageFile" class="form-label"></label>
+                <input asp-for="ImageFile" type="file" class="form-control" accept=".jpg,.jpeg,.png,.webp" />
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
+                <div class="form-text">Chấp nhận .jpg, .jpeg, .png, .webp. Tối đa 5MB.</div>
             </div>
 
             <div class="col-12 d-flex gap-2">

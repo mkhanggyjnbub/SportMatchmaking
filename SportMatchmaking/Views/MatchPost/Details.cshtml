@@ -56,6 +56,14 @@
             {
                 <a asp-controller="JoinRequest" asp-action="Create" asp-route-postId="@Model.PostId" class="btn btn-primary">Xin tham gia</a>
             }
+            else if (Model.CanLeave)
+            {
+                <form asp-action="Leave" method="post" onsubmit="return confirm('Bạn có chắc muốn rời kèo này không?');">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@Model.PostId" />
+                    <button type="submit" class="btn btn-outline-warning">Rời kèo</button>
+                </form>
+            }
             else if (Model.HasPendingJoinRequest)
             {
                 <span class="btn btn-outline-warning disabled">Đã gửi request</span>
@@ -149,7 +157,14 @@
                         <div class="col-md-4">
                             <div class="match-detail-item">
                                 <span class="match-detail-label">Slot còn lại</span>
-                                <strong>@Model.SlotsRemaining / @Model.SlotsNeeded</strong>
+                                <strong>@Model.SlotsRemaining</strong>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="match-detail-item">
+                                <span class="match-detail-label">Slot đã chốt</span>
+                                <strong>@Model.FilledSlots / @Model.SlotsNeeded</strong>
                             </div>
                         </div>
 
@@ -204,7 +219,12 @@
                                         <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
                                             <strong>@participant.DisplayName</strong>
                                             <span class="badge text-bg-light">@participant.RoleText</span>
+                                            <span class="badge @(participant.Status == BusinessObjects.Enums.PostParticipantStatuses.Confirmed ? "text-bg-success" : (participant.Status == BusinessObjects.Enums.PostParticipantStatuses.NoShow ? "text-bg-danger" : "text-bg-warning"))">@participant.StatusText</span>
                                             <span class="badge text-bg-secondary">PartySize: @participant.PartySize</span>
+                                            @if (participant.LeftAt.HasValue)
+                                            {
+                                                <text> · Updated: @participant.LeftAt.Value.ToString("dd/MM/yyyy HH:mm")</text>
+                                            }
                                         </div>
                                         <div class="text-muted small">
                                             Skill: @(participant.SkillLevel?.ToString() ?? "N/A")
@@ -212,6 +232,31 @@
                                             · Joined: @participant.JoinedAt.ToString("dd/MM/yyyy HH:mm")
                                         </div>
                                     </div>
+                                    @if (participant.CanMarkLeft || participant.CanMarkNoShow)
+                                    {
+                                        <div class="d-flex flex-column gap-2">
+                                            @if (participant.CanMarkLeft)
+                                            {
+                                                <form asp-action="UpdateParticipantStatus" method="post" onsubmit="return confirm('Đánh dấu người này đã rời kèo?');">
+                                                    @Html.AntiForgeryToken()
+                                                    <input type="hidden" name="id" value="@Model.PostId" />
+                                                    <input type="hidden" name="participantUserId" value="@participant.UserId" />
+                                                    <input type="hidden" name="status" value="@BusinessObjects.Enums.PostParticipantStatuses.Left" />
+                                                    <button type="submit" class="btn btn-sm btn-outline-warning">Đánh dấu rời</button>
+                                                </form>
+                                            }
+                                            @if (participant.CanMarkNoShow)
+                                            {
+                                                <form asp-action="UpdateParticipantStatus" method="post" onsubmit="return confirm('Đánh dấu người này no-show?');">
+                                                    @Html.AntiForgeryToken()
+                                                    <input type="hidden" name="id" value="@Model.PostId" />
+                                                    <input type="hidden" name="participantUserId" value="@participant.UserId" />
+                                                    <input type="hidden" name="status" value="@BusinessObjects.Enums.PostParticipantStatuses.NoShow" />
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger">No-show</button>
+                                                </form>
+                                            }
+                                        </div>
+                                    }
                                 </div>
                             }
                         </div>

@@ -1,11 +1,11 @@
-﻿@model BusinessObjects.SportImage
+@model SportMatchmaking.Models.SportImageUploadVM
 
 @{
     ViewData["Title"] = "Sửa ảnh môn thể thao";
 }
 
 <h2 class="admin-page-title mb-1">Sửa ảnh môn thể thao</h2>
-<p class="admin-page-subtitle mb-4">Cập nhật URL ảnh trong thư viện.</p>
+<p class="admin-page-subtitle mb-4">Cập nhật file ảnh trong thư viện.</p>
 
 @if (TempData["Error"] != null)
 {
@@ -14,14 +14,26 @@
 
 <div class="card admin-card">
     <div class="card-body">
-        <form asp-action="EditImage" method="post" class="row g-3">
+        <form asp-action="EditImage" method="post" enctype="multipart/form-data" class="row g-3">
             @Html.AntiForgeryToken()
 
             <input asp-for="ImageId" type="hidden" />
 
+            @if (!string.IsNullOrWhiteSpace(Model.CurrentImageUrl))
+            {
+                <div class="col-12">
+                    <label class="form-label">Ảnh hiện tại</label>
+                    <div>
+                        <img src="@Model.CurrentImageUrl" alt="Sport image" style="max-width:220px; max-height:220px;" class="img-thumbnail" />
+                    </div>
+                </div>
+            }
+
             <div class="col-12">
-                <label class="form-label">Image URL</label>
-                <input asp-for="ImageUrl" class="form-control" />
+                <label asp-for="ImageFile" class="form-label"></label>
+                <input asp-for="ImageFile" type="file" class="form-control" accept=".jpg,.jpeg,.png,.webp" />
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
+                <div class="form-text">Để trống nếu muốn giữ ảnh hiện tại. Chấp nhận .jpg, .jpeg, .png, .webp. Tối đa 5MB.</div>
             </div>
 
             <div class="col-12 d-flex gap-2">

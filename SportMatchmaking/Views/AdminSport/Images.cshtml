@@ -1,4 +1,4 @@
-﻿@model List<BusinessObjects.SportImage>
+@model List<BusinessObjects.SportImage>
 
 @{
     ViewData["Title"] = "Quản lý ảnh môn thể thao";
@@ -27,6 +27,7 @@
             <thead>
                 <tr>
                     <th>ImageId</th>
+                    <th>Xem trước</th>
                     <th>ImageUrl</th>
                     <th style="width:180px;">Thao tác</th>
                 </tr>
@@ -38,6 +39,12 @@
                     {
                         <tr>
                             <td>@img.ImageId</td>
+                            <td>
+                                @if (!string.IsNullOrWhiteSpace(img.ImageUrl))
+                                {
+                                    <img src="@img.ImageUrl" alt="Sport image @img.ImageId" style="width:72px; height:72px; object-fit:cover;" class="rounded border" />
+                                }
+                            </td>
                             <td class="text-break">@img.ImageUrl</td>
                             <td class="admin-actions">
                                 <a asp-action="EditImage" asp-route-id="@img.ImageId" class="btn btn-sm btn-warning">Sửa</a>
@@ -56,7 +63,7 @@
                 else
                 {
                     <tr>
-                        <td colspan="3" class="text-center py-4">Không có dữ liệu.</td>
+                        <td colspan="4" class="text-center py-4">Không có dữ liệu.</td>
                     </tr>
                 }
             </tbody>

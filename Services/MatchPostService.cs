@@ -263,6 +263,121 @@ namespace Services.MatchPosts
             _matchPostRepository.Update(post);
         }
 
+        public void LeavePost(long postId, int currentUserId)
+        {
+            ValidateUser(currentUserId);
+
+            var post = _matchPostRepository.GetById(postId)
+                ?? throw new Exception("Bài đăng không tồn tại.");
+
+            var participant = post.PostParticipants
+                .FirstOrDefault(x => x.UserId == currentUserId)
+                ?? throw new Exception("Bạn chưa tham gia bài đăng này.");
+
+            if (participant.Role == PostParticipantRoles.Creator)
+            {
+                throw new Exception("Chủ kèo không thể rời khỏi bài đăng của chính mình.");
+            }
+
+            if (participant.Status != PostParticipantStatuses.Confirmed)
+            {
+                throw new Exception("Bạn không còn ở trạng thái đã chốt trong bài đăng này.");
+            }
+
+            if (post.Status == (byte)PostStatus.Cancelled || post.Status == (byte)PostStatus.Completed)
+            {
+                throw new Exception("Không thể rời kèo khi bài đăng đã hoàn thành hoặc đã bị hủy.");
+            }
+
+            var now = DateTime.Now;
+            if (post.StartTime <= now)
+            {
+                throw new Exception("Không thể rời kèo sau khi trận đã bắt đầu.");
+            }
+
+            participant.Status = PostParticipantStatuses.Left;
+            participant.LeftAt = now;
+
+            ApplyAvailabilityStatusAfterParticipantLeave(post, now);
+            post.UpdatedAt = now;
+
+            _matchPostRepository.Save();
+        }
+
+        public void UpdateParticipantStatus(long postId, int participantUserId, int actorUserId, bool isAdmin, byte status)
+        {
+            ValidateUser(actorUserId);
+
+            if (status != PostParticipantStatuses.Left && status != PostParticipantStatuses.NoShow)
+            {
+                throw new Exception("Trạng thái người tham gia không hợp lệ.");
+            }
+
+            var post = _matchPostRepository.GetById(postId)
+                ?? throw new Exception("Bài đăng không tồn tại.");
+
+            var isCreator = post.CreatorUserId == actorUserId;
+            if (!isCreator && !isAdmin)
+            {
+                throw new Exception("Bạn không có quyền quản lý người tham gia của bài đăng này.");
+            }
+
+            var participant = post.PostParticipants
+                .FirstOrDefault(x => x.UserId == participantUserId)
+                ?? throw new Exception("Không tìm thấy người tham gia trong bài đăng này.");
+
+            if (participant.Role == PostParticipantRoles.Creator)
+            {
+                throw new Exception("Không thể cập nhật trạng thái của chủ kèo.");
+            }
+
+            if (participant.Status != PostParticipantStatuses.Confirmed)
+            {
+                throw new Exception("Người tham gia này không còn ở trạng thái đã chốt.");
+            }
+
+            var now = DateTime.Now;
+
+            if (status == PostParticipantStatuses.Left)
+            {
+                if (post.Status == (byte)PostStatus.Cancelled || post.Status == (byte)PostStatus.Completed)
+                {
+                    throw new Exception("Không thể đánh dấu rời kèo khi bài đăng đã hoàn thành hoặc bị hủy.");
+                }
+
+                if (post.StartTime <= now)
+                {
+                    throw new Exception("Chỉ có thể đánh dấu rời kèo trước khi trận bắt đầu.");
+                }
+
+                participant.Status = PostParticipantStatuses.Left;
+                participant.LeftAt = now;
+
+                ApplyAvailabilityStatusAfterParticipantLeave(post, now);
+            }
+            else
+            {
+                if (post.Status == (byte)PostStatus.Cancelled)
+                {
+                    throw new Exception("Không thể đánh dấu no-show cho bài đăng đã bị hủy.");
+                }
+
+                var matchOccurredAt = post.EndTime ?? post.StartTime;
+                if (matchOccurredAt > now)
+                {
+                    throw new Exception("Chỉ có thể đánh dấu no-show sau khi trận đã diễn ra.");
+                }
+
+                participant.Status = PostParticipantStatuses.NoShow;
+                participant.LeftAt ??= now;
+
+                ApplyDerivedStatus(post, now);
+            }
+
+            post.UpdatedAt = now;
+            _matchPostRepository.Save();
+        }
+
         public void ReportPost(CreatePostReportDTO dto)
         {
             ValidateUser(dto.ReporterUserId);
@@ -305,6 +420,10 @@ namespace Services.MatchPosts
             return Math.Max(0, post.SlotsNeeded - GetConfirmedParticipantSlots(post));
         }
 
+        public int GetFilledSlots(MatchPost post)
+        {
+            return GetConfirmedParticipantSlots(post);
+        }
         private void ValidateUser(int userId)
         {
             if (userId <= 0)
@@ -564,9 +683,10 @@ namespace Services.MatchPosts
                 query = query.Where(x => x.CreatorUserId == search.CreatorUserId.Value);
             }
 
+            query = query.Where(x => CanViewerSeePost(x, search.ViewerUserId));
+
             return query;
         }
-
         private void SyncStatuses(IEnumerable<MatchPost> posts)
         {
             var now = DateTime.Now;
@@ -589,10 +709,22 @@ namespace Services.MatchPosts
         private bool ApplyDerivedStatus(MatchPost post, DateTime now)
         {
             if (post.Status == (byte)PostStatus.Cancelled
-                || post.Status == (byte)PostStatus.Completed
-                || post.Status == (byte)PostStatus.Confirmed)
+                || post.Status == (byte)PostStatus.Completed)
             {
                 return false;
+            }
+
+            if (post.Status == (byte)PostStatus.Confirmed)
+            {
+                var completedAt = post.EndTime ?? post.StartTime;
+                if (completedAt > now)
+                {
+                    return false;
+                }
+
+                post.Status = (byte)PostStatus.Completed;
+                post.UpdatedAt = now;
+                return true;
             }
 
             var nextStatus = GetDerivedAvailabilityStatus(post, now);
@@ -619,6 +751,17 @@ namespace Services.MatchPosts
                 : (byte)PostStatus.Open;
         }
 
+        private void ApplyAvailabilityStatusAfterParticipantLeave(MatchPost post, DateTime now)
+        {
+            if (post.Status == (byte)PostStatus.Cancelled || post.Status == (byte)PostStatus.Completed)
+            {
+                return;
+            }
+
+            post.Status = GetDerivedAvailabilityStatus(post, now);
+            post.UpdatedAt = now;
+        }
+
         private int GetConfirmedParticipantSlots(MatchPost post)
         {
             return post.PostParticipants
@@ -638,6 +781,33 @@ namespace Services.MatchPosts
             var matchesMax = !post.SkillMax.HasValue || post.SkillMax.Value >= skillLevel;
 
             return matchesMin && matchesMax;
+        }
+
+        private static bool CanViewerSeePost(MatchPost post, int? viewerUserId)
+        {
+            var now = DateTime.Now;
+            var shouldHideFromOutsiders =
+                post.Status == (byte)PostStatus.Completed
+                || (post.Status == (byte)PostStatus.Confirmed && post.StartTime <= now);
+
+            if (!shouldHideFromOutsiders)
+            {
+                return true;
+            }
+
+            if (!viewerUserId.HasValue)
+            {
+                return false;
+            }
+
+            if (post.CreatorUserId == viewerUserId.Value)
+            {
+                return true;
+            }
+
+            return post.PostParticipants.Any(x =>
+                x.UserId == viewerUserId.Value
+                && (x.Status == PostParticipantStatuses.Confirmed || x.Status == PostParticipantStatuses.NoShow));
         }
 
         private static string? NormalizeText(string? value)

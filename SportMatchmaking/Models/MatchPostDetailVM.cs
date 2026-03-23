@@ -15,6 +15,7 @@ namespace SportMatchmaking.Models
         public string District { get; set; } = "";
         public string SkillText { get; set; } = "";
         public int SlotsNeeded { get; set; }
+        public int FilledSlots { get; set; }
         public int SlotsRemaining { get; set; }
         public decimal? FeePerPerson { get; set; }
         public bool IsUrgent { get; set; }
@@ -38,9 +39,11 @@ namespace SportMatchmaking.Models
         public bool AlreadyJoined { get; set; }
         public bool HasPendingJoinRequest { get; set; }
         public bool CanJoin { get; set; }
+        public bool CanLeave { get; set; }
         public bool CanEdit { get; set; }
         public bool CanCancel { get; set; }
         public bool CanManageRequests { get; set; }
+        public bool CanManageParticipants { get; set; }
 
         //vinh 
         public bool CanAccessChatRoom { get; set; }

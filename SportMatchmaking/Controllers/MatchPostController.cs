@@ -61,6 +61,7 @@ namespace SportMatchmaking.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(long id)
         {
+            var currentUserId = GetCurrentUserId();
             var post = _matchPostService.GetById(id);
             if (post == null)
             {
@@ -68,7 +69,13 @@ namespace SportMatchmaking.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(await MapDetail(post, GetCurrentUserId()));
+            if (!CanCurrentUserViewPost(post, currentUserId))
+            {
+                TempData["ErrorMessage"] = "Bài đăng này không hiển thị với tài khoản hiện tại.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(await MapDetail(post, currentUserId));
         }
 
         [UserOnly]
@@ -319,6 +326,54 @@ namespace SportMatchmaking.Controllers
             return RedirectAfterAction(id, returnAction);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Leave(long id)
+        {
+            var userId = GetCurrentUserId();
+            if (userId == null)
+            {
+                TempData["ErrorMessage"] = "Vui lòng đăng nhập trước.";
+                return RedirectToAction("Login", "Auth");
+            }
+
+            try
+            {
+                _matchPostService.LeavePost(id, userId.Value);
+                TempData["SuccessMessage"] = "Bạn đã rời kèo thành công.";
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+            }
+
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult UpdateParticipantStatus(long id, int participantUserId, byte status)
+        {
+            var userId = GetCurrentUserId();
+            if (userId == null)
+            {
+                TempData["ErrorMessage"] = "Vui lòng đăng nhập trước.";
+                return RedirectToAction("Login", "Auth");
+            }
+
+            try
+            {
+                _matchPostService.UpdateParticipantStatus(id, participantUserId, userId.Value, IsCurrentUserAdmin(), status);
+                TempData["SuccessMessage"] = "Cập nhật trạng thái người tham gia thành công.";
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+            }
+
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
         [UserOnly]
         [HttpGet]
         public IActionResult Report(long id)
@@ -400,10 +455,10 @@ namespace SportMatchmaking.Controllers
                 Status = model.Status,
                 IsUrgent = model.IsUrgent,
                 MatchType = model.MatchType,
+                ViewerUserId = GetCurrentUserId(),
                 ExploreOnlyActivePosts = exploreOnlyActivePosts
             };
         }
-
         private MatchPostListItemVM MapListItem(MatchPost post)
         {
             var now = DateTime.Now;
@@ -443,12 +498,24 @@ namespace SportMatchmaking.Controllers
         // private MatchPostDetailVM MapDetail(MatchPost post, int? currentUserId)
         {
             var now = DateTime.Now;
+            var isAdmin = IsCurrentUserAdmin();
             var remainingSlots = _matchPostService.GetRemainingSlots(post);
+            var filledSlots = _matchPostService.GetFilledSlots(post);
             var isCreator = currentUserId.HasValue && currentUserId.Value == post.CreatorUserId;
+            var canManageParticipants = isCreator || isAdmin;
             var alreadyJoined = currentUserId.HasValue
                 && post.PostParticipants.Any(x =>
                     x.UserId == currentUserId.Value
                     && x.Status == PostParticipantStatuses.Confirmed);
+            var canLeave = currentUserId.HasValue
+                && !isCreator
+                && post.PostParticipants.Any(x =>
+                    x.UserId == currentUserId.Value
+                    && x.Role == PostParticipantRoles.Member
+                    && x.Status == PostParticipantStatuses.Confirmed)
+                && post.Status != (byte)PostStatus.Completed
+                && post.Status != (byte)PostStatus.Cancelled
+                && post.StartTime > now;
             var hasPendingJoinRequest = currentUserId.HasValue
                 && post.JoinRequests.Any(x =>
                     x.RequesterUserId == currentUserId.Value
@@ -483,6 +550,7 @@ namespace SportMatchmaking.Controllers
                 District = post.District ?? "",
                 SkillText = MatchPostDisplayHelper.GetSkillText(post.SkillMin, post.SkillMax),
                 SlotsNeeded = post.SlotsNeeded,
+                FilledSlots = filledSlots,
                 SlotsRemaining = remainingSlots,
                 FeePerPerson = post.FeePerPerson,
                 IsUrgent = post.IsUrgent,
@@ -513,6 +581,7 @@ namespace SportMatchmaking.Controllers
                     && remainingSlots > 0
                     && (!post.ExpiresAt.HasValue || post.ExpiresAt.Value > now)
                     && post.StartTime > now,
+                CanLeave = canLeave,
                 CanEdit = isCreator
                     && post.Status != (byte)PostStatus.Completed
                     && post.Status != (byte)PostStatus.Cancelled,
@@ -520,6 +589,7 @@ namespace SportMatchmaking.Controllers
                     && post.Status != (byte)PostStatus.Completed
                     && post.Status != (byte)PostStatus.Cancelled,
                 CanManageRequests = isCreator,
+                CanManageParticipants = canManageParticipants,
                 //vinh
                 CanAccessChatRoom = chatThreadId.HasValue,
                 ChatThreadId = chatThreadId,
@@ -534,8 +604,9 @@ namespace SportMatchmaking.Controllers
                 CanReport = currentUserId.HasValue && !isCreator && !hasActiveReport,
                 HasActiveReportByCurrentUser = hasActiveReport,
                 Participants = post.PostParticipants
-                    .Where(x => x.Status == PostParticipantStatuses.Confirmed)
-                    .OrderBy(x => x.Role)
+                    .Where(x => x.Status != PostParticipantStatuses.Removed)
+                    .OrderBy(x => x.Status == PostParticipantStatuses.Confirmed ? 0 : 1)
+                    .ThenBy(x => x.Role)
                     .ThenBy(x => x.JoinedAt)
                     .Select(x => new PostParticipantSummaryVM
                     {
@@ -545,11 +616,25 @@ namespace SportMatchmaking.Controllers
                             ? "/images/default-avatar.png"
                             : x.User.AvatarUrl,
                         RoleText = x.Role == PostParticipantRoles.Creator ? "Chủ kèo" : "Thành viên",
+                        Status = x.Status,
+                        StatusText = MatchPostDisplayHelper.GetParticipantStatusText(x.Status),
                         PartySize = x.PartySize,
                         JoinedAt = x.JoinedAt,
+                        LeftAt = x.LeftAt,
                         SkillLevel = x.User?.SkillLevel,
                         City = x.User?.City,
-                        District = x.User?.District
+                        District = x.User?.District,
+                        CanMarkLeft = canManageParticipants
+                            && x.Role != PostParticipantRoles.Creator
+                            && x.Status == PostParticipantStatuses.Confirmed
+                            && post.Status != (byte)PostStatus.Completed
+                            && post.Status != (byte)PostStatus.Cancelled
+                            && post.StartTime > now,
+                        CanMarkNoShow = canManageParticipants
+                            && x.Role != PostParticipantRoles.Creator
+                            && x.Status == PostParticipantStatuses.Confirmed
+                            && post.Status != (byte)PostStatus.Cancelled
+                            && (post.EndTime ?? post.StartTime) <= now
                     })
                     .ToList()
             };
@@ -659,6 +744,43 @@ namespace SportMatchmaking.Controllers
         private int? GetCurrentUserId()
         {
             return HttpContext.Session.GetInt32("UserId");
+        }
+
+        private bool IsCurrentUserAdmin()
+        {
+            return string.Equals(HttpContext.Session.GetString("RoleName"), "Admin", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private bool CanCurrentUserViewPost(MatchPost post, int? currentUserId)
+        {
+            if (IsCurrentUserAdmin())
+            {
+                return true;
+            }
+
+            var now = DateTime.Now;
+            var shouldHideFromOutsiders =
+                post.Status == (byte)PostStatus.Completed
+                || (post.Status == (byte)PostStatus.Confirmed && post.StartTime <= now);
+
+            if (!shouldHideFromOutsiders)
+            {
+                return true;
+            }
+
+            if (!currentUserId.HasValue)
+            {
+                return false;
+            }
+
+            if (post.CreatorUserId == currentUserId.Value)
+            {
+                return true;
+            }
+
+            return post.PostParticipants.Any(x =>
+                x.UserId == currentUserId.Value
+                && (x.Status == PostParticipantStatuses.Confirmed || x.Status == PostParticipantStatuses.NoShow));
         }
     }
 }
