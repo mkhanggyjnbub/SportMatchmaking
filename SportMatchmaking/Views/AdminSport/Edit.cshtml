@@ -1,4 +1,4 @@
-﻿@model BusinessObjects.Sport
+@model BusinessObjects.Sport
 
 @{
     ViewData["Title"] = "Sửa môn thể thao";
@@ -27,12 +27,12 @@
 
             <div class="col-md-3">
                 <label class="form-label">Team Min</label>
-                <input asp-for="TeamMin" class="form-control" type="number" />
+                <input asp-for="TeamMin" class="form-control" type="number" required />
             </div>
 
             <div class="col-md-3">
                 <label class="form-label">Team Max</label>
-                <input asp-for="TeamMax" class="form-control" type="number" />
+                <input asp-for="TeamMax" class="form-control" type="number" required />
             </div>
 
             <div class="col-md-12">

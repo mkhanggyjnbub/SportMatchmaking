@@ -1,4 +1,6 @@
-﻿using BusinessObjects;
+using System;
+using System.Linq;
+using BusinessObjects;
 using Repositories.Admin;
 using AppUserEntity = BusinessObjects.AppUser;
 
@@ -49,6 +51,17 @@ namespace Services.Admin
             if (user == null)
             {
                 return (false, "Không tìm thấy user.");
+            }
+
+            // Không cho phép khóa tài khoản có role Admin.
+            var roles = await _adminUserRepository.GetRolesAsync();
+            var adminRole = roles.FirstOrDefault(r =>
+                string.Equals(r.Name, "Admin", StringComparison.OrdinalIgnoreCase));
+
+            // ToggleBanAsync sẽ đổi trạng thái IsBanned. Chỉ chặn trường hợp "khóa" (tức đang chưa bị khóa).
+            if (adminRole != null && user.RoleId == adminRole.RoleId && !user.IsBanned)
+            {
+                return (false, "Không thể khóa tài khoản admin.");
             }
 
             bool result = await _adminUserRepository.ToggleBanAsync(targetUserId);

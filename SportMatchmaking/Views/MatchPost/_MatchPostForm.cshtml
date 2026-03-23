@@ -4,60 +4,60 @@
 
 <div class="row g-3">
     <div class="col-lg-7">
-        <label asp-for="SportId" class="form-label">Mon the thao</label>
+        <label asp-for="SportId" class="form-label">Môn thể thao</label>
         <select asp-for="SportId" asp-items="Model.SportOptions" class="form-select">
-            <option value="">-- Chon mon --</option>
+            <option value="">-- Chọn môn --</option>
         </select>
         <span asp-validation-for="SportId" class="text-danger"></span>
     </div>
 
     <div class="col-lg-5">
-        <label class="form-label">Anh theo mon</label>
+        <label class="form-label">Ảnh theo môn</label>
         <div class="match-sport-preview-card">
             <img src="@Model.SelectedSportImageUrl"
-                 alt="Anh mon the thao"
+                 alt="Ảnh môn thể thao"
                  class="match-sport-preview-image @(string.IsNullOrWhiteSpace(Model.SelectedSportImageUrl) ? "d-none" : "")"
                  data-sport-preview-image />
             <div class="match-sport-preview-empty @(string.IsNullOrWhiteSpace(Model.SelectedSportImageUrl) ? "" : "d-none")"
                  data-sport-preview-empty>
-                Chon mon de xem anh tu dong.
+                Chọn môn để xem ảnh tự động.
             </div>
         </div>
         <input type="text"
                class="form-control mt-2"
                value="@Model.SelectedSportImageUrl"
-               placeholder="Link anh se tu lay theo mon da chon"
+               placeholder="Link ảnh sẽ tự lấy theo môn đã chọn"
                readonly
                data-sport-preview-url />
     </div>
 
     <div class="col-md-6">
-        <label asp-for="MatchType" class="form-label">Loai tran</label>
+        <label asp-for="MatchType" class="form-label">Loại trận</label>
         <select asp-for="MatchType" asp-items="Model.MatchTypeOptions" class="form-select"></select>
         <span asp-validation-for="MatchType" class="text-danger"></span>
     </div>
 
     <div class="col-12">
-        <label asp-for="Title" class="form-label">Tieu de</label>
-        <input asp-for="Title" class="form-control" placeholder="Vi du: Can them 2 ban danh cau toi nay" />
+        <label asp-for="Title" class="form-label">Tiêu đề</label>
+        <input asp-for="Title" class="form-control" placeholder="Ví dụ: Cần thêm 2 bạn đánh cầu tới đây này" />
         <span asp-validation-for="Title" class="text-danger"></span>
     </div>
 
     <div class="col-md-6">
-        <label asp-for="StartTime" class="form-label">Bat dau</label>
+        <label asp-for="StartTime" class="form-label">Bắt đầu</label>
         <input asp-for="StartTime" type="datetime-local" asp-format="{0:yyyy-MM-ddTHH:mm}" class="form-control" />
         <span asp-validation-for="StartTime" class="text-danger"></span>
     </div>
 
     <div class="col-md-6">
-        <label asp-for="EndTime" class="form-label">Ket thuc</label>
+        <label asp-for="EndTime" class="form-label">Kết thúc</label>
         <input asp-for="EndTime" type="datetime-local" asp-format="{0:yyyy-MM-ddTHH:mm}" class="form-control" />
         <span asp-validation-for="EndTime" class="text-danger"></span>
     </div>
 
     <div class="col-md-8">
-        <label asp-for="LocationText" class="form-label">Dia diem (khong bat buoc)</label>
-        <input asp-for="LocationText" class="form-control" placeholder="San, trung tam hoac dia chi cu the" />
+        <label asp-for="LocationText" class="form-label">Địa điểm (không bắt buộc)</label>
+        <input asp-for="LocationText" class="form-control" placeholder="Sân, trung tâm hoặc địa chỉ cụ thể" />
         <span asp-validation-for="LocationText" class="text-danger"></span>
     </div>
 
@@ -68,43 +68,43 @@
     </div>
 
     <div class="col-md-6">
-        <label asp-for="City" class="form-label">Thanh pho (khong bat buoc)</label>
+        <label asp-for="City" class="form-label">Thành phố (không bắt buộc)</label>
         <input asp-for="City" class="form-control" />
         <span asp-validation-for="City" class="text-danger"></span>
     </div>
 
     <div class="col-md-6">
-        <label asp-for="District" class="form-label">Quan/Huyen (khong bat buoc)</label>
+        <label asp-for="District" class="form-label">Quận/Huyện (không bắt buộc)</label>
         <input asp-for="District" class="form-control" />
         <span asp-validation-for="District" class="text-danger"></span>
     </div>
 
     <div class="col-md-3">
-        <label asp-for="SkillMin" class="form-label">Skill min</label>
+        <label asp-for="SkillMin" class="form-label">Skill tối thiểu</label>
         <input asp-for="SkillMin" type="number" min="1" max="10" class="form-control" />
         <span asp-validation-for="SkillMin" class="text-danger"></span>
     </div>
 
     <div class="col-md-3">
-        <label asp-for="SkillMax" class="form-label">Skill max</label>
+        <label asp-for="SkillMax" class="form-label">Skill tối đa</label>
         <input asp-for="SkillMax" type="number" min="1" max="10" class="form-control" />
         <span asp-validation-for="SkillMax" class="text-danger"></span>
     </div>
 
     <div class="col-md-3">
-        <label asp-for="SlotsNeeded" class="form-label">So slot can them</label>
+        <label asp-for="SlotsNeeded" class="form-label">Số slot cần thêm</label>
         <input asp-for="SlotsNeeded" type="number" min="1" max="50" class="form-control" />
         <span asp-validation-for="SlotsNeeded" class="text-danger"></span>
     </div>
 
     <div class="col-md-3">
-        <label asp-for="FeePerPerson" class="form-label">Phi / nguoi</label>
+        <label asp-for="FeePerPerson" class="form-label">Phí / người</label>
         <input asp-for="FeePerPerson" type="number" min="0" step="1000" class="form-control" />
         <span asp-validation-for="FeePerPerson" class="text-danger"></span>
     </div>
 
     <div class="col-md-6">
-        <label asp-for="ExpiresAt" class="form-label">Han chot</label>
+        <label asp-for="ExpiresAt" class="form-label">Hạn chốt</label>
         <input asp-for="ExpiresAt" type="datetime-local" asp-format="{0:yyyy-MM-ddTHH:mm}" class="form-control" />
         <span asp-validation-for="ExpiresAt" class="text-danger"></span>
     </div>
@@ -112,13 +112,13 @@
     <div class="col-md-6 d-flex align-items-end">
         <div class="form-check mb-2">
             <input asp-for="IsUrgent" class="form-check-input" />
-            <label asp-for="IsUrgent" class="form-check-label">Danh dau gap</label>
+            <label asp-for="IsUrgent" class="form-check-label">Đánh dấu gấp</label>
         </div>
     </div>
 
     <div class="col-12">
-        <label asp-for="Description" class="form-label">Mo ta</label>
-        <textarea asp-for="Description" rows="5" class="form-control" placeholder="Mo ta trinh do mong muon, chi phi, luu y them..."></textarea>
+        <label asp-for="Description" class="form-label">Mô tả</label>
+        <textarea asp-for="Description" rows="5" class="form-control" placeholder="Mô tả trình độ mong muốn, chi phí, lưu ý thêm..."></textarea>
         <span asp-validation-for="Description" class="text-danger"></span>
     </div>
 </div>
@@ -147,7 +147,7 @@
 
             if (imageUrl) {
                 previewImage?.setAttribute("src", imageUrl);
-                previewImage?.setAttribute("alt", sportName ? `Anh mon ${sportName}` : "Anh mon the thao");
+                previewImage?.setAttribute("alt", sportName ? `Ảnh môn ${sportName}` : "Ảnh môn thể thao");
                 previewImage?.classList.remove("d-none");
                 previewEmpty?.classList.add("d-none");
                 return;
@@ -157,8 +157,8 @@
             previewImage?.removeAttribute("src");
             if (previewEmpty) {
                 previewEmpty.textContent = sportId
-                    ? `${sportName || "Mon nay"} chua co anh duoc cau hinh.`
-                    : "Chon mon de xem anh tu dong.";
+                    ? `${sportName || "Môn này"} chưa có ảnh được cấu hình.`
+                    : "Chọn môn để xem ảnh tự động.";
                 previewEmpty.classList.remove("d-none");
             }
         };

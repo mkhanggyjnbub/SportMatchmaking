@@ -1,4 +1,4 @@
-﻿using BusinessObjects;
+using BusinessObjects;
 using Microsoft.AspNetCore.Mvc;
 using Services.Admin;
 using SportMatchmaking.Filters;
@@ -46,6 +46,13 @@ namespace SportMatchmaking.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Sport sport)
         {
+            if (sport.TeamMin == null || sport.TeamMax == null || sport.ImageId == null)
+            {
+                TempData["Error"] = "Team Min, Team Max và Ảnh là bắt buộc.";
+                ViewBag.SportImages = await _adminSportService.GetSportImagesAsync();
+                return View(sport);
+            }
+
             var result = await _adminSportService.AddSportAsync(sport);
 
             if (!result.Success)
@@ -77,6 +84,13 @@ namespace SportMatchmaking.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Sport sport)
         {
+            if (sport.TeamMin == null || sport.TeamMax == null)
+            {
+                TempData["Error"] = "Team Min và Team Max không được để trống.";
+                ViewBag.SportImages = await _adminSportService.GetSportImagesAsync();
+                return View(sport);
+            }
+
             var result = await _adminSportService.UpdateSportAsync(sport);
 
             if (!result.Success)

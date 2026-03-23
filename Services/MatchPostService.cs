@@ -366,6 +366,16 @@ namespace Services.MatchPosts
                 throw new Exception("Thời gian bắt đầu phải ở tương lai.");
             }
 
+            if (!endTime.HasValue)
+            {
+                throw new Exception("Thời gian kết thúc trận là bắt buộc.");
+            }
+
+            if (!expiresAt.HasValue)
+            {
+                throw new Exception("Hạn chốt là bắt buộc.");
+            }
+
             if (endTime.HasValue && endTime.Value <= startTime)
             {
                 throw new Exception("Thời gian kết thúc phải sau thời gian bắt đầu.");
