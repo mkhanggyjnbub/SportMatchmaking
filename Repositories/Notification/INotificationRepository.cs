@@ -11,6 +11,7 @@ namespace Repositories.Notifications
         int GetUnreadCount(int userId);
         void MarkAsRead(long notificationId, int userId);
         void MarkAllAsRead(int userId);
+        void DeleteAllForUser(int userId);
         void Save();
     }
 }

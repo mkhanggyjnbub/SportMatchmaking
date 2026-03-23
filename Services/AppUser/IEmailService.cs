@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,5 +9,6 @@ namespace Services.AppUser
     public interface IEmailService
     {
         void SendOtp(string toEmail, string otp);
+        void SendPasswordResetOtp(string toEmail, string otp);
     }
 }

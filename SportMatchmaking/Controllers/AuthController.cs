@@ -119,6 +119,129 @@ namespace SportMatchmaking.Controllers
         }
 
         [HttpGet]
+        [HttpGet]
+        public IActionResult ForgotPassword()
+        {
+            return View(new ForgotPasswordVM());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ForgotPassword(ForgotPasswordVM model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            try
+            {
+                _authService.RequestPasswordReset(model.Email);
+                TempData["Success"] = "If this email is registered and verified, we have sent a reset code.";
+                TempData["Email"] = model.Email.Trim();
+                return RedirectToAction("ForgotPasswordVerifyOtp");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View(model);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult ForgotPasswordVerifyOtp()
+        {
+            var model = new VerifyOtpVM();
+            if (TempData["Email"] != null)
+            {
+                model.Email = TempData["Email"]!.ToString()!;
+                TempData.Keep("Email");
+            }
+
+            if (string.IsNullOrWhiteSpace(model.Email))
+            {
+                return RedirectToAction("ForgotPassword");
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ForgotPasswordVerifyOtp(VerifyOtpVM model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            try
+            {
+                var token = _authService.VerifyForgotPasswordOtp(model.Email, model.OTP);
+                TempData["ResetToken"] = token;
+                return RedirectToAction("ResetPassword");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View(model);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ResendForgotPasswordOtp(string email)
+        {
+            try
+            {
+                _authService.ResendForgotPasswordOtp(email);
+                TempData["Success"] = "A new code has been sent to your email.";
+                TempData["Email"] = email;
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = ex.Message;
+                TempData["Email"] = email;
+            }
+
+            return RedirectToAction("ForgotPasswordVerifyOtp");
+        }
+
+        [HttpGet]
+        public IActionResult ResetPassword()
+        {
+            var token = TempData["ResetToken"]?.ToString();
+            if (string.IsNullOrEmpty(token))
+            {
+                return RedirectToAction("ForgotPassword");
+            }
+
+            TempData.Keep("ResetToken");
+            return View(new ResetPasswordVM { ResetToken = token });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ResetPassword(ResetPasswordVM model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            try
+            {
+                _authService.CompletePasswordReset(model.ResetToken, model.NewPassword);
+                TempData["Success"] = "Your password has been updated. You can sign in now.";
+                return RedirectToAction("Login");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View(model);
+            }
+        }
+
         public IActionResult Login()
         {
             return View();

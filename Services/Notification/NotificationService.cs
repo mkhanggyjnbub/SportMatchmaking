@@ -154,6 +154,12 @@ namespace Services.Notifications
             _notificationRepository.MarkAllAsRead(userId);
             _notificationRepository.Save();
         }
+
+        public void DeleteAllNotifications(int userId)
+        {
+            _notificationRepository.DeleteAllForUser(userId);
+            _notificationRepository.Save();
+        }
     }
 }
 

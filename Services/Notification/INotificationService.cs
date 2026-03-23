@@ -13,6 +13,7 @@ namespace Services.Notifications
         List<NotificationItemDTO> GetRecentNotifications(int userId, int take = 10);
         int GetUnreadCount(int userId);
         void MarkAllAsRead(int userId);
+        void DeleteAllNotifications(int userId);
     }
 }
 

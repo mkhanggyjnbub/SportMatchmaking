@@ -67,6 +67,19 @@ namespace SportMatchmaking.Controllers
             return Ok();
         }
 
+        [HttpPost]
+        public IActionResult DeleteAll()
+        {
+            var userId = GetCurrentUserId();
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            _notificationService.DeleteAllNotifications(userId.Value);
+            return Ok();
+        }
+
         private int? GetCurrentUserId()
         {
             return HttpContext.Session.GetInt32("UserId");
