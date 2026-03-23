@@ -385,9 +385,25 @@ namespace Services.MatchPosts
             var post = _matchPostRepository.GetById(dto.PostId)
                 ?? throw new Exception("Bài đăng không tồn tại.");
 
+            var now = DateTime.Now;
+            if (ApplyDerivedStatus(post, now))
+            {
+                _matchPostRepository.Save();
+            }
+
             if (post.CreatorUserId == dto.ReporterUserId)
             {
                 throw new Exception("Bạn không thể report bài đăng của chính mình.");
+            }
+
+            if (post.Status != (byte)PostStatus.Expired)
+            {
+                throw new Exception("Chi co the report bai dang da het han.");
+            }
+
+            if (!HasUserParticipatedInPost(post, dto.ReporterUserId))
+            {
+                throw new Exception("Chi nhung nguoi da tham gia bai dang nay moi co quyen report.");
             }
 
             if (dto.ReasonCode < MinReportReasonCode || dto.ReasonCode > MaxReportReasonCode)
@@ -682,6 +698,10 @@ namespace Services.MatchPosts
             {
                 query = query.Where(x => x.CreatorUserId == search.CreatorUserId.Value);
             }
+            else if (!search.Status.HasValue)
+            {
+                query = query.Where(x => x.Status != (byte)PostStatus.Cancelled);
+            }
 
             query = query.Where(x => CanViewerSeePost(x, search.ViewerUserId));
 
@@ -787,7 +807,8 @@ namespace Services.MatchPosts
         {
             var now = DateTime.Now;
             var shouldHideFromOutsiders =
-                post.Status == (byte)PostStatus.Completed
+                post.Status == (byte)PostStatus.Cancelled
+                || post.Status == (byte)PostStatus.Completed
                 || (post.Status == (byte)PostStatus.Confirmed && post.StartTime <= now);
 
             if (!shouldHideFromOutsiders)
@@ -808,6 +829,16 @@ namespace Services.MatchPosts
             return post.PostParticipants.Any(x =>
                 x.UserId == viewerUserId.Value
                 && (x.Status == PostParticipantStatuses.Confirmed || x.Status == PostParticipantStatuses.NoShow));
+        }
+
+        private static bool HasUserParticipatedInPost(MatchPost post, int userId)
+        {
+            return post.PostParticipants.Any(x =>
+                x.UserId == userId
+                && x.Role != PostParticipantRoles.Creator
+                && (x.Status == PostParticipantStatuses.Confirmed
+                    || x.Status == PostParticipantStatuses.Left
+                    || x.Status == PostParticipantStatuses.NoShow));
         }
 
         private static string? NormalizeText(string? value)
