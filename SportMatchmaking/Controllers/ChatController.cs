@@ -103,12 +103,18 @@ namespace SportMatchmaking.Controllers
 
             try
             {
-                await _chatThreadService.SendMessageAsync(threadId, currentUserId.Value, messageText);
+                var message = await _chatThreadService.SendMessageAsync(threadId, currentUserId.Value, messageText);
 
+                var senderName = message.SenderUser?.DisplayName ?? message.SenderUser?.UserName ?? "Unknown";
                 await _hubContext.Clients.Group(threadId.ToString())
                     .SendAsync("ReceiveMessage", new
                     {
-                        threadId = threadId
+                        messageId = message.MessageId,
+                        senderName = senderName,
+                        messageText = message.MessageText,
+                        sentAt = message.SentAt,
+                        isDeleted = false,
+                        canEditOrDelete = false
                     });
 
                 return RedirectToAction("Index", new

@@ -663,6 +663,7 @@
 </div>
 
 @section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/signalr/7.0.0/signalr.min.js"></script>
     <script>
         function openEditModal(messageId, currentText) {
             const overlay = document.getElementById('editModalOverlay');
@@ -718,5 +719,40 @@
                 });
             });
         }
+
+        // SignalR connection for chat
+        const chatConnection = new signalR.HubConnectionBuilder()
+            .withUrl("/chathub", {
+                skipNegotiation: true,
+                transport: signalR.HttpTransportType.WebSockets
+            })
+            .withAutomaticReconnect()
+            .build();
+
+        chatConnection.start().catch(err => console.error('SignalR connection error:', err));
+
+        // Join thread when page loads
+        const threadId = '@Model.SelectedThreadId?.ToString() ?? ""';
+        if (threadId) {
+            chatConnection.invoke("JoinThread", threadId).catch(err => console.error('Join thread error:', err));
+        }
+
+        // Receive new message
+        chatConnection.on("ReceiveMessage", function (data) {
+            console.log('Message received:', data);
+            location.reload();
+        });
+
+        // Receive edited message
+        chatConnection.on("MessageEdited", function (data) {
+            console.log('Message edited:', data);
+            location.reload();
+        });
+
+        // Receive deleted message
+        chatConnection.on("MessageDeleted", function (data) {
+            console.log('Message deleted:', data);
+            location.reload();
+        });
     </script>
 }
