@@ -65,6 +65,7 @@ namespace Repositories
         public async Task<List<ChatMessage>> GetMessagesByThreadIdAsync(long threadId)
         {
             return await _context.ChatMessages
+                .Include(m => m.SenderUser)
                 .Where(m => m.ThreadId == threadId)
                 .OrderBy(m => m.SentAt)
                 .ToListAsync();
@@ -105,6 +106,7 @@ namespace Repositories
         public async Task<ChatMessage?> GetMessageByIdAsync(long messageId)
         {
             return await _context.ChatMessages
+                .Include(m => m.SenderUser)
                 .FirstOrDefaultAsync(m => m.MessageId == messageId);
         }
 

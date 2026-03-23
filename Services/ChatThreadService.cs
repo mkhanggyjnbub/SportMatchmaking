@@ -27,9 +27,22 @@ namespace Services
             return sentAtLocal.ToString("dd/MM");
         }
 
-        private static string FormatMessageSender(int senderUserId)
+        private static string FormatMessageSender(ChatMessage message)
         {
-            return $"User {senderUserId}";
+            if (message.SenderUser != null)
+            {
+                if (!string.IsNullOrWhiteSpace(message.SenderUser.UserName))
+                {
+                    return message.SenderUser.UserName;
+                }
+
+                if (!string.IsNullOrWhiteSpace(message.SenderUser.DisplayName))
+                {
+                    return message.SenderUser.DisplayName;
+                }
+            }
+
+            return $"User {message.SenderUserId}";
         }
 
         private static string FormatThreadRoomName(ChatThread thread, MatchPost? post)
@@ -147,7 +160,7 @@ namespace Services
                         ? $"Phòng chat theo bài đăng • {selectedRoomMemberCount} thành viên"
                         : $"Phòng chat trực tiếp • {selectedRoomMemberCount} thành viên";
                 }
-
+                    
                 var messages = await _chatThreadRepository.GetMessagesByThreadIdAsync(selectedThreadId.Value);
 
                 messageItems = messages.Select(m => new ChatMessageItemViewModel
@@ -155,7 +168,7 @@ namespace Services
                     MessageId = m.MessageId,
                     ThreadId = m.ThreadId,
                     SenderUserId = m.SenderUserId,
-                    SenderName = FormatMessageSender(m.SenderUserId),
+                    SenderName = FormatMessageSender(m),
                     MessageText = m.IsDeleted == true ? "Tin nhắn đã bị xóa" : (m.MessageText ?? ""),
                     SentAt = m.SentAt,
                     EditedAt = m.EditedAt,
@@ -308,7 +321,8 @@ namespace Services
             await _chatThreadRepository.AddMessageAsync(newMessage);
             await _chatThreadRepository.SaveChangesAsync();
 
-            return newMessage;
+            var savedMessage = await _chatThreadRepository.GetMessageByIdAsync(newMessage.MessageId);
+            return savedMessage ?? newMessage;
         }
 
         public async Task<(bool success, string message)> EditMessageAsync(long messageId, long currentUserId, string newText)
