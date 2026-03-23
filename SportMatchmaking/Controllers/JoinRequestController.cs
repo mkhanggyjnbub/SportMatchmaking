@@ -170,7 +170,7 @@ namespace SportMatchmaking.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Accept(long requestId, long postId)
+        public async Task<IActionResult> Accept(long requestId, long postId)
         {
             var userId = GetCurrentUserId();
             if (userId == null)
@@ -181,7 +181,9 @@ namespace SportMatchmaking.Controllers
 
             try
             {
-                _joinRequestService.AcceptRequest(requestId, userId.Value);
+               //vinh
+                await _joinRequestService.AcceptRequest(requestId, userId.Value);
+                //_joinRequestService.AcceptRequest(requestId, userId.Value);
                 TempData["SuccessMessage"] = "Duyệt request thành công.";
             }
             catch (Exception ex)

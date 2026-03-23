@@ -3,6 +3,7 @@ using BusinessObjects.Enums;
 using Repositories.JoinRequest;
 using Repositories.PostParticipant;
 using Services.DTOs;
+using Services;
 using Services.Notifications;
 
 namespace Services.JoinRequest
@@ -12,15 +13,18 @@ namespace Services.JoinRequest
         private readonly IJoinRequestRepository _joinRequestRepository;
         private readonly IPostParticipantRepository _postParticipantRepository;
         private readonly INotificationService _notificationService;
+        private readonly IChatThreadService _chatThreadService;
 
         public JoinRequestService(
             IJoinRequestRepository joinRequestRepository,
             IPostParticipantRepository postParticipantRepository,
-            INotificationService notificationService)
+            INotificationService notificationService,
+            IChatThreadService chatThreadService)
         {
             _joinRequestRepository = joinRequestRepository;
             _postParticipantRepository = postParticipantRepository;
             _notificationService = notificationService;
+            _chatThreadService = chatThreadService;
         }
 
         public byte? GetUserSkillLevel(int userId)
@@ -242,7 +246,7 @@ namespace Services.JoinRequest
             _joinRequestRepository.Save();
         }
 
-        public void AcceptRequest(long requestId, int currentUserId)
+        public async Task AcceptRequest(long requestId, int currentUserId)
         {
             var request = _joinRequestRepository.GetById(requestId);
             if (request == null)
@@ -342,6 +346,10 @@ namespace Services.JoinRequest
 
             _joinRequestRepository.Update(request);
             _joinRequestRepository.Save();
+
+            //vinh
+            await _chatThreadService.EnsurePostGroupThreadCreatedAsync(post.PostId);
+            await _chatThreadService.AddConfirmedParticipantsToThreadAsync(post.PostId);
 
             _notificationService.NotifyRequestAccepted(request);
         }

@@ -2,6 +2,7 @@
 
 using BusinessObjects;
 using Services.Models.Chat;
+using Services;
 
 namespace Services
 {
@@ -11,6 +12,8 @@ namespace Services
 
         Task<ChatIndexViewModel> GetChatIndexDataAsync(int currentUserId, long? threadId);
         Task<int> AddConfirmedParticipantsToThreadAsync(long postId);
+
+        Task<long?> GetAccessiblePostThreadIdAsync(long postId, int currentUserId);
 
         Task<ChatMessage> SendMessageAsync(long threadId, int senderUserId, string messageText);
 
