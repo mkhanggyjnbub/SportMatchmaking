@@ -472,8 +472,8 @@
 
         <div class="d-flex gap-2">
             <a asp-controller="MatchPost"
-               asp-action="Index"
-               class="btn btn-outline-secondary">
+                   asp-action="Index"
+                   class="btn btn-outline-secondary">
                 Quay lại feed
             </a>
         </div>
@@ -500,9 +500,9 @@
                         : "#";
 
                         <a href="/MatchPost/Chat?threadId=@room.ThreadId"
-                           class="room-item @(room.IsSelected ? "active" : "")"
-                           data-room-name="@room.RoomName.ToLowerInvariant()"
-                           data-room-message="@room.LastMessage.ToLowerInvariant()">
+                               class="room-item @(room.IsSelected ? "active" : "")"
+                               data-room-name="@room.RoomName.ToLowerInvariant()"
+                               data-room-message="@room.LastMessage.ToLowerInvariant()">
                             <div class="avatar">@avatarText</div>
 
                             <div class="room-content">
@@ -578,13 +578,13 @@
                                 {
                                     <div class="message-actions">
                                         <button type="button"
-                                                class="message-action-btn edit-btn"
-                                                onclick="openEditModal('@msg.MessageId', @Html.Raw(System.Text.Json.JsonSerializer.Serialize(msg.MessageText ?? "")))">
+                                                class="message-action-btn edit-btn js-edit-message"
+                                                data-message-id="@msg.MessageId"
+                                                data-message-text="@msg.MessageText">
                                             Sửa
                                         </button>
 
-                                        <form asp-controller="Chat"
-                                              asp-action="DeleteMessageFromUi"
+                                        <form action="/MatchPost/Chat/delete"
                                               method="post"
                                               style="display:inline;">
                                             <input type="hidden" name="messageId" value="@msg.MessageId" />
@@ -614,8 +614,7 @@
 
             @if (Model.SelectedThreadId.HasValue)
             {
-                <form asp-controller="Chat"
-                      asp-action="SendMessageFromUi"
+                <form action="/MatchPost/Chat/send"
                       method="post"
                       class="input-area">
                     <input type="hidden" name="threadId" value="@Model.SelectedThreadId" />
@@ -633,8 +632,7 @@
             Sửa tin nhắn
         </div>
 
-        <form asp-controller="Chat"
-              asp-action="EditMessageFromUi"
+        <form action="/MatchPost/Chat/edit"
               method="post"
               id="editMessageForm">
             <div class="edit-modal-body">
@@ -661,9 +659,7 @@
         </form>
     </div>
 </div>
-
 @section Scripts {
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/signalr/7.0.0/signalr.min.js"></script>
     <script>
         function openEditModal(messageId, currentText) {
             const overlay = document.getElementById('editModalOverlay');
@@ -685,74 +681,86 @@
             }
         }
 
-        document.addEventListener('keydown', function (event) {
-            if (event.key === 'Escape') {
-                closeEditModal();
-            }
-        });
-
-        document.getElementById('editModalOverlay')?.addEventListener('click', function (event) {
-            if (event.target === this) {
-                closeEditModal();
-            }
-        });
-
-        const chatMessages = document.getElementById('chatMessages');
-        if (chatMessages) {
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-
-        const searchInput = document.getElementById('chatRoomSearch');
-        const roomList = document.getElementById('chatRoomList');
-
-        if (searchInput && roomList) {
-            searchInput.addEventListener('input', function () {
-                const keyword = this.value.trim().toLowerCase();
-                const items = roomList.querySelectorAll('.room-item');
-
-                items.forEach(item => {
-                    const roomName = item.getAttribute('data-room-name') || '';
-                    const roomMessage = item.getAttribute('data-room-message') || '';
-                    const matched = roomName.includes(keyword) || roomMessage.includes(keyword);
-
-                    item.style.display = matched ? 'flex' : 'none';
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.js-edit-message').forEach(button => {
+                button.addEventListener('click', function () {
+                    const messageId = this.dataset.messageId;
+                    const messageText = this.dataset.messageText || '';
+                    openEditModal(messageId, messageText);
                 });
             });
-        }
 
-        // SignalR connection for chat
-        const chatConnection = new signalR.HubConnectionBuilder()
-            .withUrl("/chathub", {
-                skipNegotiation: true,
-                transport: signalR.HttpTransportType.WebSockets
-            })
-            .withAutomaticReconnect()
-            .build();
+            document.addEventListener('keydown', function (event) {
+                if (event.key === 'Escape') {
+                    closeEditModal();
+                }
+            });
 
-        chatConnection.start().catch(err => console.error('SignalR connection error:', err));
+            document.getElementById('editModalOverlay')?.addEventListener('click', function (event) {
+                if (event.target === this) {
+                    closeEditModal();
+                }
+            });
 
-        // Join thread when page loads
-        const threadId = '@Model.SelectedThreadId?.ToString() ?? ""';
-        if (threadId) {
-            chatConnection.invoke("JoinThread", threadId).catch(err => console.error('Join thread error:', err));
-        }
+            const chatMessages = document.getElementById('chatMessages');
+            if (chatMessages) {
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
 
-        // Receive new message
-        chatConnection.on("ReceiveMessage", function (data) {
-            console.log('Message received:', data);
-            location.reload();
-        });
+            const searchInput = document.getElementById('chatRoomSearch');
+            const roomList = document.getElementById('chatRoomList');
 
-        // Receive edited message
-        chatConnection.on("MessageEdited", function (data) {
-            console.log('Message edited:', data);
-            location.reload();
-        });
+            if (searchInput && roomList) {
+                searchInput.addEventListener('input', function () {
+                    const keyword = this.value.trim().toLowerCase();
+                    const items = roomList.querySelectorAll('.room-item');
 
-        // Receive deleted message
-        chatConnection.on("MessageDeleted", function (data) {
-            console.log('Message deleted:', data);
-            location.reload();
+                    items.forEach(item => {
+                        const roomName = item.getAttribute('data-room-name') || '';
+                        const roomMessage = item.getAttribute('data-room-message') || '';
+                        const matched = roomName.includes(keyword) || roomMessage.includes(keyword);
+
+                        item.style.display = matched ? 'flex' : 'none';
+                    });
+                });
+            }
+
+            const selectedThreadId = '@(Model.SelectedThreadId?.ToString() ?? "")';
+
+            const chatConnection = new signalR.HubConnectionBuilder()
+                .withUrl('/chathub')
+                .withAutomaticReconnect()
+                .build();
+
+            chatConnection.on('ReceiveMessage', function () {
+                location.reload();
+            });
+
+            chatConnection.on('MessageEdited', function () {
+                location.reload();
+            });
+
+            chatConnection.on('MessageDeleted', function () {
+                location.reload();
+            });
+
+            async function startChatConnection() {
+                try {
+                    await chatConnection.start();
+                    console.log('Chat SignalR connected.');
+
+                    if (selectedThreadId) {
+                        await chatConnection.invoke('JoinThread', selectedThreadId);
+                        console.log('Joined thread:', selectedThreadId);
+                    }
+                } catch (err) {
+                    console.error('Chat SignalR error:', err);
+                    setTimeout(startChatConnection, 3000);
+                }
+            }
+
+            startChatConnection();
         });
     </script>
+
 }

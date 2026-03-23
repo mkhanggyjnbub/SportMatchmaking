@@ -105,7 +105,9 @@ namespace SportMatchmaking.Controllers
             {
                 var message = await _chatThreadService.SendMessageAsync(threadId, currentUserId.Value, messageText);
 
-                var senderName = message.SenderUser?.DisplayName ?? message.SenderUser?.UserName ?? "Unknown";
+                var senderName = message.SenderUser?.UserName
+                ?? message.SenderUser?.DisplayName
+                ?? $"User {message.SenderUserId}";
                 await _hubContext.Clients.Group(threadId.ToString())
                     .SendAsync("ReceiveMessage", new
                     {
@@ -150,7 +152,8 @@ namespace SportMatchmaking.Controllers
                     .SendAsync("MessageEdited", new
                     {
                         messageId = messageId,
-                        threadId = threadId
+                        newText = newText,
+                        editedAt = DateTime.UtcNow
                     });
             }
 
@@ -179,8 +182,7 @@ namespace SportMatchmaking.Controllers
                 await _hubContext.Clients.Group(threadId.ToString())
                     .SendAsync("MessageDeleted", new
                     {
-                        messageId = messageId,
-                        threadId = threadId
+                        messageId = messageId
                     });
             }
 
