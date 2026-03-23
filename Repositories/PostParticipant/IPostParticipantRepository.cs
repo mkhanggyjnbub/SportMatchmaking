@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,5 +12,8 @@ namespace Repositories.PostParticipant
         PostParticipantt? GetByPostAndUser(long postId, int userId);
         void Add(PostParticipantt entity);
         void Update(PostParticipantt entity);
+        Task SaveAsync();
+        Task<List<PostParticipantt>> GetByPostIdAsync(long postId);
+        Task<int> GetConfirmedParticipantSlotsAsync(long postId);
     }
 }
