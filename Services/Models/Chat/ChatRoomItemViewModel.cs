@@ -10,6 +10,7 @@ namespace Services.Models.Chat
         public string LastMessage { get; set; } = "";
         public string LastMessageTimeText { get; set; } = "";
         public int MemberCount { get; set; }
+        public bool HasUnread { get; set; }
         public bool IsSelected { get; set; }
     }
 }

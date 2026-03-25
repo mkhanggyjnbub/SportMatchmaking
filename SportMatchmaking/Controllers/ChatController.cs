@@ -104,6 +104,7 @@ namespace SportMatchmaking.Controllers
             try
             {
                 var message = await _chatThreadService.SendMessageAsync(threadId, currentUserId.Value, messageText);
+                var memberUserIds = await _chatThreadService.GetThreadMemberUserIdsAsync(threadId);
 
                 var senderName = message.SenderUser?.UserName
                 ?? message.SenderUser?.DisplayName
@@ -118,6 +119,16 @@ namespace SportMatchmaking.Controllers
                         isDeleted = false,
                         canEditOrDelete = false
                     });
+
+                foreach (var memberUserId in memberUserIds.Distinct())
+                {
+                    await _hubContext.Clients.Group($"user-{memberUserId}")
+                        .SendAsync("ThreadUnreadChanged", new
+                        {
+                            threadId = threadId,
+                            hasUnread = memberUserId != currentUserId.Value
+                        });
+                }
 
                 return RedirectToAction("Index", new
                 {

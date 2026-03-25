@@ -59,9 +59,12 @@ namespace Services
 
             return $"Phòng #{thread.ThreadId}";
         }
+
         public async Task<ChatIndexViewModel> GetChatIndexDataAsync(int currentUserId, long? threadId)
         {
             var threads = await _chatThreadRepository.GetThreadsByUserIdAsync(currentUserId);
+
+            long? selectedThreadId = threadId;
 
             var roomItems = new List<ChatRoomItemViewModel>();
 
@@ -92,7 +95,8 @@ namespace Services
                     LastMessageTimeText = lastMessage != null
                         ? FormatRoomTime(lastMessage.SentAt.ToLocalTime())
                         : "",
-                    MemberCount = memberCount
+                    MemberCount = memberCount,
+                    HasUnread = false
                 });
             }
 
@@ -119,8 +123,6 @@ namespace Services
                 .ThenByDescending(r => threads.First(t => t.ThreadId == r.ThreadId).CreatedAt)
                 .ToList();
 
-            long? selectedThreadId = threadId;
-
             if (selectedThreadId == null && roomItems.Any())
             {
                 selectedThreadId = roomItems.First().ThreadId;
@@ -129,6 +131,10 @@ namespace Services
             foreach (var room in roomItems)
             {
                 room.IsSelected = selectedThreadId.HasValue && room.ThreadId == selectedThreadId.Value;
+                if (room.IsSelected)
+                {
+                    room.HasUnread = false;
+                }
             }
 
             var selectedRoomTitle = "Chưa chọn phòng";
@@ -323,6 +329,15 @@ namespace Services
 
             var savedMessage = await _chatThreadRepository.GetMessageByIdAsync(newMessage.MessageId);
             return savedMessage ?? newMessage;
+        }
+
+        public async Task<List<int>> GetThreadMemberUserIdsAsync(long threadId)
+        {
+            var members = await _chatThreadRepository.GetThreadMembersByThreadIdAsync(threadId);
+            return members
+                .Select(m => m.UserId)
+                .Distinct()
+                .ToList();
         }
 
         public async Task<(bool success, string message)> EditMessageAsync(long messageId, long currentUserId, string newText)

@@ -130,9 +130,11 @@ namespace Services.MatchPosts
                 throw new Exception("Bạn không có quyền sửa bài đăng này.");
             }
 
-            if (post.Status == (byte)PostStatus.Completed || post.Status == (byte)PostStatus.Cancelled)
+            if (post.Status == (byte)PostStatus.Confirmed
+                || post.Status == (byte)PostStatus.Completed
+                || post.Status == (byte)PostStatus.Cancelled)
             {
-                throw new Exception("Chỉ có thể sửa bài khi bài chưa hoàn thành và chưa bị hủy.");
+                throw new Exception("Không thể sửa bài đăng sau khi chủ kèo đã chốt trận, hoàn thành hoặc hủy bài.");
             }
 
             var confirmedParticipantSlots = GetConfirmedParticipantSlots(post);
@@ -284,9 +286,11 @@ namespace Services.MatchPosts
                 throw new Exception("Bạn không còn ở trạng thái đã chốt trong bài đăng này.");
             }
 
-            if (post.Status == (byte)PostStatus.Cancelled || post.Status == (byte)PostStatus.Completed)
+            if (post.Status == (byte)PostStatus.Confirmed
+                || post.Status == (byte)PostStatus.Cancelled
+                || post.Status == (byte)PostStatus.Completed)
             {
-                throw new Exception("Không thể rời kèo khi bài đăng đã hoàn thành hoặc đã bị hủy.");
+                throw new Exception("Không thể rời kèo sau khi chủ kèo đã chốt trận, hoàn thành hoặc hủy bài.");
             }
 
             var now = DateTime.Now;
@@ -340,9 +344,11 @@ namespace Services.MatchPosts
 
             if (status == PostParticipantStatuses.Left)
             {
-                if (post.Status == (byte)PostStatus.Cancelled || post.Status == (byte)PostStatus.Completed)
+                if (post.Status == (byte)PostStatus.Confirmed
+                    || post.Status == (byte)PostStatus.Cancelled
+                    || post.Status == (byte)PostStatus.Completed)
                 {
-                    throw new Exception("Không thể đánh dấu rời kèo khi bài đăng đã hoàn thành hoặc bị hủy.");
+                    throw new Exception("Không thể đánh dấu rời kèo sau khi chủ kèo đã chốt trận, hoàn thành hoặc hủy bài.");
                 }
 
                 if (post.StartTime <= now)

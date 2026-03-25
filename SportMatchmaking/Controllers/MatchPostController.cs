@@ -165,7 +165,15 @@ namespace SportMatchmaking.Controllers
 
             if (post.CreatorUserId != userId.Value)
             {
-                TempData["ErrorMessage"] = "Bạn không có quyền sửa bài đăng này.";
+                TempData["ErrorMessage"] = "Ban khong co quyen sua bai dang nay.";
+                return RedirectToAction(nameof(Details), new { id });
+            }
+
+            if (post.Status == (byte)PostStatus.Confirmed
+                || post.Status == (byte)PostStatus.Completed
+                || post.Status == (byte)PostStatus.Cancelled)
+            {
+                TempData["ErrorMessage"] = "Bai dang da duoc chot tran, hoan thanh hoac huy nen khong the sua.";
                 return RedirectToAction(nameof(Details), new { id });
             }
 
@@ -489,7 +497,9 @@ namespace SportMatchmaking.Controllers
                 SlotsNeeded = post.SlotsNeeded,
                 SlotsRemaining = _matchPostService.GetRemainingSlots(post),
                 CreatorName = post.CreatorUser?.DisplayName ?? post.CreatorUser?.UserName ?? $"User #{post.CreatorUserId}",
-                CanEdit = post.Status != (byte)PostStatus.Completed && post.Status != (byte)PostStatus.Cancelled,
+                CanEdit = post.Status != (byte)PostStatus.Confirmed
+                    && post.Status != (byte)PostStatus.Completed
+                    && post.Status != (byte)PostStatus.Cancelled,
                 CanCancel = post.Status != (byte)PostStatus.Completed && post.Status != (byte)PostStatus.Cancelled,
                 CanConfirm = post.Status != (byte)PostStatus.Completed
                     && post.Status != (byte)PostStatus.Cancelled
@@ -519,6 +529,7 @@ namespace SportMatchmaking.Controllers
                     x.UserId == currentUserId.Value
                     && x.Role == PostParticipantRoles.Member
                     && x.Status == PostParticipantStatuses.Confirmed)
+                && post.Status != (byte)PostStatus.Confirmed
                 && post.Status != (byte)PostStatus.Completed
                 && post.Status != (byte)PostStatus.Cancelled
                 && post.StartTime > now;
@@ -594,6 +605,7 @@ namespace SportMatchmaking.Controllers
                     && post.StartTime > now,
                 CanLeave = canLeave,
                 CanEdit = isCreator
+                    && post.Status != (byte)PostStatus.Confirmed
                     && post.Status != (byte)PostStatus.Completed
                     && post.Status != (byte)PostStatus.Cancelled,
                 CanCancel = isCreator
@@ -638,6 +650,7 @@ namespace SportMatchmaking.Controllers
                         CanMarkLeft = canManageParticipants
                             && x.Role != PostParticipantRoles.Creator
                             && x.Status == PostParticipantStatuses.Confirmed
+                            && post.Status != (byte)PostStatus.Confirmed
                             && post.Status != (byte)PostStatus.Completed
                             && post.Status != (byte)PostStatus.Cancelled
                             && post.StartTime > now,

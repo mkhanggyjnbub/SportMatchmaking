@@ -16,6 +16,7 @@ namespace Services
         Task<long?> GetAccessiblePostThreadIdAsync(long postId, int currentUserId);
 
         Task<ChatMessage> SendMessageAsync(long threadId, int senderUserId, string messageText);
+        Task<List<int>> GetThreadMemberUserIdsAsync(long threadId);
 
         Task<(bool success, string message)> EditMessageAsync(long messageId, long currentUserId, string newText);
         Task<(bool success, string message)> DeleteMessageAsync(long messageId, long currentUserId);

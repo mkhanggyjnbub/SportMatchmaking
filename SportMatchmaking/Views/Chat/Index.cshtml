@@ -148,6 +148,13 @@
             align-items: flex-start;
         }
 
+        .room-name-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 0;
+        }
+
         .room-name {
             font-size: 1rem;
             font-weight: 700;
@@ -156,6 +163,19 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+        }
+
+        .room-unread-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ef4444;
+            flex-shrink: 0;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+        }
+
+        .room-unread-dot.hidden {
+            display: none;
         }
 
         .room-time {
@@ -501,13 +521,18 @@
 
                         <a href="/MatchPost/Chat?threadId=@room.ThreadId"
                                class="room-item @(room.IsSelected ? "active" : "")"
+                               data-thread-id="@room.ThreadId"
                                data-room-name="@room.RoomName.ToLowerInvariant()"
                                data-room-message="@room.LastMessage.ToLowerInvariant()">
                             <div class="avatar">@avatarText</div>
 
                             <div class="room-content">
                                 <div class="room-top">
-                                    <div class="room-name">@room.RoomName</div>
+                                    <div class="room-name-wrap">
+                                        <div class="room-name">@room.RoomName</div>
+                                        <span class="room-unread-dot @(room.HasUnread ? "" : "hidden")"
+                                              data-unread-dot-for="@room.ThreadId"></span>
+                                    </div>
                                     <div class="room-time">@room.LastMessageTimeText</div>
                                 </div>
 
@@ -726,13 +751,78 @@
             }
 
             const selectedThreadId = '@(Model.SelectedThreadId?.ToString() ?? "")';
+            const currentUserId = '@Model.CurrentUserId';
+            const currentUserGroup = currentUserId ? `user-${currentUserId}` : '';
+            const unreadStorageKey = currentUserId ? `chat-unread:${currentUserId}` : '';
 
             const chatConnection = new signalR.HubConnectionBuilder()
                 .withUrl('/chathub')
                 .withAutomaticReconnect()
                 .build();
 
-            chatConnection.on('ReceiveMessage', function () {
+            function getUnreadMap() {
+                if (!unreadStorageKey) return {};
+
+                try {
+                    return JSON.parse(localStorage.getItem(unreadStorageKey) || '{}');
+                } catch {
+                    return {};
+                }
+            }
+
+            function saveUnreadMap(map) {
+                if (!unreadStorageKey) return;
+                localStorage.setItem(unreadStorageKey, JSON.stringify(map));
+            }
+
+            function setRoomUnread(threadId, hasUnread) {
+                if (!threadId) return;
+
+                const dot = document.querySelector(`[data-unread-dot-for="${threadId}"]`);
+                if (!dot) return;
+
+                dot.classList.toggle('hidden', !hasUnread);
+            }
+
+            function syncUnreadUiFromStorage() {
+                const unreadMap = getUnreadMap();
+                document.querySelectorAll('[data-unread-dot-for]').forEach(dot => {
+                    const threadId = dot.getAttribute('data-unread-dot-for') || '';
+                    const hasUnread = Boolean(unreadMap[threadId]);
+                    dot.classList.toggle('hidden', !hasUnread);
+                });
+            }
+
+            function updateUnreadState(threadId, hasUnread) {
+                if (!threadId) return;
+
+                const unreadMap = getUnreadMap();
+
+                if (hasUnread) {
+                    unreadMap[threadId] = true;
+                } else {
+                    delete unreadMap[threadId];
+                }
+
+                saveUnreadMap(unreadMap);
+                setRoomUnread(threadId, hasUnread);
+            }
+
+            syncUnreadUiFromStorage();
+
+            if (selectedThreadId) {
+                updateUnreadState(selectedThreadId, false);
+            }
+
+            chatConnection.on('ReceiveMessage', async function () {
+                if (selectedThreadId && currentUserId) {
+                    try {
+                        await chatConnection.invoke('MarkThreadAsRead', Number(selectedThreadId), Number(currentUserId));
+                    } catch (err) {
+                        console.error('MarkThreadAsRead error:', err);
+                    }
+                }
+
                 location.reload();
             });
 
@@ -744,13 +834,32 @@
                 location.reload();
             });
 
+            chatConnection.on('ThreadUnreadChanged', function (payload) {
+                if (!payload) return;
+
+                const threadId = payload.threadId?.toString?.() ?? '';
+                const hasUnread = Boolean(payload.hasUnread);
+
+                if (threadId === selectedThreadId) {
+                    updateUnreadState(threadId, false);
+                    return;
+                }
+
+                updateUnreadState(threadId, hasUnread);
+            });
+
             async function startChatConnection() {
                 try {
                     await chatConnection.start();
                     console.log('Chat SignalR connected.');
 
+                    if (currentUserGroup) {
+                        await chatConnection.invoke('JoinUserGroup', currentUserGroup);
+                    }
+
                     if (selectedThreadId) {
                         await chatConnection.invoke('JoinThread', selectedThreadId);
+                        await chatConnection.invoke('MarkThreadAsRead', Number(selectedThreadId), Number(currentUserId));
                         console.log('Joined thread:', selectedThreadId);
                     }
                 } catch (err) {

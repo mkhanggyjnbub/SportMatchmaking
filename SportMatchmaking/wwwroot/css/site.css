@@ -521,3 +521,64 @@ body.admin-sidebar-enabled.admin-sidebar-collapsed .admin-sidebar-label {
     padding: 8px 10px;
   }
 }
+
+.match-post-card {
+  overflow: hidden;
+  border-radius: 1rem;
+}
+
+.match-sport-card-image {
+  display: block;
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  object-position: center;
+  background: #e2e8f0;
+}
+
+.match-sport-card-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #dbeafe, #e2e8f0);
+  color: #475569;
+  font-weight: 700;
+  text-align: center;
+  padding: 1rem;
+}
+
+.match-sport-thumb {
+  width: 72px;
+  height: 72px;
+  min-width: 72px;
+  border-radius: 0.9rem;
+  object-fit: cover;
+  object-position: center;
+  background: #e2e8f0;
+}
+
+.match-sport-detail-image {
+  display: block;
+  width: 100%;
+  height: 320px;
+  border-radius: 1rem;
+  object-fit: cover;
+  object-position: center;
+  background: #e2e8f0;
+}
+
+@media (max-width: 767.98px) {
+  .match-sport-card-image {
+    height: 200px;
+  }
+
+  .match-sport-detail-image {
+    height: 240px;
+  }
+
+  .match-sport-thumb {
+    width: 60px;
+    height: 60px;
+    min-width: 60px;
+  }
+}

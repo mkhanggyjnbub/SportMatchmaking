@@ -6,6 +6,14 @@ namespace SportMatchmaking.Hubs
 {
     public class ChatHub : Hub
     {
+        public async Task JoinUserGroup(string userGroup)
+        {
+            if (!string.IsNullOrWhiteSpace(userGroup))
+            {
+                await Groups.AddToGroupAsync(Context.ConnectionId, userGroup);
+            }
+        }
+
         public async Task JoinThread(string threadId)
         {
             if (!string.IsNullOrWhiteSpace(threadId))
@@ -60,6 +68,15 @@ namespace SportMatchmaking.Hubs
                     messageId = messageId
                 });
             }
+        }
+
+        public async Task MarkThreadAsRead(long threadId, int userId)
+        {
+            await Clients.Group($"user-{userId}").SendAsync("ThreadUnreadChanged", new
+            {
+                threadId = threadId,
+                hasUnread = false
+            });
         }
     }
 }

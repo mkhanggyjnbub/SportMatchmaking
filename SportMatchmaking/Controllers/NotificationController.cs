@@ -90,8 +90,7 @@ namespace SportMatchmaking.Controllers
 
         private string? BuildTargetUrl(string type, string? dataJson)
         {
-            if (!string.Equals(type, "JoinRequest.New", StringComparison.OrdinalIgnoreCase)
-                || string.IsNullOrWhiteSpace(dataJson))
+            if (string.IsNullOrWhiteSpace(dataJson))
             {
                 return null;
             }
@@ -105,7 +104,17 @@ namespace SportMatchmaking.Controllers
                     return null;
                 }
 
-                return Url.Action("PostRequests", "JoinRequest", new { postId });
+                if (string.Equals(type, "JoinRequest.New", StringComparison.OrdinalIgnoreCase))
+                {
+                    return Url.Action("PostRequests", "JoinRequest", new { postId });
+                }
+
+                if (string.Equals(type, "JoinRequest.Accepted", StringComparison.OrdinalIgnoreCase))
+                {
+                    return Url.Action("Details", "MatchPost", new { id = postId });
+                }
+
+                return null;
             }
             catch (JsonException)
             {
