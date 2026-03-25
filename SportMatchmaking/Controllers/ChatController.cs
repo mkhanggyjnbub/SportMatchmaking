@@ -205,5 +205,43 @@ namespace SportMatchmaking.Controllers
                 threadId = threadId
             });
         }
+
+        [HttpPost("delete-room")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteRoom(long threadId)
+        {
+            var currentUserId = GetCurrentUserId();
+            if (!currentUserId.HasValue)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            var result = await _chatThreadService.DeleteRoomAsync(threadId, currentUserId.Value);
+            TempData["ChatMessage"] = result.message;
+            TempData["ChatMessageType"] = result.success ? "success" : "error";
+
+            return result.success
+                ? RedirectToAction("Index")
+                : RedirectToAction("Index", new { threadId });
+        }
+
+        [HttpPost("leave-room")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> LeaveRoom(long threadId)
+        {
+            var currentUserId = GetCurrentUserId();
+            if (!currentUserId.HasValue)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            var result = await _chatThreadService.LeaveRoomAsync(threadId, currentUserId.Value);
+            TempData["ChatMessage"] = result.message;
+            TempData["ChatMessageType"] = result.success ? "success" : "error";
+
+            return result.success
+                ? RedirectToAction("Index")
+                : RedirectToAction("Index", new { threadId });
+        }
     }
 }

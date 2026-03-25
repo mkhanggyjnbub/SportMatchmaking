@@ -591,7 +591,6 @@ namespace SportMatchmaking.Controllers
                     : post.CreatorUser.AvatarUrl,
                 CreatorCity = post.CreatorUser?.City,
                 CreatorDistrict = post.CreatorUser?.District,
-                CreatorSkillLevel = post.CreatorUser?.SkillLevel,
                 IsCreator = isCreator,
                 AlreadyJoined = alreadyJoined,
                 HasPendingJoinRequest = hasPendingJoinRequest,
@@ -644,7 +643,6 @@ namespace SportMatchmaking.Controllers
                         PartySize = x.PartySize,
                         JoinedAt = x.JoinedAt,
                         LeftAt = x.LeftAt,
-                        SkillLevel = x.User?.SkillLevel,
                         City = x.User?.City,
                         District = x.User?.District,
                         CanMarkLeft = canManageParticipants

@@ -36,9 +36,9 @@
 
                 <div class="mb-3">
                     <label asp-for="SkillLevel" class="form-label">Kỹ năng của bạn</label>
-                    <input asp-for="SkillLevel" class="form-control" type="number" min="1" max="10" placeholder="Nhập mức kỹ năng từ 1 đến 10" readonly/>
+                    <input asp-for="SkillLevel" class="form-control" type="number" min="1" max="10" placeholder="Nhập mức kỹ năng từ 1 đến 10" />
                     <span asp-validation-for="SkillLevel" class="text-danger"></span>
-                    <div class="form-text">Giá trị này sẽ được dùng để kiểm tra skill range của bài đăng và cập nhật vào hồ sơ của bạn.</div>
+                    <div class="form-text">Giá trị này sẽ được lưu trên request và dùng để kiểm tra skill range của bài đăng.</div>
                 </div>
 
                 <div class="mb-3">

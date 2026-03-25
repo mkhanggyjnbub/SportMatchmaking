@@ -9,7 +9,6 @@ namespace Services.JoinRequest
 {
     public interface IJoinRequestService
     {
-        byte? GetUserSkillLevel(int userId);
         void Create(CreateJoinRequestDTO dto);
         List<PostJoinRequestItemDTO> GetRequestsOfPost(long postId, int currentUserId);
         List<MyJoinRequestItemDTO> GetMyRequests(int currentUserId);

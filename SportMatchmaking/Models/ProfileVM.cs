@@ -29,7 +29,5 @@ namespace SportMatchmaking.Models
         [StringLength(100, ErrorMessage = "District must not exceed 100 characters.")]
         public string District { get; set; } = "";
 
-        [Range(1, 10, ErrorMessage = "Skill level must be between 1 and 10.")]
-        public byte SkillLevel { get; set; }
     }
 }

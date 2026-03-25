@@ -20,5 +20,7 @@ namespace Services
 
         Task<(bool success, string message)> EditMessageAsync(long messageId, long currentUserId, string newText);
         Task<(bool success, string message)> DeleteMessageAsync(long messageId, long currentUserId);
+        Task<(bool success, string message)> DeleteRoomAsync(long threadId, int currentUserId);
+        Task<(bool success, string message)> LeaveRoomAsync(long threadId, int currentUserId);
     }
 }

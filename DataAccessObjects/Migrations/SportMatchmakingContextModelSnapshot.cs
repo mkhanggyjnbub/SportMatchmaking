@@ -271,6 +271,11 @@ namespace DataAccessObjects.Migrations
                     b.Property<int>("RequesterUserId")
                         .HasColumnType("int");
 
+                    b.Property<byte>("SkillLevel")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("tinyint")
+                        .HasDefaultValue((byte)1);
+
                     b.Property<byte>("Status")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("tinyint")

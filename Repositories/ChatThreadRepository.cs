@@ -3,7 +3,6 @@
 using BusinessObjects;
 using BusinessObjects.Enums;
 using Microsoft.EntityFrameworkCore;
-using BusinessObjects.Enums;
 
 namespace Repositories
 {
@@ -83,7 +82,7 @@ namespace Repositories
         public async Task<BusinessObjects.PostParticipant?> GetCreatorParticipantByPostIdAsync(long postId)
         {
             return await _context.PostParticipants
-                .FirstOrDefaultAsync(pp => pp.PostId == postId && pp.Role == 1);
+                .FirstOrDefaultAsync(pp => pp.PostId == postId && pp.Role == PostParticipantRoles.Creator);
         }
 
         public async Task<List<ChatThreadMember>> GetThreadMembersByThreadIdAsync(long threadId)
@@ -93,9 +92,35 @@ namespace Repositories
                 .ToListAsync();
         }
 
+        public async Task<ChatThreadMember?> GetThreadMemberAsync(long threadId, int userId)
+        {
+            return await _context.ChatThreadMembers
+                .FirstOrDefaultAsync(m => m.ThreadId == threadId && m.UserId == userId);
+        }
+
         public async Task AddThreadMembersAsync(List<ChatThreadMember> members)
         {
             await _context.ChatThreadMembers.AddRangeAsync(members);
+        }
+
+        public void RemoveThreadMember(ChatThreadMember member)
+        {
+            _context.ChatThreadMembers.Remove(member);
+        }
+
+        public void RemoveThreadMembers(List<ChatThreadMember> members)
+        {
+            _context.ChatThreadMembers.RemoveRange(members);
+        }
+
+        public void RemoveMessages(List<ChatMessage> messages)
+        {
+            _context.ChatMessages.RemoveRange(messages);
+        }
+
+        public void RemoveThread(ChatThread thread)
+        {
+            _context.ChatThreads.Remove(thread);
         }
 
         public async Task AddMessageAsync(ChatMessage message)

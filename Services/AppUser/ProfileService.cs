@@ -50,7 +50,6 @@ namespace Services.AppUser
             user.PhoneNumber = dto.PhoneNumber;
             user.City = dto.City;
             user.District = dto.District;
-            user.SkillLevel = dto.SkillLevel;
 
             _userRepository.Update(user);
         }

@@ -22,11 +22,9 @@ namespace SportMatchmaking.Controllers
             TempData.Remove("ErrorMessage");
             TempData.Remove("SuccessMessage");
 
-            var userId = GetCurrentUserId();
             var vm = new CreateJoinRequestVM
             {
                 PostId = postId,
-                SkillLevel = userId.HasValue ? _joinRequestService.GetUserSkillLevel(userId.Value) : null,
                 PartySize = 1
             };
 
@@ -55,7 +53,7 @@ namespace SportMatchmaking.Controllers
                 {
                     PostId = model.PostId,
                     RequesterUserId = userId.Value,
-                    SkillLevel = model.SkillLevel,
+                    SkillLevel = model.SkillLevel!.Value,
                     PartySize = model.PartySize,
                     Message = model.Message,
                     GuestNames = model.GuestNames

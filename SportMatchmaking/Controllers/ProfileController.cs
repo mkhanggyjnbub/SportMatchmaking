@@ -43,8 +43,7 @@ namespace SportMatchmaking.Controllers
                 Bio = user.Bio,
                 PhoneNumber = user.PhoneNumber ?? "",
                 City = user.City ?? "",
-                District = user.District ?? "",
-                SkillLevel = user.SkillLevel ?? 1
+                District = user.District ?? ""
             };
 
             return PartialView("_ViewProfilePartial", vm);
@@ -70,8 +69,7 @@ namespace SportMatchmaking.Controllers
                 Bio = user.Bio,
                 PhoneNumber = user.PhoneNumber ?? "",
                 City = user.City ?? "",
-                District = user.District ?? "",
-                SkillLevel = user.SkillLevel ?? 1
+                District = user.District ?? ""
             };
 
             return PartialView("_EditProfilePartial", vm);
@@ -149,8 +147,7 @@ namespace SportMatchmaking.Controllers
                 Bio = model.Bio,
                 PhoneNumber = model.PhoneNumber,
                 City = model.City,
-                District = model.District,
-                SkillLevel = model.SkillLevel
+                District = model.District
             };
 
             try

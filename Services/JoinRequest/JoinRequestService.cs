@@ -27,11 +27,6 @@ namespace Services.JoinRequest
             _chatThreadService = chatThreadService;
         }
 
-        public byte? GetUserSkillLevel(int userId)
-        {
-            return _joinRequestRepository.GetUserById(userId)?.SkillLevel;
-        }
-
         public void Create(CreateJoinRequestDTO dto)
         {
             var post = _joinRequestRepository.GetPostById(dto.PostId);
@@ -57,36 +52,19 @@ namespace Services.JoinRequest
                 throw new Exception("Bạn đã tham gia bài đăng này rồi, không thể gửi request thêm.");
             }
 
-            if (dto.SkillLevel.HasValue)
+            if (dto.SkillLevel < 1 || dto.SkillLevel > 10)
             {
-                if (dto.SkillLevel.Value < 1 || dto.SkillLevel.Value > 10)
-                {
-                    throw new Exception("Kỹ năng của bạn phải từ 1 đến 10.");
-                }
-
-                requester.SkillLevel = dto.SkillLevel.Value;
-                requester.UpdatedAt = DateTime.Now;
+                throw new Exception("Kỹ năng của bạn phải từ 1 đến 10.");
             }
 
-            var effectiveSkillLevel = dto.SkillLevel ?? requester.SkillLevel;
-            var hasSkillRequirement = post.SkillMin.HasValue || post.SkillMax.HasValue;
-
-            if (hasSkillRequirement && !effectiveSkillLevel.HasValue)
+            if (post.SkillMin.HasValue && dto.SkillLevel < post.SkillMin.Value)
             {
-                throw new Exception("Vui lòng nhập kỹ năng của bạn để gửi request vào kèo này.");
+                throw new Exception($"Trình độ của bạn chưa đạt tối thiểu ({post.SkillMin}).");
             }
 
-            if (effectiveSkillLevel.HasValue)
+            if (post.SkillMax.HasValue && dto.SkillLevel > post.SkillMax.Value)
             {
-                if (post.SkillMin.HasValue && effectiveSkillLevel.Value < post.SkillMin.Value)
-                {
-                    throw new Exception($"Trình độ của bạn chưa đạt tối thiểu ({post.SkillMin}).");
-                }
-
-                if (post.SkillMax.HasValue && effectiveSkillLevel.Value > post.SkillMax.Value)
-                {
-                    throw new Exception($"Trình độ của bạn vượt mức tối đa ({post.SkillMax}).");
-                }
+                throw new Exception($"Trình độ của bạn vượt mức tối đa ({post.SkillMax}).");
             }
 
             if (post.ExpiresAt.HasValue && post.ExpiresAt.Value < DateTime.Now)
@@ -138,6 +116,7 @@ namespace Services.JoinRequest
                         throw new Exception("Bạn đã được chấp nhận ở bài đăng này rồi.");
                     }
 
+                    existingRequest.SkillLevel = dto.SkillLevel;
                     existingRequest.PartySize = dto.PartySize;
                     existingRequest.Message = string.IsNullOrWhiteSpace(dto.Message) ? null : dto.Message.Trim();
                     existingRequest.GuestNames = string.IsNullOrWhiteSpace(dto.GuestNames) ? null : dto.GuestNames.Trim();
@@ -155,6 +134,7 @@ namespace Services.JoinRequest
 
                 if (existingRequest.Status == 3 || existingRequest.Status == 4)
                 {
+                    existingRequest.SkillLevel = dto.SkillLevel;
                     existingRequest.PartySize = dto.PartySize;
                     existingRequest.Message = string.IsNullOrWhiteSpace(dto.Message) ? null : dto.Message.Trim();
                     existingRequest.GuestNames = string.IsNullOrWhiteSpace(dto.GuestNames) ? null : dto.GuestNames.Trim();
@@ -177,6 +157,7 @@ namespace Services.JoinRequest
             {
                 PostId = dto.PostId,
                 RequesterUserId = dto.RequesterUserId,
+                SkillLevel = dto.SkillLevel,
                 PartySize = dto.PartySize,
                 Message = string.IsNullOrWhiteSpace(dto.Message) ? null : dto.Message.Trim(),
                 GuestNames = string.IsNullOrWhiteSpace(dto.GuestNames) ? null : dto.GuestNames.Trim(),
@@ -215,7 +196,7 @@ namespace Services.JoinRequest
                 RequesterName = !string.IsNullOrWhiteSpace(x.RequesterUser?.DisplayName)
                     ? x.RequesterUser.DisplayName
                     : (x.RequesterUser?.UserName ?? "Unknown"),
-                RequesterSkillLevel = x.RequesterUser?.SkillLevel,
+                RequesterSkillLevel = x.SkillLevel,
                 PartySize = x.PartySize,
                 Message = x.Message,
                 CreatedAt = x.CreatedAt,
@@ -305,9 +286,20 @@ namespace Services.JoinRequest
                 throw new Exception("Bài đăng hết hạn.");
             }
 
-           
+            if (request.SkillLevel < 1 || request.SkillLevel > 10)
+            {
+                throw new Exception("Skill của request không hợp lệ.");
+            }
 
-           
+            if (post.SkillMin.HasValue && request.SkillLevel < post.SkillMin.Value)
+            {
+                throw new Exception($"Request này không còn đạt skill tối thiểu ({post.SkillMin}).");
+            }
+
+            if (post.SkillMax.HasValue && request.SkillLevel > post.SkillMax.Value)
+            {
+                throw new Exception($"Request này vượt mức skill tối đa ({post.SkillMax}).");
+            }
 
             if (request.PartySize > remainingSlots)
             {

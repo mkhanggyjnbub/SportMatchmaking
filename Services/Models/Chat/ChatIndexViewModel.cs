@@ -11,6 +11,8 @@ namespace Services.Models.Chat
         public string SelectedRoomTitle { get; set; } = "";
         public string SelectedRoomSubtitle { get; set; } = "";
         public int SelectedRoomMemberCount { get; set; }
+        public bool CanDeleteSelectedRoom { get; set; }
+        public bool CanLeaveSelectedRoom { get; set; }
 
         public List<ChatRoomItemViewModel> Rooms { get; set; } = new();
         public List<ChatMessageItemViewModel> Messages { get; set; } = new();

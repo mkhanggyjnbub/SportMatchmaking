@@ -33,7 +33,6 @@ namespace SportMatchmaking.Models
         public string CreatorAvatarUrl { get; set; } = "/images/default-avatar.png";
         public string? CreatorCity { get; set; }
         public string? CreatorDistrict { get; set; }
-        public byte? CreatorSkillLevel { get; set; }
 
         public bool IsCreator { get; set; }
         public bool AlreadyJoined { get; set; }

@@ -60,11 +60,28 @@ namespace Services
             return $"Phòng #{thread.ThreadId}";
         }
 
+        private static DateTime GetRoomActionAvailableAt(MatchPost post)
+        {
+            return (post.EndTime ?? post.StartTime).AddDays(1);
+        }
+
+        private static bool CanManageRoomAfterMatch(MatchPost post, DateTime now)
+        {
+            return GetRoomActionAvailableAt(post) <= now;
+        }
+
         public async Task<ChatIndexViewModel> GetChatIndexDataAsync(int currentUserId, long? threadId)
         {
             var threads = await _chatThreadRepository.GetThreadsByUserIdAsync(currentUserId);
+            var accessibleThreadIds = threads
+                .Select(t => t.ThreadId)
+                .ToHashSet();
 
             long? selectedThreadId = threadId;
+            if (selectedThreadId.HasValue && !accessibleThreadIds.Contains(selectedThreadId.Value))
+            {
+                selectedThreadId = null;
+            }
 
             var roomItems = new List<ChatRoomItemViewModel>();
 
@@ -142,6 +159,8 @@ namespace Services
                 ? "Hãy chọn một phòng để xem nội dung chat"
                 : "Bạn chưa tham gia phòng chat nào";
             var selectedRoomMemberCount = 0;
+            var canDeleteSelectedRoom = false;
+            var canLeaveSelectedRoom = false;
 
             var messageItems = new List<ChatMessageItemViewModel>();
 
@@ -165,6 +184,18 @@ namespace Services
                     selectedRoomSubtitle = selectedThread.PostId.HasValue
                         ? $"Phòng chat theo bài đăng • {selectedRoomMemberCount} thành viên"
                         : $"Phòng chat trực tiếp • {selectedRoomMemberCount} thành viên";
+
+                    if (selectedPost != null && CanManageRoomAfterMatch(selectedPost, DateTime.Now))
+                    {
+                        if (selectedPost.CreatorUserId == currentUserId)
+                        {
+                            canDeleteSelectedRoom = true;
+                        }
+                        else if (selectedMembers.Any(m => m.UserId == currentUserId))
+                        {
+                            canLeaveSelectedRoom = true;
+                        }
+                    }
                 }
                     
                 var messages = await _chatThreadRepository.GetMessagesByThreadIdAsync(selectedThreadId.Value);
@@ -191,6 +222,8 @@ namespace Services
                 SelectedRoomTitle = selectedRoomTitle,
                 SelectedRoomSubtitle = selectedRoomSubtitle,
                 SelectedRoomMemberCount = selectedRoomMemberCount,
+                CanDeleteSelectedRoom = canDeleteSelectedRoom,
+                CanLeaveSelectedRoom = canLeaveSelectedRoom,
                 Rooms = roomItems,
                 Messages = messageItems
             };
@@ -397,6 +430,95 @@ namespace Services
             await _chatThreadRepository.SaveChangesAsync();
 
             return (true, "Xóa tin nhắn thành công.");
+        }
+
+        public async Task<(bool success, string message)> DeleteRoomAsync(long threadId, int currentUserId)
+        {
+            var thread = await _chatThreadRepository.GetThreadByIdAsync(threadId);
+            if (thread == null)
+            {
+                return (false, "Không tìm thấy phòng chat.");
+            }
+
+            if (!thread.PostId.HasValue)
+            {
+                return (false, "Chỉ có thể xóa phòng chat gắn với bài đăng.");
+            }
+
+            var post = await _chatThreadRepository.GetPostByIdAsync(thread.PostId.Value);
+            if (post == null)
+            {
+                return (false, "Không tìm thấy bài đăng của phòng chat.");
+            }
+
+            if (post.CreatorUserId != currentUserId)
+            {
+                return (false, "Chỉ chủ phòng mới có thể xóa phòng chat.");
+            }
+
+            if (!CanManageRoomAfterMatch(post, DateTime.Now))
+            {
+                return (false, "Chỉ có thể xóa phòng chat sau 1 ngày kể từ thời gian trận đấu.");
+            }
+
+            var members = await _chatThreadRepository.GetThreadMembersByThreadIdAsync(threadId);
+            var messages = await _chatThreadRepository.GetMessagesByThreadIdAsync(threadId);
+
+            if (messages.Any())
+            {
+                _chatThreadRepository.RemoveMessages(messages);
+            }
+
+            if (members.Any())
+            {
+                _chatThreadRepository.RemoveThreadMembers(members);
+            }
+
+            _chatThreadRepository.RemoveThread(thread);
+            await _chatThreadRepository.SaveChangesAsync();
+
+            return (true, "Đã xóa phòng chat.");
+        }
+
+        public async Task<(bool success, string message)> LeaveRoomAsync(long threadId, int currentUserId)
+        {
+            var thread = await _chatThreadRepository.GetThreadByIdAsync(threadId);
+            if (thread == null)
+            {
+                return (false, "Không tìm thấy phòng chat.");
+            }
+
+            if (!thread.PostId.HasValue)
+            {
+                return (false, "Chỉ có thể rời phòng chat gắn với bài đăng.");
+            }
+
+            var post = await _chatThreadRepository.GetPostByIdAsync(thread.PostId.Value);
+            if (post == null)
+            {
+                return (false, "Không tìm thấy bài đăng của phòng chat.");
+            }
+
+            if (post.CreatorUserId == currentUserId)
+            {
+                return (false, "Chủ phòng không thể thoát phòng chat. Hãy dùng chức năng xóa phòng.");
+            }
+
+            if (!CanManageRoomAfterMatch(post, DateTime.Now))
+            {
+                return (false, "Chỉ có thể thoát phòng chat sau 1 ngày kể từ thời gian trận đấu.");
+            }
+
+            var member = await _chatThreadRepository.GetThreadMemberAsync(threadId, currentUserId);
+            if (member == null)
+            {
+                return (false, "Bạn không còn trong phòng chat này.");
+            }
+
+            _chatThreadRepository.RemoveThreadMember(member);
+            await _chatThreadRepository.SaveChangesAsync();
+
+            return (true, "Bạn đã thoát phòng chat.");
         }
     }
 }

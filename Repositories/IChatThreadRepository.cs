@@ -14,7 +14,12 @@ namespace Repositories
         Task<List<BusinessObjects.PostParticipant>> GetConfirmedParticipantsByPostIdAsync(long postId);
         Task<BusinessObjects.PostParticipant?> GetCreatorParticipantByPostIdAsync(long postId);
         Task<List<ChatThreadMember>> GetThreadMembersByThreadIdAsync(long threadId);
+        Task<ChatThreadMember?> GetThreadMemberAsync(long threadId, int userId);
         Task AddThreadMembersAsync(List<ChatThreadMember> members);
+        void RemoveThreadMember(ChatThreadMember member);
+        void RemoveThreadMembers(List<ChatThreadMember> members);
+        void RemoveMessages(List<ChatMessage> messages);
+        void RemoveThread(ChatThread thread);
 
         Task<ChatMessage?> GetMessageByIdAsync(long messageId);
         void UpdateMessage(ChatMessage message);

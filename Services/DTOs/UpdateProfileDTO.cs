@@ -15,6 +15,5 @@ namespace Services.DTOs
         public string? PhoneNumber { get; set; }
         public string? City { get; set; }
         public string? District { get; set; }
-        public byte? SkillLevel { get; set; }
     }
 }

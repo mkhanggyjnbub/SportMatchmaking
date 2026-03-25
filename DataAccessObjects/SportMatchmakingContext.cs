@@ -145,6 +145,7 @@ public partial class SportMatchmakingContext : DbContext
             entity.Property(e => e.GuestNames).HasMaxLength(300);
             entity.Property(e => e.Message).HasMaxLength(500);
             entity.Property(e => e.PartySize).HasDefaultValue(1);
+            entity.Property(e => e.SkillLevel).HasDefaultValue((byte)1);
             entity.Property(e => e.Status).HasDefaultValue((byte)1);
 
             entity.HasOne(d => d.DecidedByUser).WithMany(p => p.JoinRequestDecidedByUsers)

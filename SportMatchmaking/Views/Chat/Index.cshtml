@@ -20,6 +20,18 @@
             margin-bottom: 1rem;
         }
 
+        .chat-header-right {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .chat-room-action-form {
+            margin: 0;
+        }
+
             .chat-page-header h1 {
                 margin-bottom: 0.25rem;
                 font-size: 2.3rem;
@@ -499,6 +511,14 @@
         </div>
     </div>
 
+    @if (TempData["ChatMessage"] is string chatMessage)
+    {
+        var isSuccessMessage = string.Equals(TempData["ChatMessageType"] as string, "success", StringComparison.OrdinalIgnoreCase);
+        <div class="alert @(isSuccessMessage ? "alert-success" : "alert-danger")">
+            @chatMessage
+        </div>
+    }
+
     <div class="chat-page">
         <div class="sidebar">
             <div class="sidebar-header">
@@ -569,8 +589,33 @@
                     </div>
                 </div>
 
-                <div class="status-badge">
-                    @(Model.SelectedRoomMemberCount > 0 ? $"{Model.SelectedRoomMemberCount} thành viên" : "Chưa chọn phòng")
+                <div class="chat-header-right">
+                    <div class="status-badge">
+                        @(Model.SelectedRoomMemberCount > 0 ? $"{Model.SelectedRoomMemberCount} thành viên" : "Chưa chọn phòng")
+                    </div>
+
+                    @if (Model.SelectedThreadId.HasValue && Model.CanDeleteSelectedRoom)
+                    {
+                        <form action="/MatchPost/Chat/delete-room"
+                              method="post"
+                              class="chat-room-action-form"
+                              onsubmit="return confirm('Bạn có chắc muốn xóa phòng chat này không?');">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="threadId" value="@Model.SelectedThreadId" />
+                            <button type="submit" class="btn btn-outline-danger btn-sm">Xóa phòng chat</button>
+                        </form>
+                    }
+                    else if (Model.SelectedThreadId.HasValue && Model.CanLeaveSelectedRoom)
+                    {
+                        <form action="/MatchPost/Chat/leave-room"
+                              method="post"
+                              class="chat-room-action-form"
+                              onsubmit="return confirm('Bạn có chắc muốn thoát khỏi phòng chat này không?');">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="threadId" value="@Model.SelectedThreadId" />
+                            <button type="submit" class="btn btn-outline-secondary btn-sm">Thoát phòng chat</button>
+                        </form>
+                    }
                 </div>
             </div>
 

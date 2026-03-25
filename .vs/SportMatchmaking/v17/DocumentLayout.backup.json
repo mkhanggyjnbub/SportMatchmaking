@@ -90,8 +90,7 @@
               "RelativeToolTip": "SportMatchmaking\\Views\\AdminReport\\Details.cshtml",
               "ViewState": "AgIAAHMAAAAAAAAAAABBwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-03-09T17:49:52.59Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-09T17:49:52.59Z"
             },
             {
               "$type": "Document",
@@ -103,8 +102,7 @@
               "RelativeToolTip": "SportMatchmaking\\Views\\AdminPost\\Details.cshtml",
               "ViewState": "AgIAAGAAAAAAAAAAAEBVwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-03-09T17:49:32.379Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-09T17:49:32.379Z"
             },
             {
               "$type": "Document",
@@ -129,8 +127,7 @@
               "RelativeToolTip": "SportMatchmaking\\Views\\AdminUser\\Index.cshtml",
               "ViewState": "AgIAAIMAAAAAAAAAAABBwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-03-09T17:50:54.02Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-09T17:50:54.02Z"
             },
             {
               "$type": "Document",
@@ -142,8 +139,7 @@
               "RelativeToolTip": "GeneratePasswordHash.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-10T00:09:48.712Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-10T00:09:48.712Z"
             },
             {
               "$type": "Document",
@@ -155,8 +151,7 @@
               "RelativeToolTip": "Services\\Admin\\AdminUserService.cs",
               "ViewState": "AgIAAHoAAAAAAAAAAAAAwBUAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-09T17:47:50.624Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-09T17:47:50.624Z"
             },
             {
               "$type": "Document",
@@ -168,8 +163,7 @@
               "RelativeToolTip": "Services\\Admin\\IAdminUserService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-09T17:47:43.632Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-09T17:47:43.632Z"
             },
             {
               "$type": "Document",
@@ -181,8 +175,7 @@
               "RelativeToolTip": "Repositories\\Admin\\AdminUserRepository.cs",
               "ViewState": "AgIAADYAAAAAAAAAAAAAAAUAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-09T17:45:19.288Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-09T17:45:19.288Z"
             },
             {
               "$type": "Document",
@@ -194,8 +187,7 @@
               "RelativeToolTip": "Repositories\\Admin\\IAdminUserRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-09T17:45:10.614Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-09T17:45:10.614Z"
             },
             {
               "$type": "Document",
@@ -207,8 +199,7 @@
               "RelativeToolTip": "SportMatchmaking\\Program.cs",
               "ViewState": "AgIAAAYAAAAAAAAAAAAAABwAAAArAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-09T17:35:56.545Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-03-09T17:35:56.545Z"
             }
           ]
         }

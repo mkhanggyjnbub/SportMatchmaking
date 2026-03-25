@@ -60,7 +60,7 @@
                                         <div class="fw-semibold">@item.RequesterName</div>
                                         <div class="text-muted small">UserId: @item.RequesterUserId</div>
                                     </td>
-                                    <td class="px-3 py-3">@(item.RequesterSkillLevel?.ToString() ?? "Chưa có")</td>
+                                    <td class="px-3 py-3">@item.RequesterSkillLevel</td>
                                     <td class="px-3 py-3">@item.PartySize</td>
                                     <td class="px-3 py-3">
                                         @(string.IsNullOrWhiteSpace(item.Message) ? "(Không có lời nhắn)" : item.Message)

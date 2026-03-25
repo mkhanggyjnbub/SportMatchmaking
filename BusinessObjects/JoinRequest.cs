@@ -11,6 +11,8 @@ public partial class JoinRequest
 
     public int RequesterUserId { get; set; }
 
+    public byte SkillLevel { get; set; }
+
     public int PartySize { get; set; }
 
     public string? Message { get; set; }

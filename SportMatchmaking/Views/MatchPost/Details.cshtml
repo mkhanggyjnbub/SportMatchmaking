@@ -265,8 +265,7 @@
                                             }
                                         </div>
                                         <div class="text-muted small">
-                                            Skill: @(participant.SkillLevel?.ToString() ?? "N/A")
-                                            · Khu vực: @(participant.District ?? "Chưa cập nhật"), @(participant.City ?? "Chưa cập nhật")
+                                            Khu vực: @(participant.District ?? "Chưa cập nhật"), @(participant.City ?? "Chưa cập nhật")
                                             · Joined: @participant.JoinedAt.ToString("dd/MM/yyyy HH:mm")
                                         </div>
                                     </div>
@@ -319,10 +318,6 @@
                         <strong>@(Model.CreatorDistrict ?? "Chưa cập nhật"), @(Model.CreatorCity ?? "Chưa cập nhật")</strong>
                     </div>
 
-                    <div class="match-detail-item">
-                        <span class="match-detail-label">Skill hiện tại</span>
-                        <strong>@(Model.CreatorSkillLevel?.ToString() ?? "Chưa cập nhật")</strong>
-                    </div>
                 </div>
             </div>
 
