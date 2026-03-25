@@ -1,20 +1,23 @@
 ﻿using BusinessObjects;
 using Repositories.Admin;
+using Repositories.MatchPosts;
 
 namespace Services.Admin
 {
     public class AdminReportService : IAdminReportService
     {
         private readonly IAdminReportRepository _adminReportRepository;
+        private readonly IMatchPostRepository _matchPostRepository;
 
         private const byte REPORT_STATUS_OPEN = 1;
         private const byte REPORT_STATUS_IN_REVIEW = 2;
         private const byte REPORT_STATUS_RESOLVED = 3;
         private const byte REPORT_STATUS_DISMISSED = 4;
 
-        public AdminReportService(IAdminReportRepository adminReportRepository)
+        public AdminReportService(IAdminReportRepository adminReportRepository, IMatchPostRepository matchPostRepository)
         {
             _adminReportRepository = adminReportRepository;
+            _matchPostRepository = matchPostRepository;
         }
 
         public async Task<List<Report>> GetReportsAsync(
@@ -84,6 +87,10 @@ namespace Services.Admin
             }
 
             bool result = await _adminReportRepository.ResolveReportAsync(reportId, reviewedByUserId, resolution);
+            if (result)
+            {
+                await CancelPostWhenResolvedReportsReachThresholdAsync(report);
+            }
 
             return result
                 ? (true, "Xử lý report thành công.")
@@ -156,6 +163,31 @@ namespace Services.Admin
         public async Task<int> CountAllReportsAsync()
         {
             return await _adminReportRepository.CountAllReportsAsync();
+        }
+
+        private async Task CancelPostWhenResolvedReportsReachThresholdAsync(Report report)
+        {
+            if (report.TargetType != (byte)ReportTargetType.Post || !report.TargetPostId.HasValue)
+            {
+                return;
+            }
+
+            var post = _matchPostRepository.GetById(report.TargetPostId.Value);
+            if (post == null || post.Status == (byte)PostStatus.Cancelled)
+            {
+                return;
+            }
+
+            var reportsOfPost = await _adminReportRepository.GetReportsOfPostAsync(report.TargetPostId.Value);
+            var requiredResolvedReports = post.SlotsNeeded == 1 ? 1 : 3;
+            if (reportsOfPost.Count != requiredResolvedReports)
+            {
+                return;
+            }
+
+            post.Status = (byte)PostStatus.Cancelled;
+            post.UpdatedAt = DateTime.Now;
+            _matchPostRepository.Update(post);
         }
     }
 }

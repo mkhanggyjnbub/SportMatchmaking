@@ -392,6 +392,12 @@ namespace SportMatchmaking.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
+            if (!CanUserReportPost(post, userId.Value))
+            {
+                TempData["ErrorMessage"] = "Ban khong co quyen report bai dang nay.";
+                return RedirectToAction(nameof(Details), new { id });
+            }
+
             var model = new CreatePostReportVM
             {
                 PostId = post.PostId,
@@ -524,6 +530,9 @@ namespace SportMatchmaking.Controllers
                 && post.Reports.Any(x =>
                     x.ReporterUserId == currentUserId.Value
                     && (x.Status == (byte)ReportStatus.Open || x.Status == (byte)ReportStatus.InReview));
+            var canReport = currentUserId.HasValue
+                && CanUserReportPost(post, currentUserId.Value)
+                && !hasActiveReport;
 
             //vinh
             long? chatThreadId = null;
@@ -601,7 +610,7 @@ namespace SportMatchmaking.Controllers
                     && post.Status != (byte)PostStatus.Completed
                     && post.Status != (byte)PostStatus.Cancelled
                     && (post.EndTime ?? post.StartTime) <= now,
-                CanReport = currentUserId.HasValue && !isCreator && !hasActiveReport,
+                CanReport = canReport,
                 HasActiveReportByCurrentUser = hasActiveReport,
                 Participants = post.PostParticipants
                     .Where(x => x.Status != PostParticipantStatuses.Removed)
@@ -781,6 +790,26 @@ namespace SportMatchmaking.Controllers
             return post.PostParticipants.Any(x =>
                 x.UserId == currentUserId.Value
                 && (x.Status == PostParticipantStatuses.Confirmed || x.Status == PostParticipantStatuses.NoShow));
+        }
+
+        private static bool CanUserReportPost(MatchPost post, int userId)
+        {
+            if (post.CreatorUserId == userId)
+            {
+                return false;
+            }
+
+            if (post.Status != (byte)PostStatus.Expired)
+            {
+                return false;
+            }
+
+            return post.PostParticipants.Any(x =>
+                x.UserId == userId
+                && x.Role != PostParticipantRoles.Creator
+                && (x.Status == PostParticipantStatuses.Confirmed
+                    || x.Status == PostParticipantStatuses.Left
+                    || x.Status == PostParticipantStatuses.NoShow));
         }
     }
 }
