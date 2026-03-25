@@ -4,6 +4,44 @@
     ViewData["Title"] = "Chi tiết bài đăng";
 }
 
+<style>
+    .match-participant-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .match-avatar {
+        width: 56px;
+        height: 56px;
+        min-width: 56px;
+        border-radius: 50%;
+        object-fit: cover;
+        object-position: center;
+        flex-shrink: 0;
+    }
+
+    .match-avatar-lg {
+        width: 88px;
+        height: 88px;
+        min-width: 88px;
+    }
+
+    @@media (max-width: 576px) {
+        .match-avatar {
+            width: 48px;
+            height: 48px;
+            min-width: 48px;
+        }
+
+        .match-avatar-lg {
+            width: 72px;
+            height: 72px;
+            min-width: 72px;
+        }
+    }
+</style>
+
 <div class="match-page-shell">
     @if (TempData["SuccessMessage"] != null)
     {
