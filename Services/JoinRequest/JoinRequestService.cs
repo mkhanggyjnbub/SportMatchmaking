@@ -284,17 +284,7 @@ namespace Services.JoinRequest
 
             if (request.Status != 1)
             {
-                throw new Exception("Request nay da duoc xu ly truoc do.");
-            }
-
-            if (post.Status != (byte)PostStatus.Open)
-            {
-                throw new Exception("Bai dang hien khong con mo.");
-            }
-
-            if (post.ExpiresAt.HasValue && post.ExpiresAt.Value < DateTime.Now)
-            {
-                throw new Exception("Bai dang da het han.");
+                throw new Exception("Request đã được xử lí trước đó");
             }
 
             var confirmedParticipantSlots = _joinRequestRepository.GetConfirmedParticipantSlots(post.PostId);
@@ -302,8 +292,22 @@ namespace Services.JoinRequest
 
             if (remainingSlots <= 0)
             {
-                throw new Exception("Bai dang da du nguoi.");
+                throw new Exception("Bài đăng đã đủ người.");
             }
+
+            if (post.Status != (byte)PostStatus.Open)
+            {
+                throw new Exception("Bài đăng không còn mở.");
+            }
+
+            if (post.ExpiresAt.HasValue && post.ExpiresAt.Value < DateTime.Now)
+            {
+                throw new Exception("Bài đăng hết hạn.");
+            }
+
+           
+
+           
 
             if (request.PartySize > remainingSlots)
             {

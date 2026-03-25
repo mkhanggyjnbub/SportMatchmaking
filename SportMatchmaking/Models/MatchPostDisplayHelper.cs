@@ -17,22 +17,22 @@ namespace SportMatchmaking.Models
         public static IReadOnlyList<(byte Value, string Label)> Statuses { get; } =
             new List<(byte Value, string Label)>
             {
-                ((byte)PostStatus.Open, "Dang mo"),
-                ((byte)PostStatus.Full, "Da du nguoi"),
-                ((byte)PostStatus.Confirmed, "Da chot tran"),
-                ((byte)PostStatus.Completed, "Da hoan thanh"),
-                ((byte)PostStatus.Cancelled, "Da huy"),
-                ((byte)PostStatus.Expired, "Het han")
+                ((byte)PostStatus.Open, "Đang mở"),
+                ((byte)PostStatus.Full, "Đã đủ người"),
+                ((byte)PostStatus.Confirmed, "Đã chốt trận"),
+                ((byte)PostStatus.Completed, "Đã hoàn thành"),
+                ((byte)PostStatus.Cancelled, "Đã hủy"),
+                ((byte)PostStatus.Expired, "Hết hạn")
             };
 
         public static IReadOnlyList<(byte Value, string Label)> FilterStatuses { get; } =
             new List<(byte Value, string Label)>
             {
-                ((byte)PostStatus.Open, "Dang mo"),
-                ((byte)PostStatus.Full, "Da du nguoi"),
-                ((byte)PostStatus.Completed, "Da hoan thanh"),
-                ((byte)PostStatus.Cancelled, "Da huy"),
-                ((byte)PostStatus.Expired, "Het han")
+                ((byte)PostStatus.Open, "Đang mở"),
+                ((byte)PostStatus.Full, "Đã đủ người"),
+                ((byte)PostStatus.Completed, "Đã hoàn thành"),
+                ((byte)PostStatus.Cancelled, "Đã hủy"),
+                ((byte)PostStatus.Expired, "Hết hạn")
             };
 
         public static IReadOnlyList<(byte Value, string Label)> ReportReasons { get; } =

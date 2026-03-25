@@ -529,7 +529,9 @@ namespace SportMatchmaking.Controllers
             var hasActiveReport = currentUserId.HasValue
                 && post.Reports.Any(x =>
                     x.ReporterUserId == currentUserId.Value
-                    && (x.Status == (byte)ReportStatus.Open || x.Status == (byte)ReportStatus.InReview));
+                    && (x.Status == (byte)ReportStatus.Open
+                        || x.Status == (byte)ReportStatus.InReview
+                        || x.Status == (byte)ReportStatus.Dismissed));
             var canReport = currentUserId.HasValue
                 && CanUserReportPost(post, currentUserId.Value)
                 && !hasActiveReport;

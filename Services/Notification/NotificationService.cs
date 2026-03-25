@@ -151,6 +151,7 @@ namespace Services.Notifications
                 NotificationId = x.NotificationId,
                 Title = x.Title,
                 Body = x.Body,
+                DataJson = x.DataJson,
                 Type = x.Type,
                 IsRead = x.IsRead,
                 CreatedAt = x.CreatedAt

@@ -22,11 +22,25 @@ body {
   background-color: #f4f6fb;
 }
 
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 1050;
+}
+
+.app-main-container {
+  margin-top: 88px;
+}
+
 .admin-sidebar {
   position: fixed;
   top: 72px;
   left: 0;
   bottom: 0;
+  height: calc(100vh - 72px);
   width: 250px;
   background: #1f2a44;
   color: #fff;
@@ -35,6 +49,7 @@ body {
   box-shadow: 6px 0 20px rgba(0, 0, 0, 0.15);
   padding: 12px 10px;
   overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .admin-sidebar-header {

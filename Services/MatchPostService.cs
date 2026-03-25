@@ -411,9 +411,18 @@ namespace Services.MatchPosts
                 throw new Exception("Lý do report không hợp lệ.");
             }
 
-            var existingActiveReport = _matchPostRepository.GetActivePostReportByReporter(dto.PostId, dto.ReporterUserId);
-            if (existingActiveReport != null)
+            var existingBlockedReport = post.Reports.FirstOrDefault(x =>
+                x.ReporterUserId == dto.ReporterUserId
+                && (x.Status == (byte)ReportStatus.Open
+                    || x.Status == (byte)ReportStatus.InReview
+                    || x.Status == (byte)ReportStatus.Dismissed));
+            if (existingBlockedReport != null)
             {
+                if (existingBlockedReport.Status == (byte)ReportStatus.Dismissed)
+                {
+                    throw new Exception("Report cua ban cho bai dang nay da bi dismiss, ban khong the gui lai.");
+                }
+
                 throw new Exception("Bạn đã gửi report cho bài đăng này và đang chờ xử lý.");
             }
 

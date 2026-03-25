@@ -4,6 +4,7 @@ using SportMatchmaking.Filters;
 using SportMatchmaking.Models;
 using System;
 using System.Linq;
+using System.Text.Json;
 
 namespace SportMatchmaking.Controllers
 {
@@ -46,6 +47,8 @@ namespace SportMatchmaking.Controllers
                 NotificationId = x.NotificationId,
                 Title = x.Title,
                 Body = x.Body,
+                DataJson = x.DataJson,
+                TargetUrl = BuildTargetUrl(x.Type, x.DataJson),
                 Type = x.Type,
                 IsRead = x.IsRead,
                 CreatedAt = x.CreatedAt
@@ -83,6 +86,31 @@ namespace SportMatchmaking.Controllers
         private int? GetCurrentUserId()
         {
             return HttpContext.Session.GetInt32("UserId");
+        }
+
+        private string? BuildTargetUrl(string type, string? dataJson)
+        {
+            if (!string.Equals(type, "JoinRequest.New", StringComparison.OrdinalIgnoreCase)
+                || string.IsNullOrWhiteSpace(dataJson))
+            {
+                return null;
+            }
+
+            try
+            {
+                using var document = JsonDocument.Parse(dataJson);
+                if (!document.RootElement.TryGetProperty("postId", out var postIdElement)
+                    || !postIdElement.TryGetInt64(out var postId))
+                {
+                    return null;
+                }
+
+                return Url.Action("PostRequests", "JoinRequest", new { postId });
+            }
+            catch (JsonException)
+            {
+                return null;
+            }
         }
     }
 }

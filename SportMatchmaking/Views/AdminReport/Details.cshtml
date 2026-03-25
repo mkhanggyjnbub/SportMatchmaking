@@ -81,13 +81,6 @@
 </div>
 
 <div class="row g-3">
-    <div class="col-12">
-        <form asp-action="MarkInReview" asp-route-id="@Model.ReportId" method="post" class="d-inline">
-            @Html.AntiForgeryToken()
-            <button type="submit" class="btn btn-warning">Chuyển sang InReview</button>
-        </form>
-    </div>
-
     <div class="col-md-6">
         <div class="card admin-card h-100">
             <div class="card-body">
@@ -118,34 +111,6 @@
                 </form>
             </div>
         </div>
-    </div>
-</div>
-
-<div class="card admin-card mt-4">
-    <div class="card-body">
-        <h5 class="mb-3">Cập nhật trạng thái bất kỳ</h5>
-        <form asp-action="UpdateStatus" asp-route-id="@Model.ReportId" method="post" class="row g-2 align-items-end">
-            @Html.AntiForgeryToken()
-
-            <div class="col-md-3">
-                <label class="form-label">Status</label>
-                <select name="status" class="form-select">
-                    <option value="1">Open</option>
-                    <option value="2">In Review</option>
-                    <option value="3">Resolved</option>
-                    <option value="4">Dismissed</option>
-                </select>
-            </div>
-
-            <div class="col-md-5">
-                <label class="form-label">Ghi chú</label>
-                <input type="text" name="resolution" class="form-control" placeholder="Nhập ghi chú xử lý..." />
-            </div>
-
-            <div class="col-md-3">
-                <button type="submit" class="btn btn-primary">Cập nhật</button>
-            </div>
-        </form>
     </div>
 </div>
 
