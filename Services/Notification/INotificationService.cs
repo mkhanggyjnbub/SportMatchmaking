@@ -9,6 +9,8 @@ namespace Services.Notifications
         void NotifyNewJoinRequest(BusinessObjects.JoinRequest request);
         void NotifyRequestAccepted(BusinessObjects.JoinRequest request);
         void NotifyRequestRejected(BusinessObjects.JoinRequest request);
+        void NotifyReportResolved(BusinessObjects.Report report);
+        void NotifyReportDismissed(BusinessObjects.Report report);
 
         List<NotificationItemDTO> GetRecentNotifications(int userId, int take = 10);
         int GetUnreadCount(int userId);

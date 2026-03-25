@@ -1,6 +1,7 @@
 ﻿using BusinessObjects;
 using Repositories.Admin;
 using Repositories.MatchPosts;
+using Services.Notifications;
 
 namespace Services.Admin
 {
@@ -8,16 +9,21 @@ namespace Services.Admin
     {
         private readonly IAdminReportRepository _adminReportRepository;
         private readonly IMatchPostRepository _matchPostRepository;
+        private readonly INotificationService _notificationService;
 
         private const byte REPORT_STATUS_OPEN = 1;
         private const byte REPORT_STATUS_IN_REVIEW = 2;
         private const byte REPORT_STATUS_RESOLVED = 3;
         private const byte REPORT_STATUS_DISMISSED = 4;
 
-        public AdminReportService(IAdminReportRepository adminReportRepository, IMatchPostRepository matchPostRepository)
+        public AdminReportService(
+            IAdminReportRepository adminReportRepository,
+            IMatchPostRepository matchPostRepository,
+            INotificationService notificationService)
         {
             _adminReportRepository = adminReportRepository;
             _matchPostRepository = matchPostRepository;
+            _notificationService = notificationService;
         }
 
         public async Task<List<Report>> GetReportsAsync(
@@ -90,6 +96,7 @@ namespace Services.Admin
             if (result)
             {
                 await CancelPostWhenResolvedReportsReachThresholdAsync(report);
+                _notificationService.NotifyReportResolved(report);
             }
 
             return result
@@ -114,6 +121,10 @@ namespace Services.Admin
             }
 
             bool result = await _adminReportRepository.DismissReportAsync(reportId, reviewedByUserId, resolution);
+            if (result)
+            {
+                _notificationService.NotifyReportDismissed(report);
+            }
 
             return result
                 ? (true, "Từ chối report thành công.")

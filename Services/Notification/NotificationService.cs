@@ -80,6 +80,16 @@ namespace Services.Notifications
             NotifyRequestDecision(request, false);
         }
 
+        public void NotifyReportResolved(BusinessObjects.Report report)
+        {
+            NotifyReportDecision(report, true);
+        }
+
+        public void NotifyReportDismissed(BusinessObjects.Report report)
+        {
+            NotifyReportDecision(report, false);
+        }
+
         private void NotifyRequestDecision(BusinessObjects.JoinRequest request, bool accepted)
         {
             var post = _joinRequestRepository.GetPostById(request.PostId);
@@ -134,6 +144,40 @@ namespace Services.Notifications
             _notificationRepository.Save();
                 
             PushUnreadCountRealtime(request.RequesterUserId);
+        }
+
+        private void NotifyReportDecision(BusinessObjects.Report report, bool resolved)
+        {
+            var title = resolved
+                ? "Report của bạn đã được xử lí"
+                : "Report của bạn đã bì từ chối";
+
+            var body = resolved
+                ? $"Admin da resolve report cua ban cho bai dang #{report.TargetPostId}."
+                : $"Admin da dismiss report cua ban cho bai dang #{report.TargetPostId}.";
+
+            var data = new
+            {
+                reportId = report.ReportId,
+                postId = report.TargetPostId,
+                status = resolved ? "resolved" : "dismissed",
+                type = "report_decision"
+            };
+
+            var notification = new BusinessObjects.Notification
+            {
+                UserId = report.ReporterUserId,
+                Type = resolved ? "Report.Resolved" : "Report.Dismissed",
+                Title = title,
+                Body = body,
+                DataJson = JsonSerializer.Serialize(data),
+                IsRead = false,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            _notificationRepository.Add(notification);
+            _notificationRepository.Save();
+            PushUnreadCountRealtime(report.ReporterUserId);
         }
 
         private void PushUnreadCountRealtime(int userId)
