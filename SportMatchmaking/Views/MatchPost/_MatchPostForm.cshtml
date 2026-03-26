@@ -67,12 +67,28 @@
         <label asp-for="LocationText" class="form-label">Địa điểm (không bắt buộc)</label>
         <input asp-for="LocationText" class="form-control" placeholder="Sân, trung tâm hoặc địa chỉ cụ thể" />
         <span asp-validation-for="LocationText" class="text-danger"></span>
+        <div class="form-text">Ban co the nhap tay hoac bam nut chon tren ban do de dien dia chi tu dong.</div>
     </div>
 
     <div class="col-md-4">
         <label asp-for="GoogleMapsUrl" class="form-label">Google Maps URL</label>
         <input asp-for="GoogleMapsUrl" class="form-control" placeholder="https://maps.google.com/..." />
         <span asp-validation-for="GoogleMapsUrl" class="text-danger"></span>
+        <div class="d-flex flex-wrap gap-2 mt-2">
+            <button type="button"
+                    class="btn btn-outline-primary btn-sm"
+                    data-map-picker-open>
+                Chon tren ban do
+            </button>
+            <a href="#"
+               class="btn btn-outline-secondary btn-sm disabled"
+               target="_blank"
+               rel="noopener noreferrer"
+               aria-disabled="true"
+               data-map-picker-open-link>
+                Mo link map
+            </a>
+        </div>
     </div>
 
     <div class="col-md-6">
@@ -128,6 +144,73 @@
         <label asp-for="Description" class="form-label">Mô tả</label>
         <textarea asp-for="Description" rows="5" class="form-control" placeholder="Mô tả trình độ mong muốn, chi phí, lưu ý thêm..."></textarea>
         <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+</div>
+
+<div class="modal fade" id="matchPostMapPickerModal" tabindex="-1" aria-labelledby="matchPostMapPickerLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="matchPostMapPickerLabel">Chon dia diem tren ban do</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row g-3">
+                    <div class="col-lg-8">
+                        <div class="input-group mb-3">
+                            <input type="text"
+                                   class="form-control"
+                                   placeholder="Tim san, duong, khu vuc..."
+                                   data-map-picker-search />
+                            <button type="button" class="btn btn-outline-secondary" data-map-picker-search-button>
+                                Tim
+                            </button>
+                            <button type="button" class="btn btn-outline-primary" data-map-picker-current-location>
+                                Vi tri hien tai
+                            </button>
+                        </div>
+
+                        <div class="match-post-map-status alert alert-light border mb-3" data-map-picker-status>
+                            Bam vao ban do de chon vi tri, hoac tim theo ten dia diem.
+                        </div>
+
+                        <div class="match-post-map-canvas" data-map-picker-canvas></div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="match-post-map-summary">
+                            <div class="match-post-map-summary-label">Dia chi se dien vao form</div>
+                            <div class="match-post-map-summary-value" data-map-picker-address>
+                                Chua chon vi tri.
+                            </div>
+                        </div>
+
+                        <div class="match-post-map-summary">
+                            <div class="match-post-map-summary-label">Thanh pho</div>
+                            <div class="match-post-map-summary-value" data-map-picker-city>-</div>
+                        </div>
+
+                        <div class="match-post-map-summary">
+                            <div class="match-post-map-summary-label">Quan / Huyen</div>
+                            <div class="match-post-map-summary-value" data-map-picker-district>-</div>
+                        </div>
+
+                        <div class="match-post-map-summary">
+                            <div class="match-post-map-summary-label">Toa do</div>
+                            <div class="match-post-map-summary-value" data-map-picker-coordinates>-</div>
+                        </div>
+
+                        <div class="form-text">
+                            He thong se sinh link Google Maps tu vi tri ban chon va dien vao cac truong dia diem.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Dong</button>
+                <button type="button" class="btn btn-primary" disabled data-map-picker-apply>Ap dung vi tri</button>
+            </div>
+        </div>
     </div>
 </div>
 
