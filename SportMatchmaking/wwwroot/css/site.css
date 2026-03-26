@@ -582,3 +582,37 @@ body.admin-sidebar-enabled.admin-sidebar-collapsed .admin-sidebar-label {
     min-width: 60px;
   }
 }
+
+.admin-chart-scroll-x {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.admin-chart-wide {
+  min-width: 100%;
+}
+
+.admin-chart-scroll-x canvas {
+  display: block;
+  max-width: none;
+}
+
+.admin-weekly-filter {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+@media (max-width: 767.98px) {
+  .admin-weekly-filter {
+    width: 100%;
+  }
+
+  .admin-weekly-filter > div,
+  .admin-weekly-filter .btn {
+    flex: 1 1 auto;
+  }
+}
