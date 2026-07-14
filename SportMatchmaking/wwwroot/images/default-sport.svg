@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500">
+  <rect width="800" height="500" fill="#f3f4f6"/>
+  <rect x="40" y="40" width="720" height="420" rx="24" fill="#ffffff" stroke="#d1d5db" stroke-width="4"/>
+  <circle cx="400" cy="220" r="112" fill="#e5e7eb"/>
+  <path d="M304 336c24-60 72-92 96-92s72 32 96 92" fill="#d1d5db"/>
+  <text x="400" y="420" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="36" fill="#6b7280">No sport image</text>
+</svg>
